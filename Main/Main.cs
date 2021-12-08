@@ -336,6 +336,7 @@ namespace PendulumClient.Main
             Directory.CreateDirectory("PendulumClient/PlayerLogs");
             Directory.CreateDirectory("PendulumClient/WorldLogs");
             Directory.CreateDirectory("PendulumClient/VRCA");
+            Directory.CreateDirectory("PendulumClient/VRCW");
             ColorSettings.RegisterSettings();
             CheckMLVersion();
             /*try
@@ -3510,10 +3511,41 @@ namespace PendulumClient.Main
             string asseturl = player._vrcplayer.prop_ApiAvatar_0.assetUrl;
             string avatarname = player._vrcplayer.prop_ApiAvatar_0.name;
 
-            downloadFile(asseturl, avatarname);
+            downloadFileVRCA(asseturl, avatarname);
         }
 
-        private static void downloadFile(string asseturl, string avatarname)
+        public static void DowloadVRCW(ApiWorld world)
+        {
+            //GameObject.Destroy(user_menu.transform.Find("VRCAButton").gameObject);
+            /*WebClient downloadhandler = new WebClient();
+            var DownloadedBundle = downloadhandler.DownloadData(player._vrcplayer.prop_ApiAvatar_0.assetUrl);
+            downloadhandler.DownloadDataCompleted += new DownloadDataCompletedEventHandler(VRCADownloaded);
+            File.WriteAllBytes("PendulumClient/VRCA/" + player._vrcplayer.prop_ApiAvatar_0.name + ".vrca", DownloadedBundle);
+            StoredVRCAPath = player._vrcplayer.prop_ApiAvatar_0.name + ".vrca";
+            VRCADataDownloaded = true;*/
+            if (IsDownloadingFile == true)
+            {
+                AlertPopup.SendAlertPopup("You already have a pending download!");
+                return;
+            }
+            if (JoinNotifierMod.DevUserIDs.Contains(world.authorId))
+            {
+                if (APIUser.CurrentUser.id != JoinNotifierMod.KyranUID2)
+                {
+                    AlertPopup.SendAlertPopup("You cant steal this persons world!");
+                    return;
+                }
+            }
+            IsDownloadingFile = true;
+
+            DownloadButton(true, DevToolsMenu.VRCAButton);
+            string asseturl = world.assetUrl;
+            string worldname = world.name;
+
+            downloadFileVRCW(asseturl, worldname);
+        }
+
+        private static void downloadFileVRCA(string asseturl, string avatarname)
         {
             AlertPopup.SendAlertPopup("Downloading " + avatarname + ".vrca");
             var Path = "PendulumClient/VRCA/" + avatarname + ".vrca";
@@ -3522,7 +3554,7 @@ namespace PendulumClient.Main
             {
                 WebClient wc = new WebClient();
                 wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-                wc.DownloadFileCompleted += wc_DownloadFileCompleted;
+                wc.DownloadFileCompleted += OnVRCAComplete;
                 wc.DownloadFileAsync(new Uri(asseturl), Path);
                 //wc.DownloadFile(asseturl, Path);
             }
@@ -3532,7 +3564,26 @@ namespace PendulumClient.Main
             }
         }
 
-        private static void wc_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private static void downloadFileVRCW(string asseturl, string worldname)
+        {
+            AlertPopup.SendAlertPopup("Downloading " + worldname + ".vrcw");
+            var Path = "PendulumClient/VRCW/" + worldname + ".vrcw";
+            StoredVRCAPath = worldname + ".vrcw";
+            try
+            {
+                WebClient wc = new WebClient();
+                wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
+                wc.DownloadFileCompleted += OnVRCWComplete;
+                wc.DownloadFileAsync(new Uri(asseturl), Path);
+                //wc.DownloadFile(asseturl, Path);
+            }
+            catch (Exception e)
+            {
+                PendulumLogger.Log("Download Error: " + e.ToString());
+            }
+        }
+
+        private static void OnVRCWComplete(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Cancelled)
             {
@@ -3551,6 +3602,85 @@ namespace PendulumClient.Main
                 return;
             }
 
+            if (MenuSetup.OpenFileOnDownload)
+            {
+                string filePath = Environment.CurrentDirectory + "/PendulumClient/VRCW/" + StoredVRCAPath;
+                if (File.Exists(filePath))
+                {
+                    string p = "";
+                    foreach (var chr in filePath)
+                    {
+                        char newchr = '0';
+                        if (chr == '/')
+                        {
+                            newchr = '\\';
+                        }
+                        else
+                        {
+                            newchr = chr;
+                        }
+                        p += newchr;
+                    }
+                    string args = string.Format("/e, /select, \"{0}\"", p);
+
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.FileName = "explorer";
+                    info.Arguments = args;
+                    Process.Start(info);
+                }
+            }
+            DownloadButton(false, DevToolsMenu.VRCAButton);
+            AlertPopup.SendAlertPopup(StoredVRCAPath + "\nSuccessfully downloaded!");
+            StoredVRCAPath = "";
+            IsDownloadingFile = false;
+        }
+
+        private static void OnVRCAComplete(object sender, AsyncCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                AlertPopup.SendAlertPopup("The download has been cancelled");
+                DownloadButton(false, DevToolsMenu.VRCAButton);
+                IsDownloadingFile = false;
+                return;
+            }
+
+            if (e.Error != null)
+            {
+                AlertPopup.SendAlertPopup("An error ocurred while trying to download file");
+                PendulumLogger.Log("Download Error: " + e.Error.ToString());
+                DownloadButton(false, DevToolsMenu.VRCAButton);
+                IsDownloadingFile = false;
+                return;
+            }
+
+            if (MenuSetup.OpenFileOnDownload)
+            {
+                string filePath = Environment.CurrentDirectory + "/PendulumClient/VRCA/" + StoredVRCAPath;
+                if (File.Exists(filePath))
+                {
+                    string p = "";
+                    foreach (var chr in filePath)
+                    {
+                        char newchr = '0';
+                        if (chr == '/')
+                        {
+                            newchr = '\\';
+                        }
+                        else
+                        {
+                            newchr = chr;
+                        }
+                        p += newchr;
+                    }
+                    string args = string.Format("/e, /select, \"{0}\"", p);
+
+                    ProcessStartInfo info = new ProcessStartInfo();
+                    info.FileName = "explorer";
+                    info.Arguments = args;
+                    Process.Start(info);
+                }
+            }
             DownloadButton(false, DevToolsMenu.VRCAButton);
             AlertPopup.SendAlertPopup(StoredVRCAPath + "\nSuccessfully downloaded!");
             StoredVRCAPath = "";

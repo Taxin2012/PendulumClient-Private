@@ -24,6 +24,8 @@ namespace PendulumClient.ButtonAPIV2
         public static object dsobj = null;
         public static object ds2obj = null;
 
+        public static bool OpenFileOnDownload = false;
+
         public static void EnableEvent9(bool t)
         {
             if (t)
@@ -74,6 +76,36 @@ namespace PendulumClient.ButtonAPIV2
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("Event209 Disabled");
             }
         }
+
+        private static void OpenFolder(string folderPath)
+        {
+            if (System.IO.Directory.Exists(folderPath))
+            {
+                string p = "";
+                foreach (var chr in folderPath)
+                {
+                    char newchr = '0';
+                    if (chr == '/')
+                    {
+                        newchr = '\\';
+                    }
+                    else
+                    {
+                        newchr = chr;
+                    }
+                    p += newchr;
+                }
+
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    Arguments = p,
+                    FileName = "explorer.exe"
+                };
+
+                System.Diagnostics.Process.Start(startInfo);
+            }
+        }
+
         public static VRC.Player GetSelectedPlayer()
         {
             var selectedUser = NewQuickMenu.Instance.field_Private_UIPage_1.Cast<VRC.UI.Elements.Menus.SelectedUserMenuQM>().field_Private_IUser_0;
@@ -228,9 +260,26 @@ namespace PendulumClient.ButtonAPIV2
                 System.Windows.Forms.Clipboard.SetText(plr.field_Private_APIUser_0.id);
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("Copied UserID!");
             });
-            FunctionMenu.AddButton("Download Current .VRCA", "Downloads your avatars .VRCA", () =>
+            var DownloadsMenu = FunctionMenu.AddMenuPage("VRCA/VRCW Downloads", "Download World and Avatar .VRCAs");
+            DownloadsMenu.AddToggle("Open Folder on Download", "Open File Explorer to your .vrca/.vrcw on download", b => 
+            {
+                OpenFileOnDownload = b;
+            });
+            DownloadsMenu.AddButton("Download Current .VRCA", "Download your current avatars .VRCA", () =>
             {
                 PendulumClientMain.DowloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
+            });
+            DownloadsMenu.AddButton("Download Current .VRCW", "Download your current worlds .VRCW", () =>
+            {
+                PendulumClientMain.DowloadVRCW(RoomManager.field_Internal_Static_ApiWorld_0);
+            });
+            DownloadsMenu.AddButton("Open VRCA Folder", "Open the folder containing all of your downloaded VRCAs", () =>
+            {
+                OpenFolder(Environment.CurrentDirectory + "/PendulumClient/VRCA");
+            });
+            DownloadsMenu.AddButton("Open VRCW Folder", "Open the folder containing all of your downloaded VRCWs", () =>
+            {
+                OpenFolder(Environment.CurrentDirectory + "/PendulumClient/VRCW");
             });
         }
     }

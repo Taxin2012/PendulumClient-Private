@@ -960,19 +960,19 @@ namespace PendulumClient.Main
 
             if (Input.GetKeyDown(KeyCode.Mouse2))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(16);
+                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(16);
             }
             if (Input.GetKeyDown(KeyCode.Mouse4))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(40);
+                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(40);
             }
             if (Input.GetKeyDown(KeyCode.Mouse3))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(3);
+                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
             }
             if (Input.GetKeyDown(KeyCode.F15))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(5);
+                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(5);
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))

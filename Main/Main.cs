@@ -1421,7 +1421,7 @@ namespace PendulumClient.Main
                         //USpeaker.field_Internal_Static_Single_0 = 1f;
                         //USpeaker.field_Internal_Static_Single_1 = 1f;
                         //USpeaker.field_Internal_Static_Single_2 = 1f;
-                        USpeaker.field_Internal_Static_Single_3 = 1f;
+                        USpeaker.field_Internal_Static_Single_1 = 1f;
                         //currentPlayer.field_Private_USpeaker_0.CurrentBitrate = EnumPublicSealedvaBi15BiBiBiBiBiBiBiUnique.BitRate_48K;
                         AlertPopup.SendAlertPopup("Mic Gain Off");
                     }
@@ -1432,7 +1432,7 @@ namespace PendulumClient.Main
                         //USpeaker.field_Internal_Static_Single_0 = float.MaxValue;
                         //USpeaker.field_Internal_Static_Single_1 = float.MaxValue;
                         //USpeaker.field_Internal_Static_Single_2 = float.MaxValue;
-                        USpeaker.field_Internal_Static_Single_3 = float.MaxValue;
+                        USpeaker.field_Internal_Static_Single_1 = float.MaxValue;
                         //currentPlayer.field_Private_USpeaker_0.CurrentBitrate = EnumPublicSealedvaBi15BiBiBiBiBiBiBiUnique.BitRate_8K;
                         AlertPopup.SendAlertPopup("Mic Gain On");
                     }

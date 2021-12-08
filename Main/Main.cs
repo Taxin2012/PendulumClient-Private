@@ -3467,6 +3467,7 @@ namespace PendulumClient.Main
         }*/
         public static void DownloadButton(bool enabled, GameObject button)
         {
+            return;
             var ButtonComp = button.GetComponent<Button>();
             var ButtonText = button.GetComponentInChildren<Text>();
             if (enabled)
@@ -3514,6 +3515,7 @@ namespace PendulumClient.Main
 
         private static void downloadFile(string asseturl, string avatarname)
         {
+            AlertPopup.SendAlertPopup("Downloading " + avatarname + ".vrca");
             var Path = "PendulumClient/VRCA/" + avatarname + ".vrca";
             StoredVRCAPath = avatarname + ".vrca";
             try

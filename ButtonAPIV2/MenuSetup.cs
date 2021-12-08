@@ -228,6 +228,10 @@ namespace PendulumClient.ButtonAPIV2
                 System.Windows.Forms.Clipboard.SetText(plr.field_Private_APIUser_0.id);
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("Copied UserID!");
             });
+            FunctionMenu.AddButton("Download Current .VRCA", "Downloads your avatars .VRCA", () =>
+            {
+                PendulumClientMain.DowloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
+            });
         }
     }
 }

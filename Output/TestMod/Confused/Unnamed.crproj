@@ -1,0 +1,14 @@
+<project outputDir="E:\desktop other shit\PendulumClientPublic\Output\TestMod\Confused" baseDir="E:\desktop other shit\PendulumClientPublic\Output\TestMod" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" preset="aggressive" inherit="false">
+    <protection id="anti ildasm" />
+    <protection id="rename">
+      <argument name="mode" value="decodable" />
+      <argument name="renXaml" value="false" />
+      <argument name="renPublic" value="true" />
+    </protection>
+    <protection id="ctrl flow" />
+    <protection id="constants" />
+    <protection id="resources" />
+  </rule>
+  <module path="PendulumClientPublic.dll" />
+</project>

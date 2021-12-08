@@ -1,0 +1,1113 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using PendulumClient.UI;
+using PendulumClient.Main;
+using UnityEngine;
+using UnityEngine.Video;
+using MelonLoader;
+using VRC;
+using VRC.SDKBase;
+using VRC.Core;
+using VRC.UI;
+using UnhollowerBaseLib;
+using PendulumClient.Wrapper;
+using System.Diagnostics;
+using JoinNotifier;
+using Transmtn.DTO.Notifications;
+using System.Security.Cryptography;
+using System.Reflection;
+using UnhollowerRuntimeLib;
+
+using Player = VRC.Player;
+
+namespace PendulumClient.Anti
+{
+    class Prefixes
+    {
+        public static bool Moderation = true;
+        public static short Ping = -420;
+        public static string newhwid = null;
+        public static bool debugmode = false;
+        public static bool Anti9 = false;
+        public static bool Anti209 = false;
+
+        public static bool patch__false()
+        {
+            return false;
+        }
+
+        public static bool prepatch__QMOnClose()
+        {
+            return true;
+        }
+
+        public static void postpatch__QMOnClose()
+        {
+            ColorModuleV2.CMV2_ColorModule.ChangeHudReticle();
+        }
+
+        public static bool prepatch__QMOnOpen()
+        {
+            return true;
+        }
+
+        public static void postpatch__QMOnOpen()
+        {
+            ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
+        }
+
+        public static bool prepatch__PortalAwake(PortalInternal __instance)
+        {
+            return true;
+        }
+
+        public static void postpatch__PortalAwake(PortalInternal __instance)
+        {
+            if (PendulumClientMain.DeleteNewPortals)
+                PendulumClientMain.delete_portal(__instance);
+        }
+
+        /*public static bool IsBlockedPrefix(string __0)
+        {
+            //CheckIfBlockedLoop(ǄǄǄǄǅǅǄǄǄǅǅǅǄǅǄǄǄǅǅǅǄǄǄǅǅǅǅǄǄǄǄǅǄǄǅǄǅǅǅǅǅǅǅǄǅǄǅ);
+            /*Player player = PlayerWrappers.GetPlayer(ǄǄǄǄǅǅǄǄǄǅǅǅǄǅǄǄǄǅǅǅǄǄǄǅǅǅǅǄǄǄǄǅǄǄǅǄǅǅǅǅǅǅǅǄǅǄǅ);
+			ApplyBlockedNamePlateColor(player);*/
+        //PendulumLogger.Log("IsBlockedOutputString: " + ǅǅǅǄǄǄǅǅǅǄǅǅǅǅǅǅǄǅǅǄǅǄǄǄǄǅǅǅǄǄǅǄǄǄǅǅǅǅǅǅǅǅǅǄǅǅǅ);
+        /*return false;
+    }
+    public static bool KickUserPatch(string __0, string __1, string __2, string __3, Player __4)
+    {
+        PendulumLogger.Log("World Owner ({0})\nTried To Kick {1}.", __4.prop_APIUser_0.displayName, PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+        PendulumLogger.Log("WOTKPS1: {0}", __0);
+        PendulumLogger.Log("WOTKPS2: {0}", __1);
+        PendulumLogger.Log("WOTKPS3: {0}", __2);
+        PendulumLogger.Log("WOTKPS4: {0}", __3);
+        AlertPopup.SendAlertPopup("World Owner ({0})\nTried To Kick {1}.", __4.prop_APIUser_0.displayName, PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+        return false;
+    }
+
+    public static bool BlockStateChangePrefix(string __0, bool __1, Player __2)
+    {
+        PendulumLogger.Log("Block Event Triggered!");
+        PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
+        PendulumLogger.Log("State: {0}", __1);
+        if (PlayerWrappers.GetPlayer(__0) != null)
+        {
+            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            PendulumClientMain.DebugPlayerLog(__2, __1 ? "BLOCKED" : "UNBLOCKED", __0);
+        }
+        else
+        {
+            PendulumLogger.Log("Receiver Not Found!");
+        }
+        return true;
+    }
+
+    public static void AvatarStateChangePrefix(string __0, bool __1, Player __2)
+    {
+        PendulumLogger.Log("Avatar Event Triggered!");
+        PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
+        PendulumLogger.Log("State: {0}", __1 ? "Shown" : "Hidden");
+        if (PlayerWrappers.GetPlayer(__0) != null)
+        {
+            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            PendulumClientMain.DebugPlayerLog(__2, __1 ? "SHOWN" : "HIDDEN", __0);
+        }
+        else
+        {
+            PendulumLogger.Log("Receiver Not Found!");
+        }
+    }
+
+    public static void MuteStateChangePrefix(string __0, bool __1, Player __2)
+    {
+        PendulumLogger.Log("Mute Event Triggered!");
+        PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
+        PendulumLogger.Log("State: {0}", __1 ? "Muted" : "Unmuted");
+        if (PlayerWrappers.GetPlayer(__0) != null)
+        {
+            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            PendulumClientMain.DebugPlayerLog(__2, __1 ? "MUTED" : "UNMUTED", __0);
+        }
+        else
+        {
+            PendulumLogger.Log("Receiver Not Found!");
+        }
+    }
+
+    public static void FriendStateChangePrefix(string __0, Player __1)
+    {
+        PendulumLogger.Log("Friend State Changed!");
+        PendulumLogger.Log("Sender: {0}", __1.prop_APIUser_0.displayName);
+        if (PlayerWrappers.GetPlayer(__0) != null)
+        {
+            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            PendulumClientMain.DebugPlayerLog(__1, "Friended/Unfriended", __0);
+        }
+        else
+        {
+            PendulumLogger.Log("Receiver Not Found!");
+        }
+    }
+
+    public static bool ForceMicOffPrefix(string __0, Player __1)
+    {
+        //PendulumLogger.Log("Friend State Changed!");
+        //PendulumLogger.Log("Sender: {0}", __1.prop_APIUser_0.displayName);
+        if (PlayerWrappers.GetPlayer(__0) != null)
+        {
+            //PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            PendulumClientMain.DebugMicLog(__1, "Forced", __0);
+            if (APIUser.CurrentUser.id == __0)
+            {
+                AlertPopup.SendAlertPopup(__1.prop_APIUser_0.displayName + "\nTried to force your mic off!");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return true;
+            //PendulumLogger.Log("Receiver Not Found!");
+        }
+    }
+
+    public static bool ApiModerationPrefix(string __0, ApiModeration.ModerationType __1, string __2, ApiModeration. ModerationTimeRange __3, string __4 = "", string __5 = "", Il2CppSystem.Action<ApiModelContainer<ApiModeration>> __6 = null, Il2CppSystem.Action<ApiModelContainer<ApiModeration>> __7 = null)
+    {
+        PendulumLogger.Log("ApiModeration Called!");
+        PendulumLogger.Log("Target: " + PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName + " (" + __0 + ")");
+        PendulumLogger.Log("Type: " + __1.ToString());
+        PendulumLogger.Log("Reason: " + __2);
+        PendulumLogger.Log("TimeRange: " + __3);
+        PendulumLogger.Log("WorldID: " + __4);
+        PendulumLogger.Log("InstanceID: " + __5);
+        if (__0 == APIUser.CurrentUser.id)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public static bool FlowManagerPatch1(string __0, bool __1)
+    {
+        //PendulumLogger.Log("FMP1");
+        //PendulumLogger.Log("String: " + __0);
+        //PendulumLogger.Log("Bool: " + __1);
+        //__1 = false;
+        return false;
+    }
+
+    public static bool FlowManagerPatch2(string __0, string __1, bool __2)
+    {
+        //PendulumLogger.Log("FMP2");
+        //PendulumLogger.Log("String1: " + __0);
+        //PendulumLogger.Log("String2: " + __1);
+        //PendulumLogger.Log("Bool: " + __2);
+        //__2 = false;
+        return false;
+    }
+
+    public static bool FlowManagerPatch3(string __0, int __1)
+    {
+        //PendulumLogger.Log("FMP3");
+        //PendulumLogger.Log("String: " + __0);
+        //PendulumLogger.Log("Int: " + __1);
+        return false;
+    }
+    public static bool SerializePrefix()
+    {
+        return PendulumClientMain.Serialization;
+    }
+
+    public static bool VoteToKickInit(string __0, Player __1)
+    {
+        LogVTKDetails(__0, __1);
+        PendulumClientMain.DebugPlayerLog(__1, "Started a Vote to Kick on", __0);
+        return true;
+    }
+
+    public static void LogVTKDetails(string ǅǄǄǄǄǄǄǅǅǅǅǅǄǄǅǄǅǄǅǄǅǄǅǅǄǅǅǄǄǅǅǅǄǅǄǄǅǄǅǅǄǅǄǅǄǄǄ, Player ǄǄǄǅǅǄǅǄǄǄǄǅǄǅǅǅǄǅǄǅǅǄǄǅǅǄǅǄǅǅǅǄǅǅǅǅǄǅǄǅǅǅǄǅǄǄǅ)
+    {
+        PendulumLogger.Log("Vote Kick Init: {0}", ǅǄǄǄǄǄǄǅǅǅǅǅǄǄǅǄǅǄǅǄǅǄǅǅǄǅǅǄǄǅǅǅǄǅǄǄǅǄǅǅǄǅǄǅǄǄǄ);
+        PendulumLogger.Log("Player of Init: {0}", ǄǄǄǅǅǄǅǄǄǄǄǅǄǅǅǅǄǅǄǅǅǄǄǅǅǄǅǄǅǅǅǄǅǅǅǅǄǅǄǅǅǅǄǅǄǄǅ.prop_APIUser_0.displayName);
+    }
+
+    public static bool TStringOutput(string __0, string __1, string __2)
+    {
+        PendulumLogger.Log("String1: {0}", __0);
+        PendulumLogger.Log("String2: {0}", __1);
+        PendulumLogger.Log("String3: {0}", __2);
+        PendulumLogger.Log("IsKickedFromWorld");
+        PendulumClientMain.IsLoading = true;
+        return false;
+    }
+
+    public static bool TStringOutputFalse(string __0, string __1, string __2)
+    {
+        return false;
+    }
+
+    public static bool TryKickPatch(APIUser __0)
+    {
+        PendulumLogger.Log("TKP-ApiUser: {0}", __0.displayName);
+        return false;
+    }
+
+    public static bool UserKickUserPatch(APIUser __0, string __1, APIUser __2)
+    {
+        PendulumLogger.Log("Sender User: {0}", __0.displayName);
+        PendulumLogger.Log("Sender Type: {0}", __1);
+        PendulumLogger.Log("Target User: {0}", __2.displayName);
+        AlertPopup.SendAlertPopup("UserKickUser Detected.\nKick Sent By: {0}\nKick From: {1}\nKick Target: {2}", __0.displayName, __1, __2.displayName);
+        if (__0.id == APIUser.CurrentUser.id)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public static void SendVoteKickPatch(string __0, string __1, bool __2)
+    {
+        PendulumLogger.Log("FirstString: {0}", __0);
+        PendulumLogger.Log("SecondString: {0}", __1);
+        PendulumLogger.Log("Bool: {0}", __2);
+    }
+
+    public static bool IsKickedPatch(bool __0 = false)
+    {
+        __0 = false;
+        PendulumLogger.Log("FirstBool: {0}", __0);
+        PendulumLogger.Log("You have been kicked from this world!");
+        AlertPopup.SendAlertPopup("You have been kicked from this world!");
+        return false;
+    }*/
+
+        public static bool patch__1(ApiWorld __0, ApiWorldInstance __1, string __2, int __3)
+    {
+        if (debugmode)
+        {
+            PendulumLogger.DebugLog("WorldName: " + __0.name);
+            //PendulumLogger.DebugLog("WorldId: " + __0.id + ":" + __1.idWithTags);
+            PendulumLogger.DebugLog("WorldCount: " + __1.count);
+            //PendulumLogger.Log("String: " + __2);
+            PendulumLogger.DebugLog("Int: " + __3);
+            if (__1.users != null)
+            {
+                if (__1.users.Count > 0)
+                {
+                    foreach (APIUser user in __1.users)
+                    {
+                        PendulumLogger.DebugLog("User: " + user.displayName);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void patch__2__unused(string __0, ApiPlayerModeration.ModerationType __1, Il2CppSystem.Action<ApiPlayerModeration> __2, Il2CppSystem.Action<string> __3)
+    {
+        PendulumLogger.Log("epic {0} you sent", __1.ToString().ToLower());
+        //var moderation = new ApiPlayerModeration(__2.method);
+        //PendulumLogger.Log(moderation.moderationType);
+        //PendulumLogger.Log(moderation.targetUserId);
+       // PendulumLogger.Log(moderation.sourceUserId);
+    }
+
+    public static void patch__3(Player __0, VRC_EventHandler.VrcEvent __1, VRC_EventHandler.VrcBroadcastType __2, int __3, float __4)
+    {
+        //PendulumLogger.Log("CustomRPC: " + __0);
+        //PendulumLogger.Log("Player: " + __1.prop_APIUser_0.displayName);
+        //PendulumLogger.Log("eventsent");
+        if (__0.prop_APIUser_0 == null || __0 == null)
+        {
+            if (string.IsNullOrEmpty(__1.ParameterString))
+            {
+                    PendulumLogger.Log("Empty Event: " + __1.ParameterString);
+            }
+            return;
+        }
+        if (__1 == null)
+        {
+            PendulumLogger.Log("Empty Event Sent From " + __0.prop_APIUser_0.displayName);
+            return;
+        }
+
+        if (debugmode == true && __0 != null && __1 != null)
+        {
+                bool param1 = __2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered && __1.ParameterString == "ReceiveVoiceStatsSyncRPC" && __1.ParameterObject.name == "USpeak" && __1.ParameterString == "SanityCheck";
+                if (!param1)
+                {
+                    PendulumLogger.EventLog("----------Basic Event----------");
+                    PendulumLogger.EventLog("EventSender: " + __0.prop_APIUser_0.displayName);
+                    PendulumLogger.EventLog("EventType: " + __1.EventType.ToString());
+                    PendulumLogger.EventLog("BroadcastType: " + __2.ToString());
+                    PendulumLogger.EventLog("EventString: " + __1.ParameterString);
+                    PendulumLogger.EventLog("EventBool: " + __1.ParameterBool);
+                    PendulumLogger.EventLog("ObjectName: " + __1.ParameterObject.name);
+                    //PendulumLogger.Log("PhotonID: " + __3);
+                    //return true;
+                    if (__1.ParameterObject.name == "SceneEventHandlerAndInstantiator")
+                    {
+                        var allComponents = __1.ParameterObject.GetComponents(Component.Il2CppType);
+                        foreach (var Component in allComponents)
+                        {
+                            PendulumLogger.EventLog("ComponentName: " + Component.name);
+                            PendulumLogger.EventLog("ComponentTag: " + Component.tag);
+                            PendulumLogger.EventLog("ComponentType: " + Component.GetType().ToString());
+                        }
+                    }
+                    PendulumLogger.EventLog("----------End Event----------");
+                }
+        }
+
+        if (__0.prop_APIUser_0.id != APIUser.CurrentUser.id)
+        {
+            if (__1.EventType == VRC_EventHandler.VrcEventType.SendRPC)
+            {
+                if (__2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+                {
+                    if (__1.ParameterString == "_DestroyObject")
+                    {
+                        PendulumClientMain.DebugLog(__0.prop_APIUser_0.displayName + " Deleted a Portal!");
+                    }
+                }
+            }
+        }
+         //return true;
+        if (Moderation)
+        {
+            if (JoinNotifierMod.DevUserIDs.Contains(__0.prop_APIUser_0.id))
+            {
+                if (__2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+                {
+                    if (__1.ParameterString.Contains("PCM:") && __1.EventType == VRC_EventHandler.VrcEventType.SendRPC)
+                    {
+                        var Moderation = __1.ParameterString.Split(new char[]
+                        {
+                            ':'
+                        });
+                        if (Moderation[1] == APIUser.CurrentUser.id)
+                        {
+                            if (Moderation[2] == "Logout")
+                            {
+                                PendulumClientMain.FakeBanToggle = true;
+                                APIUser.Logout();
+                            }
+                            if (Moderation[2] == "EndProcess")
+                            {
+                                Process.GetCurrentProcess().Kill();
+                            }
+                            if (Moderation[2] == "GoHome")
+                            {
+                                if (!string.IsNullOrEmpty(APIUser.CurrentUser.homeLocation))
+                                {
+                                    var HomeInstance = APIUser.CurrentUser.homeLocation + ":" + new System.Random().Next(1, 99999) + "~private(" + APIUser.CurrentUser.id + ")~nonce(" + PendulumClientMain.RandomInstance8Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance12Char() + ")";
+                                    Networking.GoToRoom(HomeInstance);
+                                    //PendulumLogger.Log(HomeInstance);
+                                    PendulumClientMain.IsLoading = true;
+                                }
+                                else
+                                {
+                                    var HomeInstance = "wrld_4432ea9b-729c-46e3-8eaf-846aa0a37fdd:" + new System.Random().Next(1, 99999) + "~private(" + APIUser.CurrentUser.id + ")~nonce(" + PendulumClientMain.RandomInstance8Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance12Char() + ")";
+                                    Networking.GoToRoom(HomeInstance);
+                                    PendulumClientMain.IsLoading = true;
+                                }
+                            }
+                            if (Moderation[2] == "ResetAvatar")
+                            {
+                                //PendulumClientMain.ChangeToAvatar("avtr_c38a1615-5bf5-42b4-84eb-a8b6c37cbd11");
+                            }
+                            if (Moderation[2] == "Rejoin")
+                            {
+                                //Networking.GoToRoom(RoomManager.field_Internal_Static_ApiWorld_0.id + ":" + RoomManager.field_Internal_Static_ApiWorld_0.currentInstanceIdWithTags);
+                            }
+                            if (Moderation[2] == "Respawn")
+                            {
+                                VRCPlayer.field_Internal_Static_VRCPlayer_0.transform.position = PendulumClientMain.GetSpawnPoint().gameObject.transform.position;
+                            }
+                            if (Moderation[2] == "RickRoll")
+                            {
+                                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                            }
+                            if (Moderation[2] == "ISPCUSER")
+                            {
+                                prefix__return(APIUser.CurrentUser.id, PendulumClientMain.PendulumClientBuildVersion, PendulumClientMain.PendulumClientBranchVersion);
+                            }
+                            if (Moderation[2] == "Propane")
+                            {
+                                Process.Start("https://www.youtube.com/watch?v=Ve4qfo7kXho&t=89");
+                            }
+                            if (Moderation[2] == "ChangeAvatar")
+                            {
+                                 //PendulumClientMain.ChangeToAvatar(Moderation[3]);
+                            }
+                            if (Moderation[2] == "Driver")
+                            {
+                                Process.Start("https://www.youtube.com/watch?v=O3FKMYBV01U&t=47s");
+                            }
+                            if (Moderation[2] == "NFF")
+                            {
+                                Process.Start("https://open.spotify.com/track/7eJqLdEQ96D5Xzc406xkeZ");
+                            }
+                        }
+                        if (Moderation[1] == "VOID_MC")
+                        {
+                            if (RoomManager.field_Internal_Static_ApiWorld_0.id == "wrld_7e10376a-29b6-43af-ac5d-6eb72732e90c")
+                            {
+                                //GameObject.Find("Main_2019_Assets/Systems/Music/VRCVideoSync").GetComponent<VideoPlayer>().Stop();
+                                PendulumClientMain.ChangeVPLink(Moderation[2] + ":" + Moderation[3]);
+                                PendulumLogger.Log(Moderation[2] + ":" + Moderation[3]);
+                                //GameObject.Find("Main_2019_Assets/Systems/Music/VRCVideoSync").GetComponent<VideoPlayer>().Play();
+                            }
+                        }
+                    }
+                    else if (__1.ParameterString.Contains("PCU"))
+                    {
+                        var Moderation = __1.ParameterString.Split(new char[]
+                        {
+                            ':'
+                        });
+                        if (Moderation[1] == PendulumClientMain.StoredPCU)
+                        {
+                            if (Moderation[2] == "TRUE")
+                            {
+                                PendulumLogger.Log(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + " is a PCU");
+                                AlertPopup.SendAlertPopup(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + "\nPendClientVer = {0}\nPendClientBranch = {1}", Moderation[3], Moderation[4]);
+                            }
+                        }
+                    }
+                    else if (__1.ParameterString.Contains("BCU"))
+                    {
+                        var Moderation = __1.ParameterString.Split(new char[]
+                        {
+                            ':'
+                        });
+                        if (Moderation[1] == PendulumClientMain.StoredPCU)
+                        {
+                            if (Moderation[2] == "TRUE")
+                            {
+                                PendulumLogger.Log(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + " is a BCU");
+                                AlertPopup.SendAlertPopup(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + "\nBreadClientUser = true");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static VRC_EventHandler bruhhandler;
+    public static void prefix__return(string stringr, string ver, string branc)
+    {
+        string output = "PCU:" + stringr + ":TRUE:" + ver + ":" + branc;
+
+        if (bruhhandler == null) bruhhandler = Resources.FindObjectsOfTypeAll<VRC_EventHandler>()[0];
+
+        VRC_EventHandler.VrcEvent CustomEvent = new VRC_EventHandler.VrcEvent
+        {
+            EventType = VRC_EventHandler.VrcEventType.SendRPC,
+            Name = "卐",
+            ParameterObject = bruhhandler.gameObject,
+            ParameterInt = int.MinValue,
+            ParameterFloat = float.MinValue,
+            ParameterString = output,
+        };
+        bruhhandler.TriggerEvent(CustomEvent, VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered, VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject, 0f);
+     }
+
+    public static bool patch__anti__steam(ref ulong __result)
+    {
+        __result = Convert.ToUInt64(File.ReadAllLines("PendulumClient/SteamID.txt")[1]);
+        return false;
+    }
+
+    public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
+    {
+        if (__0.Code == 9 && Anti9)
+        {
+            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+            if (__0.Parameters[245].ToString().Length > 150)
+            {
+                PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                return false;
+            }
+            else
+            {
+                PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                return false;
+            }
+        }
+        if (__0.Code == 209 && Anti209)
+        {
+            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+            if (__0.Parameters[245].ToString().Length > 150)
+            {
+                PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                return false;
+            }
+            else
+            {
+                PendulumLogger.Log("Blocked Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                return false;
+            }
+        }
+        if (__0.Code == 9 && __0.Parameters[245].ToString().Length > 150)
+        {
+            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+            PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+            return false;
+        }
+        if (__0.Code == 209 && __0.Parameters[245].ToString().Length > 150)
+        {
+            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+            PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+            return false;
+        }
+        try
+        {
+            if (debugmode == true || __0.Code == 209 || __0.Code == 210)
+            {
+                if (__0.Code != 7)
+                {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                    PendulumLogger.EventLog("----------Photon Event----------");
+                    PendulumLogger.EventLog("From: " + __0.Sender + " (" + plr.field_Private_APIUser_0.displayName + ")");
+                    PendulumLogger.EventLog("Code: " + __0.Code);
+                    PendulumLogger.EventLog("----------End Photon Event----------");
+                }
+            }
+            /*if (__0.Code == 209 || __0.Code == 210 || __0.Code == 6)
+            {
+                PendulumLogger.Log(PlayerWrappers.GetPlayerByPhotonID(__0.Sender).prop_APIUser_0.displayName + " is trying to desync the world!");
+                return false;
+            }
+            if (__0.Code == 7)
+            {
+                if (__0.Sender == PlayerWrappers.GetCurrentPlayer().field_Private_VRCPlayerApi_0.playerId)
+                {
+                    if (PendulumClientMain.Serialization)
+                    {
+                        return false;
+                    }
+                }
+            }*/
+        }
+        catch { }
+        return true;
+
+    }
+
+        /*public static void NotifacationPatch(Notification __0)
+        {
+            //PendulumLogger.Log("Sender: " + __0.senderUsername);
+            //PendulumLogger.Log("Reciver: " + __0.receiverUserId);
+            //PendulumLogger.Log("Type: " + __0.notificationType.ToString());
+            if (__0.senderUserId == JoinNotifierMod.KyranUID1 || __0.senderUserId == JoinNotifierMod.BupperUID || __0.senderUserId == JoinNotifierMod.BupperUID2)
+            {
+                if (__0.receiverUserId == JoinNotifierMod.CorbinUID)
+                {
+                    if (__0.notificationType == "requestInvite" || __0.notificationType == "INVITE_REQUEST")
+                    {
+                        PendulumClientMain.InviteReqUser(__0.senderUserId);
+                        PendulumClientMain.InviteUser(__0.senderUserId);
+                    }
+                }
+            }
+        }
+
+        public static bool AntiPhotonEvents(ExitGames.Client.Photon.EventData __0)
+        {
+            try
+            {
+                if (__0.Code == 209 || __0.Code == 210 || __0.Code == 6)
+                {
+                    PendulumLogger.Log(PlayerWrappers.GetPlayerByPhotonID(__0.Sender).prop_APIUser_0.displayName + " is trying to desync the world!");
+                    return false;
+                }
+                if (__0.Code == 7)
+                {
+                    if (__0.Sender == PlayerWrappers.GetCurrentPlayer().field_Private_VRCPlayerApi_0.playerId)
+                    {
+                        if (PendulumClientMain.Serialization)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch { }
+            return true;
+
+        }
+
+        public static bool RecieveEventPatch(Player __0, VRC_EventHandler.VrcEvent __1, VRC_EventHandler.VrcBroadcastType __2, int __3, float __4)
+        {
+            if (__1.ParameterObject != null)
+            {
+                if (__0.prop_APIUser_0.id != APIUser.CurrentUser.id && IsNaN(__1.ParameterObject.transform.position))
+                {
+                    PendulumLogger.Log(__0.prop_APIUser_0.displayName + " tried to camera crash you lmao");
+                    return false;
+                }
+            }
+            if (__1.ParameterString == "bruh")
+            {
+                PendulumLogger.Log(__0.prop_APIUser_0.displayName);
+            }
+            return true;
+        }
+
+        private static bool IsNaN(Vector3 v)
+        {
+            return float.IsNaN(v.x) || float.IsNaN(v.y) || float.IsNaN(v.z);
+        }*/
+
+        public static bool patch__4(ref VRC_EventHandler.VrcEvent e, ref VRC_EventHandler.VrcBroadcastType broadcast, int instagatorId, float fastForward)
+    {
+        if (broadcast == VRC_EventHandler.VrcBroadcastType.Always || broadcast == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+        {
+            //PendulumLogger.Log("InstID: " + instagatorId);
+            //return true;
+        }
+
+        if (broadcast == VRC_EventHandler.VrcBroadcastType.Always ^ broadcast == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+        {
+            if (WorldTriggers == false)
+            {
+                return true;
+            }
+        }
+
+        if (WorldTriggers == true)
+        {
+            broadcast = VRC_EventHandler.VrcBroadcastType.Always;
+            return true;
+        }
+
+        return true;
+    }
+    public static bool WorldTriggers = false;
+
+        public static void patch__5(ApiContainer __0)
+        {
+            if (debugmode)
+            {
+                PendulumLogger.DebugLog("String1: " + __0.Text);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+        }
+
+        public static bool patch__6(bool __result, ApiModeration __0)
+        {
+            __result = false;
+            if (debugmode)
+            {
+                PendulumLogger.DebugLog("String1: " + __0.targetUserId);
+                PendulumLogger.DebugLog("String1: " + __0.moderatorDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+
+        public static bool patch__7(bool __result, ApiModeration __0)
+        {
+            __result = false;
+            if (debugmode)
+            {
+                PendulumLogger.DebugLog("String1: " + __0.targetDisplayName);
+                PendulumLogger.DebugLog("String1: " + __0.moderatorDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+
+        public static bool patch__8(bool __result, ApiPlayerModeration __0)
+        {
+            __result = false;
+            if (debugmode)
+            {
+                PendulumLogger.DebugLog("String1: " + __0.targetDisplayName);
+                PendulumLogger.DebugLog("String1: " + __0.sourceDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+
+        public static bool patch__9(ApiModelContainer<APIUser> __0)
+        {
+            if (debugmode)
+            {
+                //PendulumLogger.Log("String1: " + __0.);
+                //PendulumLogger.Log("String1: " + __0.sourceDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+
+        public static bool patch__enum__1(IEnumerable<ApiModeration> __0)
+        {
+            if (debugmode)
+            {
+                //PendulumLogger.Log("String1: " + __0.);
+                //PendulumLogger.Log("String1: " + __0.sourceDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+        public static bool patch__enum__2(IEnumerable<ApiPlayerModeration> __0)
+        {
+            if (debugmode)
+            {
+                //PendulumLogger.Log("String1: " + __0.);
+                //PendulumLogger.Log("String1: " + __0.sourceDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+
+        public static bool result__false(bool __result)
+        {
+            __result = false;
+            if (debugmode)
+            {
+                //PendulumLogger.Log("String1: " + __0.);
+                //PendulumLogger.Log("String1: " + __0.sourceDisplayName);
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+            return false;
+        }
+
+        public static void patch__10(Notification __0, Il2CppStructArray<byte> __1)
+        {
+            if (debugmode)
+            {
+                PendulumLogger.DebugLog("String1: " + __0.senderUsername);
+                PendulumLogger.DebugLog("String2: " + __0.type);
+                PendulumLogger.DebugLog("String3: " + __0.message);
+                var __3 = __0.details;
+                if (__3 != null)
+                {
+                    if (__3.Count > 0)
+                    {
+                        foreach (var Pair in __3)
+                        {
+                            PendulumLogger.DebugLog("NotiKey: " + Pair.key);
+                            PendulumLogger.DebugLog("NotiValue: " + Pair.value.ToString());
+                        }
+                    }
+                }
+                //PendulumLogger.Log("Float1: " + __1);
+                //PendulumLogger.Log("String3: " + __2.ToString());
+                //PendulumLogger.Log("String4: " + __3.ToString());
+            }
+        }
+        
+        public static void patch__ping(ref short __result)
+        {
+            //PendulumLogger.Log("Ping: " + __result);
+            __result = Ping;
+        }
+
+        public static bool patch__camera(ref bool __result, VRC.UserCamera.CameraUtil._TakeScreenShot_d__5 __instance)
+        {
+            if (PendulumClientMain.DesktopCameraEnabled || Login.IsInVR)
+            {
+                __result = true;
+                return true;
+            }
+            else
+            {
+                __result = false;
+                return false;
+            }
+        }
+
+        public static void patch__avatar__logging(ApiAvatar __0)
+        {
+            if (__0.authorId == "usr_d7ff85ad-303e-4ca5-bbb4-b7841ab66e0f")
+            {
+
+            }
+        }
+        /*public static void EventPatch(VRC_EventHandler.VrcEvent __0, VRC_EventHandler.VrcBroadcastType __1, int __2, float __3)
+        {
+            if (__1 == VRC_EventHandler.VrcBroadcastType.Always)
+            {
+                PendulumLogger.Log("InstID: " + __2);
+            }
+        }*/
+        public static bool UIList__Hook(ref VRCUiContentButton __0, ref Il2CppSystem.Object __1)
+        {
+            APIUser apiUser = __1.TryCast<APIUser>();
+            //var apiUser = PlayerWrappers.CachedApiUsers.Find(x => x.id == user.id) ?? user;
+            if (apiUser != null)
+            {
+                 __0.field_Public_Text_0.color = PendulumClientMain.GetTrustColor(apiUser);
+            }
+            else
+            {
+                __0.field_Public_Text_0.color = new Color(0.4139273f, 0.8854161f, 0.9705882f);
+            }
+            return true;
+        }
+
+        public static void AvatarChange__Hook(ApiAvatar __0)
+        {
+            //PendulumLogger.Log("AvatarChange: " + __0.name);
+        }
+        public static void ElementStyle__Hook(VRC.UI.Core.Styles.ElementStyle __0, string __1)
+        {
+            if (__0 == null) return;
+            if (string.IsNullOrEmpty(__1)) return;
+
+            if (debugmode)
+            {
+                PendulumLogger.DebugLog("StyleString: " + __1);
+            }
+            //PendulumLogger.Log("AvatarChange: " + __0.name);
+        }
+        public static void AvatarLoad__Hook(GameObject __0, VRC_AvatarDescriptor __1, bool __2)//, ref VRC_AvatarDescriptor __1, ref bool __2)//, float __1, Il2CppSystem.Action<GameObject> __2)
+        {
+            //PendulumLogger.Log("bool " + __2.ToString().ToLower());
+
+            if (__2 == true)
+            {
+                //PendulumLogger.Log("yay we gamin");
+                var playerobj = __0.transform.root.gameObject;
+                //var avatarmgr = __instance.field_Public_VRCAvatarManager_0;
+                var player = __0.transform.root.GetComponentInChildren<Player>();//avatarmgr.field_Private_VRCPlayer_0;
+                if (player == null)
+                {
+                    //PendulumLogger.Log("that shit null"); 
+                    return;
+                }
+
+                PendulumClientMain.CheckShaderBlacklist(player);
+                //var userName = player.prop_APIUser_0.displayName;
+                //PendulumLogger.Log("AvatarLoad: " + playerobj.name);
+                //PendulumLogger.Log("Avatar Name: " + avatarmgr.prop_ApiAvatar_0?.name);
+                //PendulumLogger.Log("Player: " + userName);
+                //PendulumLogger.Log("desc1: " + __1.name);
+            }
+        }
+        public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.ListType __2)
+        {
+            //PendulumLogger.Log("Selected User: " + __0.displayName);
+            var NameText = GameObject.Find("UserInterface/MenuContent/Screens/UserInfo/User Panel/NameText");
+            NameText.GetComponent<UnityEngine.UI.Text>().color = PendulumClientMain.GetTrustColor(__0);
+        }
+
+        public static bool WorldDownload__Hook(ApiWorld __0)
+        {
+            PendulumLogger.Log("World: " + __0.name);
+            return true;
+        }
+
+        public static bool FloatPatch(PlayerNameplate __instance, ref float __0, ref bool __1)//, float __1, float __2)
+        {
+            if (__1 == false) return true;
+            if (__0 == 0) return true;
+            /*if (__instance == null) return true;
+            if (__instance.gameObject == null) return true;
+            if (__instance.gameObject.transform == null) return true;
+            if (__instance.gameObject.transform.parent == null) return true;
+            if (__instance.gameObject.transform.parent.parent == null) return true;
+            if (__instance.gameObject.transform.parent.parent.parent == null) return true;
+            */
+
+            var player = __instance.gameObject.transform.parent.parent.parent.gameObject.GetComponent<Player>();
+
+            if (player.field_Private_APIUser_0.id == JoinNotifierMod.CorbinUID)
+            {
+                if (__0 == 166.32f)
+                {
+                    //PendulumLogger.Log("start change corbin nameplate size");
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = JoinNotifierMod.DevOutline;
+                    MelonCoroutines.Start(changename(__instance.gameObject.GetComponent<RectTransform>(), 248f));//__instance.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(248f, __instance.gameObject.GetComponent<RectTransform>().sizeDelta.y);
+                    //__0 = 248f;
+                    return true;
+                }
+                else
+                {
+                    if (debugmode == true)
+                    {
+                        PendulumLogger.DebugLog("Num " + __0);
+                    }
+                }
+            }
+
+            if (player.field_Private_APIUser_0.id == JoinNotifierMod.MooniUID)
+            {
+                if (__0 == 213.31f)
+                {
+                    //PendulumLogger.Log("start change corbin nameplate size");
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = JoinNotifierMod.DevOutline;
+                    MelonCoroutines.Start(changename(__instance.gameObject.GetComponent<RectTransform>(), __0 + 81.68f));//__instance.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(248f, __instance.gameObject.GetComponent<RectTransform>().sizeDelta.y);
+                    //__0 = 248f;
+                    return true;
+                }
+                else
+                {
+                    if (debugmode == true)
+                    {
+                        PendulumLogger.DebugLog("Num " + __0);
+                    }
+                }
+            }
+
+            if (player.field_Private_APIUser_0.id == JoinNotifierMod.KyranUID2)
+            {
+                if (__0 == 150f)
+                {
+                    //PendulumLogger.Log("start change corbin nameplate size");
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = JoinNotifierMod.DevOutline;
+                    MelonCoroutines.Start(changename(__instance.gameObject.GetComponent<RectTransform>(), __0 + 81.68f));//__instance.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(248f, __instance.gameObject.GetComponent<RectTransform>().sizeDelta.y);
+                    //__0 = 248f;
+                    return true;
+                }
+                else
+                {
+                    if (debugmode == true)
+                    {
+                        PendulumLogger.DebugLog("Num " + __0);
+                    }
+                }
+            }
+
+            //PendulumLogger.Log("Float1: " + __0);
+            //PendulumLogger.Log("Bool1: " + __1);
+            //PendulumLogger.Log("Float3: " + __2);
+            return __1;
+        }
+
+        private static System.Collections.IEnumerator changename(RectTransform transform, float endsize)
+        {
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            if (transform == null)  yield break;
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield return new WaitForSeconds(0.01f);
+            transform.sizeDelta = new Vector2(endsize, transform.sizeDelta.y);
+            if (transform == null)  yield break;
+            yield break;
+        }
+        public static void HWID__Hook(string __result)
+        {
+            string hwid = "";
+            if (string.IsNullOrEmpty(newhwid))
+            {
+                /*if (!string.IsNullOrEmpty(SystemInfo.deviceUniqueIdentifier))
+                {
+                    PendulumLogger.Log("Original HWID: " + SystemInfo.deviceUniqueIdentifier);
+                }*/
+                var random = new System.Random();
+                var NewHWID = KeyedHashAlgorithm.Create().ComputeHash(Encoding.UTF8.GetBytes(string.Format("{0}B-{1}1-C{2}-{3}A-{4}{5}-{6}{7}", new object[] {
+                    random.Next(1, 9),
+                    random.Next(1, 9),
+                    random.Next(1, 9),
+                    random.Next(1, 9),
+                    random.Next(1, 9),
+                    random.Next(1, 9),
+                    random.Next(1, 9),
+                    random.Next(1, 9)}))).Select((byte x) => { return x.ToString("x2"); }).Aggregate((string x, string y) => x + y);
+
+                hwid = NewHWID;
+                newhwid = NewHWID;
+                __result = hwid;
+                PendulumLogger.Log("New HWID: " + __result);
+            }
+            else
+            {
+                hwid = newhwid;
+                __result = hwid;
+            }
+        }
+    }
+    class Hooks
+    {
+
+    }
+}

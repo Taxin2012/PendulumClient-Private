@@ -2256,12 +2256,12 @@ namespace PendulumClient.Main
             //var NamePlateHook3 = typeof(PlayerNameplate).GetMethod("Method_Private_Void_Single_Boolean_PDM_1");
             var NamePlatePatch1 = typeof(Prefixes).GetMethod("FloatPatch");
 
-            var Hook7 = typeof(FlatBufferNetworkSerializer).GetMethod("Method_Public_Void_EventData_0");
-            var Hook7V2 = typeof(Photon.Realtime.LoadBalancingClient).GetMethod("OnEvent");
-            var Hook7V3 = typeof(VRCNetworkingClient).GetMethod("OnEvent");
+            var Hook7 = typeof(FlatBufferNetworkSerializer).GetMethod(nameof(FlatBufferNetworkSerializer.Method_Public_Void_EventData_0));
+            var Hook7V2 = typeof(Photon.Realtime.LoadBalancingClient).GetMethod(nameof(Photon.Realtime.LoadBalancingClient.OnEvent));
+            var Hook7V3 = typeof(VRCNetworkingClient).GetMethod(nameof(VRCNetworkingClient.OnEvent));
             //var Hook7V4 = typeof(VRC_EventLog.MonoBehaviour1NPublicObPrPrPrUnique).GetMethod("OnEvent");
             //var Hook7V3List = typeof(VRC_EventLog.MonoBehaviour1NPublicObPrPrPrUnique).GetMethods().Where(mi => mi.GetParameters().Length == 1 && mi.GetParameters().First().ParameterType == typeof(EventData) && mi.Name.StartsWith("Method_Public_Virtual_Final_New_Void_EventData_"));
-            var Hook7Patch = typeof(Prefixes).GetMethod("PhotonEvents");
+            var Hook7Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.PhotonEvents));
 
             var Hook8 = typeof(VRC.UI.Core.Styles.StyleEngine).GetMethod("Method_Public_Void_ElementStyle_String_0");
             var Hook8Patch = typeof(Prefixes).GetMethod("ElementStyle__Hook");

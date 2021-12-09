@@ -4530,6 +4530,10 @@ namespace PendulumClient.Main
                     {
                         variable.enabled = false;
                     }
+                    foreach (var variable in GDupedAvatar.GetComponentsInChildren<UnityEngine.AudioSource>())
+                    {
+                        variable.enabled = false;
+                    }
                     for (int i = 0; i < GDupedAvatar.transform.childCount; i++)
                     {       
                         var child = GDupedAvatar.transform.GetChild(i);

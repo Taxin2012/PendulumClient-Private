@@ -10,6 +10,9 @@ using PendulumClient.UI;
 using PendulumClient.Main;
 using MelonLoader;
 using PendulumClient.Wrapper;
+using Transmtn.DTO.Notifications;
+using Transmtn;
+using Transmtn.DTO;
 
 namespace PendulumClient.ButtonAPIV2
 {
@@ -280,6 +283,27 @@ namespace PendulumClient.ButtonAPIV2
             DownloadsMenu.AddButton("Open VRCW Folder", "Open the folder containing all of your downloaded VRCWs", () =>
             {
                 OpenFolder(Environment.CurrentDirectory + "/PendulumClient/VRCW");
+            });
+            FunctionMenu.AddButton("Join InstanceID", "Joins an instance by ID", () =>
+            {
+                //VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.field_Private_APIUser_0.id, "", new Location(a, new Transmtn.DTO.Instance(b, "", "", "", "", false)), WorldName));
+                InputPopup.ShowInputPopupWithCancel(VRCUiPopupManager.prop_VRCUiPopupManager_0, "Enter InstanceID", "", InputField.InputType.Standard, false, "Submit", (s, k, t) =>
+                {
+                    if (string.IsNullOrEmpty(s))
+                        return;
+
+                    if (!s.Contains("wrld_") && !s.Contains(":"))
+                        return;
+
+                    if (s.Length > 6)
+                    {
+                        var userInfo = VRC.Core.APIUser.CurrentUser;
+                        var worldidlist = s.Split('');
+                        var a = worldidlist[0];
+                        var b = worldidlist[1];
+                        VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.id, "", new Location(a, new Transmtn.DTO.Instance(b)), "" ));
+                    }
+                }, null);
             });
         }
     }

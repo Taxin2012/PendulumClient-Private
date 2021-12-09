@@ -4903,7 +4903,7 @@ namespace PendulumClient.Main
             Player30.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1700f, 1700f);
             Player31.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1700f, 1800f);
             Player32.GetComponent<RectTransform>().anchoredPosition = new Vector2(-1700f, 1900f);
-
+            
             Player1.GetComponent<Text>().color = UnityEngine.Color.white;
             Player2.GetComponent<Text>().color = UnityEngine.Color.white;
             Player3.GetComponent<Text>().color = UnityEngine.Color.white;

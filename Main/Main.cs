@@ -5037,6 +5037,7 @@ namespace PendulumClient.Main
             Player32.GetComponent<Text>().text = "";
         }
 
+
         public static void FakeBanMessage()
         {
             Errormsg("Moderator Ban", string.Format("You have been banned until {2} {1}, 2025 {0}.\nReason: Community Guidelines Violation\nCommunity Guidelines: www.vrchat.com/community", DateTime.Now.ToString("HH:mm"), DateTime.Now.Day, DateTime.Now.ToString("MMM")));
@@ -5048,7 +5049,7 @@ namespace PendulumClient.Main
             {
                 var blacklist = File.ReadAllLines("PendulumClient/ShaderBlacklist.txt");
                 var players = player;
-                string plrname = players.prop_APIUser_0.displayName;
+                string plrname = players.field_Private_APIUser_0.displayName;
                 int totalmatsremoved = 0;
                 Renderer[] componentsInChildren3 = players.GetComponentsInChildren<Renderer>(true);
                 System.Collections.Generic.List<string> RemovedShaders = new System.Collections.Generic.List<string>();

@@ -298,7 +298,7 @@ namespace PendulumClient.ButtonAPIV2
                     if (s.Length > 6)
                     {
                         var userInfo = VRC.Core.APIUser.CurrentUser;
-                        var worldidlist = s.Split('');
+                        var worldidlist = s.Split(':');
                         var a = worldidlist[0];
                         var b = worldidlist[1];
                         VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.id, "", new Location(a, new Transmtn.DTO.Instance(b)), "" ));

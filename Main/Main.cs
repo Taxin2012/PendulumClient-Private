@@ -1107,38 +1107,51 @@ namespace PendulumClient.Main
             {
                 //ColorModule.ColorModule.SetColorTheme();
                 //ColorModule.ColorModule.SetColorThemeV2();
-                if (File.Exists(Environment.CurrentDirectory + "/PendulumClient/373"))
+                UIColorsSetup = true;
+
+                try
                 {
-                    m373 = AssetBundle.LoadFromFile("PendulumClient/373");
-                    m373.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-                    AssetBundleRequest PendClientLogo = m373.LoadAssetAsync("373_invert.png", Il2CppType.Of<Sprite>());
-                    var sprite = PendClientLogo.asset.Cast<Sprite>();
-                    if (sprite != null)
+                    if (File.Exists(Environment.CurrentDirectory + "/PendulumClient/373"))
                     {
-                        //ColorModule.ColorModule.CachedColor = new Color(1f, 0f, 0f, 2f);
-                        JoinNotifierMod.PendulumSprite = sprite;
-                        ColorModuleV2.CMV2_ColorModule.SetupColors();
-                        MenuSetup.SetupMenu(VRC_UIManager, sprite);
-                        ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
-                        SetupDebugPanelNextThread = true;
-                        PendulumLogger.Log("UI Recolored");
+                        m373 = AssetBundle.LoadFromFile("PendulumClient/373");
+                        m373.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                        AssetBundleRequest PendClientLogo = m373.LoadAssetAsync("373_invert.png", Il2CppType.Of<Sprite>());
+                        var sprite = PendClientLogo.asset.Cast<Sprite>();
+                        if (sprite != null)
+                        {
+                            //ColorModule.ColorModule.CachedColor = new Color(1f, 0f, 0f, 2f);
+
+                            JoinNotifierMod.PendulumSprite = sprite;
+                            JoinNotifierMod.PendulumSprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                            ColorModuleV2.CMV2_ColorModule.SetupColors();
+                            MenuSetup.SetupMenu(VRC_UIManager, sprite);
+                            ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
+                            SetupDebugPanelNextThread = true;
+                            PendulumLogger.Log("UI Recolored");
+                        }
+                        UIColorsSetup = true;
                     }
-                    UIColorsSetup = true;
+                    else
+                    {
+                        AssetBundleRequest PendClientLogo = myAssetBundle.LoadAssetAsync("pendclientsprite.png", Il2CppType.Of<Sprite>());
+                        var sprite = PendClientLogo.asset.Cast<Sprite>();
+                        sprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                        if (sprite != null)
+                        {
+                            JoinNotifierMod.PendulumSprite = sprite;
+                            JoinNotifierMod.PendulumSprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                            ColorModuleV2.CMV2_ColorModule.SetupColors();
+                            MenuSetup.SetupMenu(VRC_UIManager, sprite);
+                            ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
+                            SetupDebugPanelNextThread = true;
+                            PendulumLogger.Log("UI Recolored");
+                        }
+                        UIColorsSetup = true;
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    AssetBundleRequest PendClientLogo = myAssetBundle.LoadAssetAsync("pendclientsprite.png", Il2CppType.Of<Sprite>());
-                    var sprite = PendClientLogo.asset.Cast<Sprite>();
-                    if (sprite != null)
-                    {
-                        JoinNotifierMod.PendulumSprite = sprite;
-                        ColorModuleV2.CMV2_ColorModule.SetupColors();
-                        MenuSetup.SetupMenu(VRC_UIManager, sprite);
-                        ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
-                        SetupDebugPanelNextThread = true;
-                        PendulumLogger.Log("UI Recolored");
-                    }
-                    UIColorsSetup = true;
+                    PendulumLogger.LogErrorSevere("Error setting up menu: " + e.ToString());
                 }
             }
 
@@ -2267,13 +2280,13 @@ namespace PendulumClient.Main
             var Hook8 = typeof(VRC.UI.Core.Styles.StyleEngine).GetMethod("Method_Public_Void_ElementStyle_String_0");
             var Hook8Patch = typeof(Prefixes).GetMethod("ElementStyle__Hook");
 
-            var Hook9 = typeof(VRC.UI.Elements.QuickMenu).GetMethod("OnDisable");
+            var Hook9 = typeof(VRC.UI.Elements.QuickMenu).GetMethod(nameof(VRC.UI.Elements.QuickMenu.OnDisable));
             var Hook9PrePatch = typeof(Prefixes).GetMethod("prepatch__QMOnClose");
             var Hook9PostPatch = typeof(Prefixes).GetMethod("postpatch__QMOnClose");
 
-            var Hook10 = typeof(VRC.UI.Elements.QuickMenu).GetMethod("OnEnable");
-            var Hook10PrePatch = typeof(Prefixes).GetMethod("prepatch__QMOnOpen");
-            var Hook10PostPatch = typeof(Prefixes).GetMethod("postpatch__QMOnOpen");
+            var Hook10 = typeof(VRC.UI.Elements.QuickMenu).GetMethod(nameof(VRC.UI.Elements.QuickMenu.OnEnable));
+            var Hook10PrePatch = typeof(Prefixes).GetMethod(nameof(Prefixes.prepatch__QMOnOpen));
+            var Hook10PostPatch = typeof(Prefixes).GetMethod(nameof(Prefixes.postpatch__QMOnOpen));
 
             var Hook11 = typeof(PortalInternal).GetMethod("ConfigurePortal");
             var Hook11PrePatch = typeof(Prefixes).GetMethod("prepatch__PortalAwake");

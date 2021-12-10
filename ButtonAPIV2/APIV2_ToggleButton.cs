@@ -53,11 +53,14 @@ namespace PendulumClient.ButtonAPIV2
             Toggle(defaultvalue, false);
 
             if (defaultvalue)
+            {
                 onToggle.Invoke(true);
+                _toggleIcon.OnValueChanged(true);
+            }
 
-            EnableDisableListener.RegisterSafe();
+            /*EnableDisableListener.RegisterSafe();
             var listener = GameObject.AddComponent<EnableDisableListener>();
-            listener.OnEnableEvent += UpdateToggleIfNeeded;
+            listener.OnEnableEvent += UpdateToggleIfNeeded;*/
         }
 
 

@@ -1,4 +1,4 @@
-<project outputDir="E:\desktop other shit\PendulumClientPublic\Output\TestMod\Confused" baseDir="E:\desktop other shit\PendulumClientPublic\Output\TestMod" xmlns="http://confuser.codeplex.com">
+<project outputDir="E:\desktop other shit\PendulumClientGitHub\imkyran\PendulumClient-Private\Output\TestMod\Confused" baseDir="E:\desktop other shit\PendulumClientGitHub\imkyran\PendulumClient-Private\Output\TestMod" xmlns="http://confuser.codeplex.com">
   <rule pattern="true" preset="aggressive" inherit="false">
     <protection id="anti ildasm" />
     <protection id="rename">
@@ -10,5 +10,5 @@
     <protection id="constants" />
     <protection id="resources" />
   </rule>
-  <module path="PendulumClientPublic.dll" />
+  <module path="PendulumClientPrivate.dll" />
 </project>

@@ -121,6 +121,7 @@ namespace PendulumClient.ButtonAPIV2
         public static void SetupMenu(VRCUiManager uimanager, Sprite icon, string menuname = "PendulumClient")
         {
             if (uimanager == null) return;
+            if (icon == null) return;
 
             MainMenu = new APIV2_MenuPage(menuname, true);
             APIV2_TabButton.Create(menuname, $"Open the {menuname} menu.", menuname, icon);

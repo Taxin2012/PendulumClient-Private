@@ -129,6 +129,116 @@ namespace PendulumClient.ColorModuleV2
         {
             try
             {
+                if (File.Exists("PendulumClient/MenuMusic/LoginMusic.wav"))
+                {
+                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoginMusic.wav")}");
+                    uwr.SendWebRequest();
+                    if (!uwr.isDone)
+                    {
+                        while (true)
+                        {
+                            System.Threading.Thread.Sleep(1);
+                            if (uwr.isDone)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+
+                    var audioSource = GameObject.Find("UserInterface/LoadingBackground_TealGradient_Music/LoadingSound").GetComponent<AudioSource>();
+                    audioSource.Stop();
+                    audioSource.clip = audioClip;
+                    audioSource.Play();
+                }
+                else if (File.Exists("PendulumClient/MenuMusic/LoginMusic.ogg"))
+                {
+                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoginMusic.ogg")}");
+                    uwr.SendWebRequest();
+                    if (!uwr.isDone)
+                    {
+                        while (true)
+                        {
+                            System.Threading.Thread.Sleep(1);
+                            if (uwr.isDone)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+
+                    var audioSource = GameObject.Find("UserInterface/LoadingBackground_TealGradient_Music/LoadingSound").GetComponent<AudioSource>();
+                    audioSource.Stop();
+                    audioSource.clip = audioClip;
+                    audioSource.Play();
+                }
+                if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.wav"))
+                {
+                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.wav")}");
+                    uwr.SendWebRequest();
+                    if (!uwr.isDone)
+                    {
+                        while (true)
+                        {
+                            System.Threading.Thread.Sleep(1);
+                            if (uwr.isDone)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+
+                    var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
+                    if (audioSource.isPlaying)
+                    {
+                        audioSource.Stop();
+                        audioSource.clip = audioClip;
+                        audioSource.Play();
+                    }
+                    else
+                    {
+                        audioSource.clip = audioClip;
+                    }
+                }
+                else if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.ogg"))
+                {
+                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.ogg")}");
+                    uwr.SendWebRequest();
+                    if (!uwr.isDone)
+                    {
+                        while (true)
+                        {
+                            System.Threading.Thread.Sleep(1);
+                            if (uwr.isDone)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+
+                    var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
+                    if (audioSource.isPlaying)
+                    {
+                        audioSource.Stop();
+                        audioSource.clip = audioClip;
+                        audioSource.Play();
+                    }
+                    else
+                    {
+                        audioSource.clip = audioClip;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                PendulumLogger.LogErrorSevere("Failed to load MenuMusic: " + e.ToString());
+            }
+
+            try
+            {
                 var color = ColorModule.ColorModule.CachedColor;
                 var color2 = ColorModule.ColorModule.CachedTextColor;
                 ColorBlock colorBlock = default(ColorBlock);

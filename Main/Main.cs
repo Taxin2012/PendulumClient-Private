@@ -226,7 +226,7 @@ namespace PendulumClient.Main
         public static bool SetupDebugPanelNextThread = false;
         public static int DebugThreadsToBypass = 0;
 
-        public static bool MenuMusic = File.Exists("PendulumClient/MenuMusic/menumusic.assetbundle");
+        //public static bool MenuMusic = File.Exists("PendulumClient/MenuMusic/menumusic.assetbundle");
 
         public static float BlockNameLoop = 0f;
         public static float LoadingWorldTimer = 0f;
@@ -254,7 +254,7 @@ namespace PendulumClient.Main
         public static string AppData = ReturnUserPath() + "/Temp/PendulumClient";
         public static string PortalDropperName = string.Empty;
 
-        public const string PendulumClientBuildVersion = "4.0.4.3";
+        public const string PendulumClientBuildVersion = "4.0.4.4";
         public const string PendulumClientBranchVersion = "dev_";
 
         public byte[] LogoBytes;
@@ -296,7 +296,7 @@ namespace PendulumClient.Main
         public static MethodInfo HookM = typeof(MelonUtils).GetMethod("NativeHookAttach", AccessTools.all);
         //public static MethodInfo SetWorldM = typeof(VRCFlowManager).GetMethods().First((MethodInfo x) => x.GetParameters().Length == 1 && x.GetParameters()[0].ParameterType.Name.ToLower().Contains("objectpublic"));
         public static EnterFix OldEnter;
-        private unsafe static IntPtr value = (IntPtr)typeof(PortalInternal).GetField("NativeMethodInfoPtr_Method_Public_Void_0", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        private unsafe static IntPtr value = (IntPtr)typeof(PortalInternal).GetField("NativeMethodInfoPtr_Method_Public_Void_1", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
         public delegate void EnterFix(IntPtr instance);
 
         public static System.Collections.Generic.List<VRCMod> Modules = new System.Collections.Generic.List<VRCMod>();
@@ -333,6 +333,7 @@ namespace PendulumClient.Main
             //ClassInjector.RegisterTypeInIl2Cpp<AvatarYoinking>();
             Directory.CreateDirectory("PendulumClient");
             Directory.CreateDirectory("PendulumClient/Logo");
+            Directory.CreateDirectory("PendulumClient/MenuMusic");
             Directory.CreateDirectory("PendulumClient/PlayerLogs");
             Directory.CreateDirectory("PendulumClient/WorldLogs");
             Directory.CreateDirectory("PendulumClient/VRCA");

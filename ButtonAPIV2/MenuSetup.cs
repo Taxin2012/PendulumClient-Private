@@ -233,6 +233,10 @@ namespace PendulumClient.ButtonAPIV2
                     PendulumClientMain.DeleteNewPortals = false;
                 }
             });
+            ProtectionMenu.AddToggle("Anti Portal", "Blocks you from entering portals\nalso displays who dropped the portal", b =>
+            {
+                PendulumClientMain.AntiPortalToggle = b;
+            });
             FunctionMenu.AddButton("Copy InstanceID", "Copy InstanceID to Clipboard", () =>
             {
                 var WorldID = RoomManager.field_Internal_Static_ApiWorld_0.id + ":" + RoomManager.field_Internal_Static_ApiWorldInstance_0.instanceId;

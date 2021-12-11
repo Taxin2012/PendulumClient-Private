@@ -61,7 +61,7 @@ namespace PendulumClient.Anti
 						PhotonExtensions.OpRaiseEvent(209, new int[]
 						{
 							photonViews[j].viewIdField,
-							VRC.Player.Method_Internal_Static_Player_0().field_Private_VRCPlayerApi_0.playerId
+							VRC.Player.prop_Player_0.field_Private_VRCPlayerApi_0.playerId
 						}, new RaiseEventOptions
 						{
 							field_Public_ReceiverGroup_0 = (ReceiverGroup)1,

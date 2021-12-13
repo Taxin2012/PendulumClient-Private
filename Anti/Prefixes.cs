@@ -71,6 +71,29 @@ namespace PendulumClient.Anti
                 PendulumClientMain.delete_portal(__instance);
         }
 
+        public static void postpatch__OnLoading()
+        {
+            if (ColorModuleV2.CMV2_ColorModule.MenuMusicShuffle)
+            {
+                ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
+            }
+        }
+
+        public static void patch__AudioSourceOnEnd(AudioSource __instance)
+        {
+            if (__instance == null)
+                return;
+
+            if (__instance.name != "LoadingSound")
+                return;
+
+            PendulumLogger.Log("Audio Stopped");
+            if (__instance.isPlaying == false && __instance.GetCachedPtr() == ColorModuleV2.CMV2_ColorModule.AudioSourcePTR)
+            {
+                PendulumLogger.Log("Audio Stopped Playing");
+                //ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
+            }
+        }
         /*public static bool IsBlockedPrefix(string __0)
         {
             //CheckIfBlockedLoop(ǄǄǄǄǅǅǄǄǄǅǅǅǄǅǄǄǄǅǅǅǄǄǄǅǅǅǅǄǄǄǄǅǄǄǅǄǅǅǅǅǅǅǅǄǅǄǅ);

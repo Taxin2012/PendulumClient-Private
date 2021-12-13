@@ -15,6 +15,9 @@ namespace PendulumClient.ColorModuleV2
     {
         private static Sprite NewButton = null;
         private static List<string> GrayscaleSprites = new List<string>();
+        public static bool MenuMusicShuffle = false;
+        public static List<AudioClip> Musics = new List<AudioClip>();
+        public static IntPtr AudioSourcePTR = IntPtr.Zero;
         public static void SetupColors()
         {
             PendulumClientMain.UIColorsSetup = true;
@@ -125,6 +128,26 @@ namespace PendulumClient.ColorModuleV2
                 styleElement.Method_Protected_Void_0();
             ExtraStuff();
         }
+        public static void ShuffleMenuMusic()
+        {
+            if (Musics.Count > 0)
+            {
+                var i = new System.Random().Next(0, Musics.Count - 1);
+                var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
+                audioSource.loop = false;
+                //AudioSourcePTR = audioSource.GetCachedPtr();
+                if (audioSource.isPlaying)
+                {
+                    audioSource.Stop();
+                    audioSource.clip = Musics[i];
+                    audioSource.Play();
+                }
+                else
+                {
+                    audioSource.clip = Musics[i];
+                }
+            }
+        }
         public static void LoadingScreenStuff()
         {
             try
@@ -173,62 +196,99 @@ namespace PendulumClient.ColorModuleV2
                     audioSource.clip = audioClip;
                     audioSource.Play();
                 }
-                if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.wav"))
+                if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/ShuffleMusic")))
                 {
-                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.wav")}");
-                    uwr.SendWebRequest();
-                    if (!uwr.isDone)
+                    try
                     {
-                        while (true)
+                        foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/ShuffleMusic")))
                         {
-                            System.Threading.Thread.Sleep(1);
-                            if (uwr.isDone)
+                            var extension = Path.GetExtension(file);
+                            if (extension == ".wav" || extension == ".ogg")
                             {
-                                break;
+                                var uwr = UnityWebRequest.Get($"file://{file}");
+                                uwr.SendWebRequest();
+                                if (!uwr.isDone)
+                                {
+                                    while (true)
+                                    {
+                                        System.Threading.Thread.Sleep(1);
+                                        if (uwr.isDone)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                                var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+                                audioClip.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                                Musics.Add(audioClip);
                             }
                         }
+                        MenuMusicShuffle = true;
                     }
-                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
-
-                    var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
-                    if (audioSource.isPlaying)
+                    catch(Exception e)
                     {
-                        audioSource.Stop();
-                        audioSource.clip = audioClip;
-                        audioSource.Play();
-                    }
-                    else
-                    {
-                        audioSource.clip = audioClip;
+                        PendulumLogger.LogErrorSevere("Failed to load ShuffleMenuMusic: " + e.ToString());
                     }
                 }
-                else if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.ogg"))
+                else
                 {
-                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.ogg")}");
-                    uwr.SendWebRequest();
-                    if (!uwr.isDone)
+                    if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.wav"))
                     {
-                        while (true)
+                        var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.wav")}");
+                        uwr.SendWebRequest();
+                        if (!uwr.isDone)
                         {
-                            System.Threading.Thread.Sleep(1);
-                            if (uwr.isDone)
+                            while (true)
                             {
-                                break;
+                                System.Threading.Thread.Sleep(1);
+                                if (uwr.isDone)
+                                {
+                                    break;
+                                }
                             }
                         }
-                    }
-                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+                        var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
 
-                    var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
-                    if (audioSource.isPlaying)
-                    {
-                        audioSource.Stop();
-                        audioSource.clip = audioClip;
-                        audioSource.Play();
+                        var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
+                        if (audioSource.isPlaying)
+                        {
+                            audioSource.Stop();
+                            audioSource.clip = audioClip;
+                            audioSource.Play();
+                        }
+                        else
+                        {
+                            audioSource.clip = audioClip;
+                        }
                     }
-                    else
+                    else if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.ogg"))
                     {
-                        audioSource.clip = audioClip;
+                        var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.ogg")}");
+                        uwr.SendWebRequest();
+                        if (!uwr.isDone)
+                        {
+                            while (true)
+                            {
+                                System.Threading.Thread.Sleep(1);
+                                if (uwr.isDone)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                        var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
+
+                        var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
+                        if (audioSource.isPlaying)
+                        {
+                            audioSource.Stop();
+                            audioSource.clip = audioClip;
+                            audioSource.Play();
+                        }
+                        else
+                        {
+                            audioSource.clip = audioClip;
+                        }
                     }
                 }
             }

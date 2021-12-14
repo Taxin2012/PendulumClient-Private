@@ -936,7 +936,7 @@ namespace PendulumClient.Main
             {
                 AntiPortalMsgTimer += Time.deltaTime;
             }
-
+            
             if (AntiPortalMsgTimer >= 0.5f)
             {
                 AntiPortalMsgTimer = 0f;
@@ -2293,6 +2293,13 @@ namespace PendulumClient.Main
             var Hook11PrePatch = typeof(Prefixes).GetMethod("prepatch__PortalAwake");
             var Hook11PostPatch = typeof(Prefixes).GetMethod("postpatch__PortalAwake");
 
+            var Hook12 = typeof(VRCUiPageLoading).GetMethod(nameof(VRCUiPageLoading.OnEnable));
+            var Hook12PostPatch = typeof(Prefixes).GetMethod("postpatch__OnLoading");
+
+            //var AudioOnEndHook = typeof(AudioSource).GetMethod("get_" + nameof(AudioSource.isPlaying));
+            var AudioOnEndHook = typeof(AudioSource).GetMethods().Where(mi => mi.GetParameters().Length == 0 && mi.Name == "Stop").First();
+            var AudioOnEndPatch = typeof(Prefixes).GetMethod("patch__AudioSourceOnEnd");
+
             //var testoriginal = typeof(VRCFlowManager.ObjectNPrivateSealedStObAcStOb1Ac1StStUnique).GetMethod(TestMethod);
             //var testoriginal2 = typeof(VRCFlowManager).GetMethod(TestMethod2);
             //moderation manager patches
@@ -2380,6 +2387,8 @@ namespace PendulumClient.Main
             instance.Patch(Hook9, new HarmonyMethod(Hook9PrePatch), new HarmonyMethod(Hook9PostPatch));
             instance.Patch(Hook10, new HarmonyMethod(Hook10PrePatch), new HarmonyMethod(Hook10PostPatch));
             instance.Patch(Hook11, new HarmonyMethod(Hook11PrePatch), new HarmonyMethod(Hook11PostPatch));
+            instance.Patch(Hook12, null, new HarmonyMethod(Hook12PostPatch));
+            instance.Patch(AudioOnEndHook, new HarmonyMethod(AudioOnEndPatch));
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
             instance.Patch(Hook1, new HarmonyMethod(Hook1Patch), null, null);

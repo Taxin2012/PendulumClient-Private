@@ -73,8 +73,6 @@ using System.Security.Cryptography;
 using Transmtn;
 using BestHTTP;
 
-//lol get trolled
-
 namespace PendulumClient.Main
 {
     internal class Win32

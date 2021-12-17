@@ -134,7 +134,7 @@ namespace PendulumClient.ColorModuleV2
             {
                 var i = new System.Random().Next(0, Musics.Count - 1);
                 var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
-                audioSource.loop = false;
+                //audioSource.loop = false;
                 //AudioSourcePTR = audioSource.GetCachedPtr();
                 if (audioSource.isPlaying)
                 {

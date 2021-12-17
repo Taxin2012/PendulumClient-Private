@@ -87,7 +87,7 @@ namespace PendulumClient.Anti
             if (__instance.name != "LoadingSound")
                 return;
 
-            PendulumLogger.Log("Audio Stopped");
+            //PendulumLogger.Log("Audio Stopped");
             if (__instance.isPlaying == false && __instance.GetCachedPtr() == ColorModuleV2.CMV2_ColorModule.AudioSourcePTR)
             {
                 PendulumLogger.Log("Audio Stopped Playing");

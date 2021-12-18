@@ -944,7 +944,9 @@ namespace PendulumClient.Anti
         {
             //PendulumLogger.Log("Selected User: " + __0.displayName);
             var NameText = GameObject.Find("UserInterface/MenuContent/Screens/UserInfo/User Panel/NameText");
+            var AvatarImage = GameObject.Find("UserInterface/MenuContent/Screens/UserInfo/AvatarImage/AvatarImageMask/AvatarImage");
             NameText.GetComponent<UnityEngine.UI.Text>().color = PendulumClientMain.GetTrustColor(__0);
+            AvatarImage.transform.localScale = new Vector3(1f, 0.75f, 1f);
         }
 
         public static bool WorldDownload__Hook(ApiWorld __0)

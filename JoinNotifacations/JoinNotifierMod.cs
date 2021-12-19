@@ -1230,6 +1230,13 @@ namespace JoinNotifier
             }
 
             //PendulumClientMain.DebugLogPlayerJoinLeave(player, "Joined", true);
+            if (PendulumClient.ButtonAPIV2.MenuSetup.PlayerESPon)
+            {
+                if (player.gameObject.transform.Find("SelectRegion") != null)
+                {
+                    Wrappers.EnableOutline(player.gameObject.transform.Find("SelectRegion").gameObject.GetComponent<MeshRenderer>(), PendulumClient.ColorModule.ColorModule.CachedColor);
+                }
+            }
 
             if (!myObservedLocalPlayerJoin || Environment.TickCount - myLastLevelLoad < 5_000) return;
             if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;

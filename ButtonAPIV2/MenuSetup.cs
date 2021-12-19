@@ -28,7 +28,37 @@ namespace PendulumClient.ButtonAPIV2
         public static object ds2obj = null;
 
         public static bool OpenFileOnDownload = false;
+        public static bool PlayerESPon = false;
 
+        public static void PlayerESP(bool esp)
+        {
+            if (esp)
+            {
+                var allplayers = PlayerWrappers.GetAllPlayers();
+                foreach (VRC.Player player in allplayers)
+                {
+                    if (player.gameObject.transform.Find("SelectRegion") != null) 
+                    {
+                        Wrappers.EnableOutline(player.gameObject.transform.Find("SelectRegion").gameObject.GetComponent<MeshRenderer>(), ColorModule.ColorModule.CachedColor);
+                    } 
+                }
+                PlayerESPon = true;
+                PendulumClientMain.VRC_UIManager.QueueHudMessage("PlayerESP Enabled");
+            }
+            else
+            {
+                var allplayers = PlayerWrappers.GetAllPlayers();
+                foreach (VRC.Player player in allplayers)
+                {
+                    if (player.gameObject.transform.Find("SelectRegion") != null)
+                    {
+                        Wrappers.DisableOutline(player.gameObject.transform.Find("SelectRegion").gameObject.GetComponent<MeshRenderer>());
+                    }
+                }
+                PlayerESPon = false;
+                PendulumClientMain.VRC_UIManager.QueueHudMessage("PlayerESP Disabled");
+            }
+        }
         public static void EnableEvent9(bool t)
         {
             if (t)
@@ -310,6 +340,12 @@ namespace PendulumClient.ButtonAPIV2
                     }
                 }, null);
             });
+
+            FunctionMenu.AddToggle("PlayerESP", "Shows people through walls", b =>
+            {
+                PlayerESP(b);
+            });
+
         }
     }
 }

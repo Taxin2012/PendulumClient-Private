@@ -69,6 +69,7 @@ using AssetBundle = UnityEngine.AssetBundle;
 using Component = UnityEngine.Component;
 using Color = UnityEngine.Color;
 using FlatBufferNetworkSerializer = VRC.Networking.FlatBufferNetworkSerializer;
+using HttpClient = System.Net.Http.HttpClient;
 using System.Security.Cryptography;
 using Transmtn;
 using BestHTTP;
@@ -351,11 +352,14 @@ namespace PendulumClient.Main
             {
                 PendulumLogger.Log("apiFileHelper Error: " + e);
             }*/
-            WebClient LogoVerWC = new WebClient();
+            //WebClient LogoVerWC = new WebClient();
             var logo_ver_string = "";
             try
             {
-                logo_ver_string = LogoVerWC.DownloadString("http://pendulumclient.altervista.org/downloads/logo/logo_ver.txt");
+                var uri = new Uri("http://pendulumclient.altervista.org/downloads/logo/logo_ver.txt");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                logo_ver_string = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();//LogoVerWC.DownloadString("http://pendulumclient.altervista.org/downloads/logo/logo_ver.txt");
             }
             catch
             {
@@ -512,7 +516,10 @@ namespace PendulumClient.Main
             var bsmd5 = "";
             try
             {
-                bsmd5 = new WebClient().DownloadString("http://pendulumclient.altervista.org/downloads/module/BootstrapSize.txt");
+                var uri = new Uri("http://pendulumclient.altervista.org/downloads/module/BootstrapSize.txt");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                bsmd5 = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             }
             catch
             {
@@ -723,6 +730,12 @@ namespace PendulumClient.Main
                     PendulumLogger.Error("Plugin with invalid Harmony detected! (" + plugin.Info.Name + ")");
                     Process.GetCurrentProcess().Kill();
                 }
+            }
+
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                PendulumLogger.Error("Debugger Detected!");
+                Process.GetCurrentProcess().Kill();
             }
         }
 
@@ -3839,22 +3852,34 @@ namespace PendulumClient.Main
             //var blloc = AppData + "/bl.txt";
             if (string.IsNullOrEmpty(SteamBL))
             {
-                var sbl = new WebClient().DownloadString("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-SID.txt");
+                var uri = new Uri("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-SID.txt");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                var sbl = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 SteamBL = sbl;
             }
             if (string.IsNullOrEmpty(NormalBL))
             {
-                var bl = new WebClient().DownloadString("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-UID.txt");
+                var uri = new Uri("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-UID.txt");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                var bl = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 NormalBL = bl;
             }
             if (string.IsNullOrEmpty(Login.IP))
             {
-                var ip = new WebClient().DownloadString("https://api.ipify.org/");
+                var uri = new Uri("https://api.ipify.org/");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                var ip = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 Login.IP = ip;
             }
             if (string.IsNullOrEmpty(IPBL))
             {
-                var bl = new WebClient().DownloadString("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-IP.txt");
+                var uri = new Uri("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-IP.txt");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                var bl = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 IPBL = bl;
             }
 
@@ -3870,10 +3895,10 @@ namespace PendulumClient.Main
             {
                 SteamList.Add(s);
             }
-            foreach (string s in SteamBL.Split("-".ToCharArray()))
+            /*foreach (string s in SteamBL.Split("-".ToCharArray()))
             {
                 SteamList.Add(s);
-            }
+            }*/
             foreach (string s in IPBL.Split("-".ToCharArray()))
             {
                 IPList.Add(s);

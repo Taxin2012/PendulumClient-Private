@@ -556,18 +556,69 @@ namespace PendulumClient.Anti
     }
 
     public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
-    {   
+    {
+        if (__0.Code == 1 && debugmode)
+        {
+            var bytearray = Serialization.ToByteArray(__0.CustomData);
+            var arraystring = "";
+            foreach (var byt in bytearray)
+            {
+                if (arraystring == "")
+                {
+                    arraystring = byt.ToString();
+                }
+                else
+                {
+                    arraystring += ", " + byt.ToString();
+                }
+            }
+            if (arraystring != null)
+            {
+                PendulumLogger.Log("Event1 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
+                File.WriteAllText("PendulumClient/event209 " + __0.Sender + ".txt", arraystring);
+            }
+        }
         if (__0.Code == 209 && debugmode)
         {
-                var bytearray = Serialization.ToByteArray(__0.CustomData);
-                PendulumLogger.Log("Event209 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/event209 " + __0.Sender + ".txt", bytearray.ToString());
+            var bytearray = Serialization.ToByteArray(__0.CustomData);
+            var arraystring = "";
+            foreach (var byt in bytearray)
+            {
+                if (arraystring == "")
+                {
+                    arraystring = byt.ToString();
+                }
+                else
+                {
+                    arraystring += ", " + byt.ToString();
+                }
+            }
+            if (arraystring != null)
+            {
+                PendulumLogger.Log("Event209 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
+                File.WriteAllText("PendulumClient/event209 " + __0.Sender + ".txt", arraystring);
+            }
         }
         if (__0.Code == 210 && debugmode)
         {
-                var bytearray = Serialization.ToByteArray(__0.CustomData);
+            var bytearray = Serialization.ToByteArray(__0.CustomData);
+            var arraystring = "";
+            foreach (var byt in bytearray)
+            {
+                if (arraystring == "")
+                {
+                    arraystring = byt.ToString();
+                }
+                else
+                {
+                    arraystring += ", " + byt.ToString();
+                }
+            }
+            if (arraystring != "")
+            {
                 PendulumLogger.Log("Event210 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
                 File.WriteAllText("PendulumClient/event210 " + __0.Sender + ".txt", bytearray.ToString());
+            }
         }
         if (__0.Code == 9 && Anti9)
         {

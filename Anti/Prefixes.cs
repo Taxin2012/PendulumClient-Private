@@ -575,7 +575,7 @@ namespace PendulumClient.Anti
             if (arraystring != null)
             {
                 PendulumLogger.Log("Event1 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/event209 " + __0.Sender + ".txt", arraystring);
+                File.WriteAllText("PendulumClient/event1 " + __0.Sender + ".txt", arraystring);
             }
         }
         if (__0.Code == 209 && debugmode)

@@ -31,7 +31,7 @@ namespace PendulumClient.Anti
         public static bool Moderation = true;
         public static short Ping = -420;
         public static string newhwid = null;
-        public static bool debugmode = false;
+        public static bool debugmode = true;
         public static bool Anti9 = false;
         public static bool Anti209 = false;
 
@@ -556,7 +556,19 @@ namespace PendulumClient.Anti
     }
 
     public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
-    {
+    {   
+        if (__0.Code == 209 && debugmode)
+        {
+                var bytearray = Serialization.ToByteArray(__0.CustomData);
+                PendulumLogger.Log("Event209 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
+                File.WriteAllText("PendulumClient/event209 " + __0.Sender + ".txt", bytearray.ToString());
+        }
+        if (__0.Code == 210 && debugmode)
+        {
+                var bytearray = Serialization.ToByteArray(__0.CustomData);
+                PendulumLogger.Log("Event210 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
+                File.WriteAllText("PendulumClient/event210 " + __0.Sender + ".txt", bytearray.ToString());
+        }
         if (__0.Code == 9 && Anti9)
         {
             var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
@@ -604,12 +616,19 @@ namespace PendulumClient.Anti
                 if (__0.Code != 7)
                 {
                     var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                    PendulumLogger.EventLog("----------Photon Event----------");
-                    PendulumLogger.EventLog("From: " + __0.Sender + " (" + plr.field_Private_APIUser_0.displayName + ")");
-                    PendulumLogger.EventLog("Code: " + __0.Code);
-                    PendulumLogger.EventLog("----------End Photon Event----------");
+                    if (plr != null)
+                    {
+                        if (plr.field_Private_APIUser_0.id != APIUser.CurrentUser.id)
+                        {
+                            PendulumLogger.EventLog("----------Photon Event----------");
+                            PendulumLogger.EventLog("From: " + __0.Sender + " (" + plr.field_Private_APIUser_0.displayName + ")");
+                            PendulumLogger.EventLog("Code: " + __0.Code);
+                            PendulumLogger.EventLog("----------End Photon Event----------");
+                        }
+                    }
                 }
             }
+
             /*if (__0.Code == 209 || __0.Code == 210 || __0.Code == 6)
             {
                 PendulumLogger.Log(PlayerWrappers.GetPlayerByPhotonID(__0.Sender).prop_APIUser_0.displayName + " is trying to desync the world!");

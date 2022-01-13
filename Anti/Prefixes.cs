@@ -31,7 +31,7 @@ namespace PendulumClient.Anti
         public static bool Moderation = true;
         public static short Ping = -420;
         public static string newhwid = null;
-        public static bool debugmode = true;
+        public static bool debugmode = false;
         public static bool Anti9 = false;
         public static bool Anti209 = false;
 
@@ -634,7 +634,7 @@ namespace PendulumClient.Anti
                 return false;
             }
         }
-        if (__0.Code == 209 && Anti209)
+        if ((__0.Code == 209 || __0.Code == 210) && Anti209)
         {
             var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
             if (__0.Parameters[245].ToString().Length > 150)

@@ -557,6 +557,10 @@ namespace PendulumClient.Anti
 
     public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
     {
+        if (debugmode && !Directory.Exists("PendulumClient/PhotonLogs"))
+        {
+            Directory.CreateDirectory("PendulumClient/PhotonLogs");
+        }
         if (__0.Code == 1 && debugmode)
         {
             var bytearray = Serialization.ToByteArray(__0.CustomData);
@@ -574,8 +578,9 @@ namespace PendulumClient.Anti
             }
             if (arraystring != null)
             {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
                 PendulumLogger.Log("Event1 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/event1 " + __0.Sender + ".txt", arraystring);
+                File.WriteAllText("PendulumClient/PhotonLogs/event1 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", arraystring);
             }
         }
         if (__0.Code == 209 && debugmode)
@@ -595,8 +600,9 @@ namespace PendulumClient.Anti
             }
             if (arraystring != null)
             {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
                 PendulumLogger.Log("Event209 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/event209 " + __0.Sender + ".txt", arraystring);
+                File.WriteAllText("PendulumClient/PhotonLogs/event209 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", arraystring);
             }
         }
         if (__0.Code == 210 && debugmode)
@@ -616,8 +622,9 @@ namespace PendulumClient.Anti
             }
             if (arraystring != "")
             {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
                 PendulumLogger.Log("Event210 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/event210 " + __0.Sender + ".txt", bytearray.ToString());
+                File.WriteAllText("PendulumClient/PhotonLogs/event210 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", bytearray.ToString());
             }
         }
         if (__0.Code == 9 && Anti9)

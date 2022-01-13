@@ -870,6 +870,11 @@ namespace PendulumClient.Main
                 }
             }*/
 
+            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.B))
+            {
+                PendulumLogger.Log("DebugMode has been " + (Prefixes.debugmode ? "Disabled" : "Enabled") + ".");
+                Prefixes.debugmode = !Prefixes.debugmode;
+            }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.O))
             {
                 text_popup("Enter Direct MP4 Link", "Change Music", new System.Action<string>(a =>

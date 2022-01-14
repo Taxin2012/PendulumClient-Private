@@ -704,9 +704,11 @@ namespace JoinNotifier
                         var newficon = GameObject.Instantiate(orgficon, newicons.transform);
                         newficon.name = "GeneratedFriendIcon";
                         newficon.SetActive(true);
-                        newficon.GetComponent<RectTransform>().anchoredPosition += new Vector2(50, 0);
-                        orgficon.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
-                        
+                        if (!player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon/User Image").gameObject.activeSelf)
+                        {
+                            newficon.GetComponent<RectTransform>().anchoredPosition += new Vector2(50, 0);
+                            //orgficon.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
+                        }
                     }
                     //var gplate = GameObject.Instantiate(plate);
                     //nametext.color = PendulumClientMain.GetTrustColor(player.prop_APIUser_0);

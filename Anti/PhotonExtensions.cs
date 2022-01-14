@@ -60,6 +60,16 @@ namespace PendulumClient.Anti
     }
     static class PhotonExtensions
     {
+        public static Photon.Realtime.RaiseEventOptions UnreliableEventOptions = new Photon.Realtime.RaiseEventOptions
+        {
+            field_Public_ReceiverGroup_0 = Photon.Realtime.ReceiverGroup.Others,
+            field_Public_EventCaching_0 = Photon.Realtime.EventCaching.DoNotCache
+        };
+
+        public static ExitGames.Client.Photon.SendOptions UnreliableOptions = new ExitGames.Client.Photon.SendOptions
+        {
+            DeliveryMode = ExitGames.Client.Photon.DeliveryMode.Unreliable
+        };
         public static void OpRaiseEvent(byte code, object customObject, RaiseEventOptions RaiseEventOptions, SendOptions sendOptions)
         {
             Il2CppSystem.Object Object = Serialization.FromManagedToIL2CPP<Il2CppSystem.Object>(customObject);

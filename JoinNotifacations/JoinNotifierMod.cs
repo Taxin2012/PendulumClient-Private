@@ -49,7 +49,7 @@ namespace JoinNotifier
 
         public const string CorbinUID = "usr_70758d81-b4a8-4543-b033-f6b4bc97d165";
         public const string KyranUID1 = "usr_ba0606b7-927b-4c14-be7b-54d9d158c8e4";
-        public const string KyranUID2 = "usr_07990006-1338-489f-802f-45455146f332";
+        public const string KyranUID2 = "usr_bf196e57-9b62-46b6-a52d-73e264356e43";//one month "usr_07990006-1338-489f-802f-45455146f332";
         public const string GrubbieUID = "usr_6ae7e5da-94d2-48d5-8f4d-d1ba861f67bb";
         public const string MooniUID = "usr_71704e0d-ac55-4e40-8368-725e7c69466b";
         //public const string CermetUID = "usr_e0c7a496-ecd1-4158-873a-481be21cc5be";
@@ -81,7 +81,7 @@ namespace JoinNotifier
 
         public static List<string> DevUserIDs = new List<string>()
         {
-            "usr_07990006-1338-489f-802f-45455146f332", //me
+            "usr_bf196e57-9b62-46b6-a52d-73e264356e43", //me
             "usr_70758d81-b4a8-4543-b033-f6b4bc97d165", //corbin
             "usr_71704e0d-ac55-4e40-8368-725e7c69466b" //other corbin
         };
@@ -594,7 +594,7 @@ namespace JoinNotifier
                     GenIcon.transform.Find("User Image").gameObject.GetComponent<RawImage>().texture = CorbinPFP.texture;
                     GenIcon.transform.Find("User Image").gameObject.SetActive(true);
                     var bgclone = GameObject.Instantiate(GenIcon.transform.Find("Background").gameObject, GenIcon.transform);
-                    bgclone.name = bgclone.name + "(Clone)";
+                    bgclone.name = "GeneratedBackground";
                     bgclone.GetComponent<Image>().sprite = DevIconOutline;
                     bgclone.GetComponent<Image>().color = TagColor;
                 }
@@ -627,7 +627,7 @@ namespace JoinNotifier
                     GenIcon.transform.Find("User Image").gameObject.GetComponent<RawImage>().texture = KyranPFP.texture;
                     GenIcon.transform.Find("User Image").gameObject.SetActive(true);
                     var bgclone = GameObject.Instantiate(GenIcon.transform.Find("Background").gameObject, GenIcon.transform);
-                    bgclone.name = bgclone.name + "(Clone)";
+                    bgclone.name = "GeneratedBackground";
                     bgclone.GetComponent<Image>().sprite = DevIconOutline;
                     bgclone.GetComponent<Image>().color = TagColor;
                 }
@@ -660,7 +660,7 @@ namespace JoinNotifier
                     GenIcon.transform.Find("User Image").gameObject.GetComponent<RawImage>().texture = MooniPFP.texture;
                     GenIcon.transform.Find("User Image").gameObject.SetActive(true);
                     var bgclone = GameObject.Instantiate(GenIcon.transform.Find("Background").gameObject, GenIcon.transform);
-                    bgclone.name = bgclone.name + "(Clone)";
+                    bgclone.name = "GeneratedBackground";
                     bgclone.GetComponent<Image>().sprite = DevIconOutline;
                     bgclone.GetComponent<Image>().color = TagColor;
                 }

@@ -63,7 +63,8 @@ namespace PendulumClient.Anti
         public static Photon.Realtime.RaiseEventOptions UnreliableEventOptions = new Photon.Realtime.RaiseEventOptions
         {
             field_Public_ReceiverGroup_0 = Photon.Realtime.ReceiverGroup.Others,
-            field_Public_EventCaching_0 = Photon.Realtime.EventCaching.DoNotCache
+            field_Public_EventCaching_0 = Photon.Realtime.EventCaching.DoNotCache,
+            //field_Public_ArrayOf_Int32_0 = new UnhollowerBaseLib.Il2CppStructArray<int>(1)
         };
 
         public static ExitGames.Client.Photon.SendOptions UnreliableOptions = new ExitGames.Client.Photon.SendOptions

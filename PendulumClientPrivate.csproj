@@ -109,6 +109,10 @@
     <Reference Include="UnhollowerRuntimeLib">
       <HintPath>..\..\..\Steam Games SSD\steamapps\common\VRChat\MelonLoader\Managed\UnhollowerRuntimeLib.dll</HintPath>
     </Reference>
+    <Reference Include="UniTask, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\Kyran\Steam Games SSD\steamapps\common\VRChat\MelonLoader\Managed\UniTask.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro, Version=3.7.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\Kyran\Steam Games SSD\steamapps\common\VRChat\MelonLoader\Managed\Unity.TextMeshPro.dll</HintPath>

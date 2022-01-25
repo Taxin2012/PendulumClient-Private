@@ -94,6 +94,51 @@ namespace PendulumClient.Anti
                 //ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
             }
         }
+
+        public static bool patch_avatarVisibilityBool(bool __0)
+        {
+            PendulumLogger.Log("Bool: " + __0);
+            return __0;
+        }
+        public static bool patch_AvatarKind(VRCAvatarManager.AvatarKind __0)
+        {
+            PendulumLogger.Log("Kind: " + __0.ToString());
+            return !(__0 == VRCAvatarManager.AvatarKind.Blocked);
+        }
+        public static bool patch_AvatarReset(Animator __0, VRC_AvatarDescriptor __1, VRCAvatarManager.AvatarKind __2)
+        {
+            PendulumLogger.Log("Kind: " + __2.ToString());
+            if (__2 == VRCAvatarManager.AvatarKind.Blocked)
+            {
+                __2 = VRCAvatarManager.AvatarKind.Custom;
+            }
+            return true;
+            //return !(__0 == VRCAvatarManager.AvatarKind.Blocked);
+        }
+        public static bool patch_avatarVisibility(GameObject __0, string __1, float __2, string __3, VRCAvatarManager __instance)
+        {
+            try
+            {
+                var bruh = __instance.field_Private_VRCPlayer_0._player.field_Private_APIUser_0.displayName;
+            }
+            catch
+            {
+                return true;
+            }
+
+            if (__1 == "blocked")
+                return false;
+
+            PendulumLogger.Log("Object Name: " + __0.name);
+            PendulumLogger.Log("String1: " + __1);
+            PendulumLogger.Log("AvatarID: " + __3);
+            PendulumLogger.Log("Float1: " + __2);
+            if (__instance != null && __instance.field_Private_VRCPlayer_0 != null)
+            {
+                PendulumLogger.Log("Player: " + __instance.field_Private_VRCPlayer_0._player.field_Private_APIUser_0.displayName);
+            }
+            return true;
+        }
         /*public static bool IsBlockedPrefix(string __0)
         {
             //CheckIfBlockedLoop(ǄǄǄǄǅǅǄǄǄǅǅǅǄǅǄǄǄǅǅǅǄǄǄǅǅǅǅǄǄǄǄǅǄǄǅǄǅǅǅǅǅǅǅǄǅǄǅ);

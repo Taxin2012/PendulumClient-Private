@@ -30,6 +30,7 @@ namespace PendulumClient.ButtonAPIV2
         public static bool OpenFileOnDownload = false;
         public static bool PlayerESPon = false;
 
+
         public static void PlayerESP(bool esp)
         {
             if (esp)
@@ -187,6 +188,7 @@ namespace PendulumClient.ButtonAPIV2
             var MovementMenu = MainMenu.AddMenuPage("Movement", "move");
             var ProtectionMenu = MainMenu.AddMenuPage("Protections", "protec yourself");
             var ExploitsMenu = MainMenu.AddMenuPage("Exploits", "boo corbin");
+            var funstuff = MainMenu.AddMenuPage("FunStuff", "The Funnys");
             /*MainMenu.AddButton("sheesh", "we do a little trolling", () =>
             {
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("sheesh");
@@ -250,6 +252,10 @@ namespace PendulumClient.ButtonAPIV2
                     PendulumClientMain.FlightSpeed = PendulumClientMain.FlightSpeed - 1;
                 }
                 _FlightSpeedButton.Text = "(" + PendulumClientMain.FlightSpeed + ")\n<size=33%>Flight Speed</size>";
+            });
+            funstuff.AddToggle("Show Head", "Shows your head", b =>
+            {
+                Anti.Prefixes.showHead = b;
             });
             FunctionMenu.AddToggle("Serialize", "Move around while others see you standing still", b => {
                 PendulumClientMain.SerializePlayer(b);

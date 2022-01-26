@@ -73,6 +73,7 @@ namespace PendulumClient.Anti
 
         public static void postpatch__OnLoading()
         {
+
             if (ColorModuleV2.CMV2_ColorModule.MenuMusicShuffle)
             {
                 ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
@@ -104,6 +105,11 @@ namespace PendulumClient.Anti
         {
             PendulumLogger.Log("Kind: " + __0.ToString());
             return !(__0 == VRCAvatarManager.AvatarKind.Blocked);
+        }
+        public static bool showHead = false;
+        public static bool patch_Head()
+        {
+            return !showHead;
         }
         public static bool patch_AvatarReset(Animator __0, VRC_AvatarDescriptor __1, VRCAvatarManager.AvatarKind __2)
         {

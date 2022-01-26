@@ -2320,12 +2320,14 @@ namespace PendulumClient.Main
             var Hook15 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_Boolean_0));
             var Hook16 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_AvatarKind_0));
             var Hook17 = typeof(VRC_AnimationController).GetMethod(nameof(VRC_AnimationController.Reset));
+            var Hook18 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_3));
             //var Hook16 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Public_Void_Animator_byref_Vector3_byref_Vector3_byref_Vector3_byref_Vector3_0));
             var Hook13Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch__false));
             var Hook14Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_avatarVisibility));
             var Hook15Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_avatarVisibilityBool));
             var Hook16Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_AvatarKind));
             var Hook17Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_AvatarReset));
+            var Hook18Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_Head));
 
             //VRCAvatarManager.Method_Private_Void_LocalAvatarVisibility_0
 
@@ -2428,6 +2430,7 @@ namespace PendulumClient.Main
             instance.Patch(Hook15, new HarmonyMethod(Hook15Patch));
             instance.Patch(Hook16, new HarmonyMethod(Hook16Patch));
             instance.Patch(Hook17, new HarmonyMethod(Hook17Patch));
+            instance.Patch(Hook18, new HarmonyMethod(Hook18Patch));
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
             instance.Patch(Hook1, new HarmonyMethod(Hook1Patch), null, null);

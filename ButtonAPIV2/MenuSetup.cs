@@ -288,10 +288,13 @@ namespace PendulumClient.ButtonAPIV2
                 if (plr == null)
                 {
                     PendulumClientMain.VRC_UIManager.QueueHudMessage("No Selected User Found!");
+                    MenuFunctions.CopyVoice(false, null);
                     return;
                 }
 
                 MenuFunctions.CopyVoice(b, plr);
+                if (b)
+                    PendulumClientMain.VRC_UIManager.QueueHudMessage("Copying " + plr.field_Private_APIUser_0.displayName + "\'s voice");
             });
         }
     }

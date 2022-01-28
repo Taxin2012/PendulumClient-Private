@@ -410,11 +410,11 @@ namespace PendulumClient.Anti
         //PendulumLogger.Log("CustomRPC: " + __0);
         //PendulumLogger.Log("Player: " + __1.prop_APIUser_0.displayName);
         //PendulumLogger.Log("eventsent");
-        if (__0.prop_APIUser_0 == null || __0 == null)
+        if (__0 == null || __0.field_Private_APIUser_0 == null)
         {
             if (string.IsNullOrEmpty(__1.ParameterString))
             {
-                    PendulumLogger.Log("Empty Event: " + __1.ParameterString);
+                    //PendulumLogger.Log("Empty Event: " + __1.ParameterString);
             }
             return;
         }
@@ -424,7 +424,7 @@ namespace PendulumClient.Anti
             return;
         }
 
-        if (debugmode == true && __0 != null && __1 != null)
+        if (debugmode == true && __0 != null && __1 != null && __1.ParameterObject != null)
         {
                 bool param1 = __2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered && __1.ParameterString == "ReceiveVoiceStatsSyncRPC" && __1.ParameterObject.name == "USpeak" && __1.ParameterString == "SanityCheck";
                 if (!param1)

@@ -1232,7 +1232,7 @@ namespace JoinNotifier
             }
 
             //PendulumClientMain.DebugLogPlayerJoinLeave(player, "Joined", true);
-            if (PendulumClient.ButtonAPIV2.MenuSetup.PlayerESPon)
+            if (PendulumClient.ButtonAPIV2.MenuFunctions.PlayerESPon)
             {
                 if (player.gameObject.transform.Find("SelectRegion") != null)
                 {

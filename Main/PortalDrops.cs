@@ -327,5 +327,47 @@ namespace PendulumClient.Main
                 PendulumLogger.Log("PlayerList is null or empty!");
             }
         }
+
+        public static void DropPortalInvalidSidewaysOnPlayerHead(Player player)
+        {
+            if (PlayerWrappers.GetAllPlayers() != null)
+            {
+                var HeadObject = player.gameObject.transform.Find("AnimationController/HeadAndHandIK/HeadEffector").gameObject;
+                //var player = PlayerWrappers.GetAllPlayers()[new System.Random().Next(PlayerWrappers.GetAllPlayers()._size-1)];
+                //var OutputDisplayName = player.prop_APIUser_0.displayName;
+                //var NameOut = OutputDisplayName.Replace("~", string.Empty);
+                if (HeadObject != null)
+                {
+                    try
+                    {
+                        var rot = new Quaternion(HeadObject.transform.rotation.x, HeadObject.transform.rotation.y, HeadObject.transform.rotation.z, HeadObject.transform.rotation.w);
+                        //rot.SetEulerAngles(new Vector3(PlayerWrappers.GetCurrentPlayer().transform.rotation.eulerAngles.x, PlayerWrappers.GetCurrentPlayer().transform.rotation.eulerAngles.y, PlayerWrappers.GetCurrentPlayer().transform.rotation.eulerAngles.z));
+                        //rot.SetEulerRotation(0f, 0f, 75f);
+                        //rot.SetAxisAngle(Vector3.back, 75f);
+                        rot *= Quaternion.Euler(0, 0, 90f);
+                        GameObject gameObject = Networking.Instantiate(0, "Portals/PortalInternalDynamic", HeadObject.transform.position + (HeadObject.transform.right * 1.2f) + (HeadObject.transform.forward * PendulumClientMain.PortalDropDistance), rot);//Quaternion(PlayerWrappers.GetCurrentPlayer().transform.rotation.x, 90f, PlayerWrappers.GetCurrentPlayer().transform.rotation.z, PlayerWrappers.GetCurrentPlayer().transform.rotation.w));
+                        Networking.RPC(VRC.SDKBase.RPC.Destination.AllBufferOne, gameObject, "ConfigurePortal", new Il2CppSystem.Object[]
+                        {
+                    (Il2CppSystem.String)"\0",
+                    (Il2CppSystem.String)"",
+                    new Il2CppSystem.Int32
+                        {
+                            m_value = -2147483647
+                        }.BoxIl2CppObject()
+                        });
+                        gameObject.name = "DroppedUserPortal";
+                        gameObject.GetComponent<PortalInternal>().SetTimerRPC(float.MinValue, player);
+                    }
+                    catch (Exception)
+                    {
+                        PendulumLogger.Log("Wait 5s before dropping more portals!");
+                    }
+                }
+            }
+            else
+            {
+                PendulumLogger.Log("PlayerList is null or empty!");
+            }
+        }
     }
 }

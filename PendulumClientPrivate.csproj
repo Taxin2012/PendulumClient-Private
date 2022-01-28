@@ -464,6 +464,7 @@
     <Compile Include="ButtonAPIV2\APIV2_MenuPage.cs" />
     <Compile Include="ButtonAPIV2\APIV2_ToggleButton.cs" />
     <Compile Include="ButtonAPIV2\APIV2_TabButton.cs" />
+    <Compile Include="ButtonAPIV2\MenuFunctions.cs" />
     <Compile Include="ButtonAPIV2\MenuSetup.cs" />
     <Compile Include="ButtonAPIV2\NewQuickMenu.cs" />
     <Compile Include="ColorModuleV2\CMV2_ColorManager.cs" />

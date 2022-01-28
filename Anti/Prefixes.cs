@@ -106,6 +106,13 @@ namespace PendulumClient.Anti
             PendulumLogger.Log("Kind: " + __0.ToString());
             return !(__0 == VRCAvatarManager.AvatarKind.Blocked);
         }
+
+        public static bool patch_IK(ref RootMotion.FinalIK.IKSolverHeuristic __instance, ref bool __result, ref string message)
+        {
+            PendulumLogger.Log("IK Event: " + message);
+            PendulumLogger.Log("IK Iterations: " + __instance.maxIterations);
+            return true;
+        }
         public static bool showHead = false;
         public static bool patch_Head()
         {
@@ -717,6 +724,16 @@ namespace PendulumClient.Anti
             var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
             PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
             return false;
+        }
+        if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0)
+        {
+            if (__0.Code == 1)
+            {
+                if (__0.Sender == ButtonAPIV2.MenuFunctions.copyVoice_photonId)
+                {
+                    PhotonExtensions.OpRaiseEvent(1, __0.CustomData, PhotonExtensions.UnreliableEventOptions, PhotonExtensions.UnreliableOptions);
+                }
+            }
         }
         try
         {

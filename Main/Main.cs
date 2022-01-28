@@ -2329,6 +2329,8 @@ namespace PendulumClient.Main
             var Hook17Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_AvatarReset));
             var Hook18Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_Head));
 
+            var Hook19 = typeof(RootMotion.FinalIK.IKSolverVR).GetMethods().Where(mi => mi.Name == nameof(RootMotion.FinalIK.IKSolverVR.IsValid) && mi.GetParameters().Length == 1);//.GetMethod(nameof(RootMotion.FinalIK.IKSolverVR.IsValid));
+            var Hook19Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_IK));
             //VRCAvatarManager.Method_Private_Void_LocalAvatarVisibility_0
 
             //var AudioOnEndHook = typeof(AudioSource).GetMethod("get_" + nameof(AudioSource.isPlaying));
@@ -2431,6 +2433,10 @@ namespace PendulumClient.Main
             instance.Patch(Hook16, new HarmonyMethod(Hook16Patch));
             instance.Patch(Hook17, new HarmonyMethod(Hook17Patch));
             instance.Patch(Hook18, new HarmonyMethod(Hook18Patch));
+            foreach(var hook in Hook19)
+            {
+                instance.Patch(hook, new HarmonyMethod(Hook19Patch));
+            }
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
             instance.Patch(Hook1, new HarmonyMethod(Hook1Patch), null, null);
@@ -3092,9 +3098,9 @@ namespace PendulumClient.Main
         public static void SaveUserID(APIUser apiuser)
         {
             if (apiuser.id != APIUser.CurrentUser.id) StoredUserID = apiuser.id; PendulumLogger.Log("Set Selected User to: {0} ({1})", apiuser.displayName, apiuser.id);
-            StoredUserInInstance = true;
+            //StoredUserInInstance = true;
             AlertPopup.SendAlertPopup("Selected:\n" + apiuser.displayName);
-            UpdatePlayerList();
+            //UpdatePlayerList();
         }
 
         public static void UnloadUserID()
@@ -3667,7 +3673,7 @@ namespace PendulumClient.Main
                 return;
             }
 
-            if (MenuSetup.OpenFileOnDownload)
+            if (MenuFunctions.OpenFileOnDownload)
             {
                 string filePath = Environment.CurrentDirectory + "/PendulumClient/VRCW/" + StoredVRCAPath;
                 if (File.Exists(filePath))
@@ -3719,7 +3725,7 @@ namespace PendulumClient.Main
                 return;
             }
 
-            if (MenuSetup.OpenFileOnDownload)
+            if (MenuFunctions.OpenFileOnDownload)
             {
                 string filePath = Environment.CurrentDirectory + "/PendulumClient/VRCA/" + StoredVRCAPath;
                 if (File.Exists(filePath))

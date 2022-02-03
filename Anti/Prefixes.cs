@@ -1100,6 +1100,32 @@ namespace PendulumClient.Anti
             return true;
         }
 
+        public static bool QuestMode = true;
+        public static bool Quest_HasBeenUnpatched = false;
+        public static void QuestPatch(ref string __result)
+        {
+            if (QuestMode && !Quest_HasBeenUnpatched)
+            {
+                try
+                {
+                    __result = "android";
+                    MelonCoroutines.Start(UnpatchQuest());
+                }
+                catch { }
+            }
+        }
+
+        public static System.Collections.IEnumerator UnpatchQuest()
+        {
+            yield return new WaitForSeconds(3f);
+            if (!Quest_HasBeenUnpatched)
+            {
+                //PendulumClientMain._harmonyInstance.Unpatch(HarmonyLib.AccessTools.Property(typeof(Tools), "Platform").GetMethod, PendulumClientMain.QuestSpoofPatch);
+                Quest_HasBeenUnpatched = true;
+            }
+            yield break;
+        }
+
         public static bool FloatPatch(PlayerNameplate __instance, ref float __0, ref bool __1)//, float __1, float __2)
         {
             if (__1 == false) return true;

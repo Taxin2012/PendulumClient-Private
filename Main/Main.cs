@@ -291,6 +291,8 @@ namespace PendulumClient.Main
 
         private static System.Random _random = new System.Random();
 
+        public static HarmonyLib.Harmony _harmonyInstance;
+
         private delegate void EventDelegate(IntPtr thisPtr, IntPtr eventDataPtr, IntPtr nativeMethodInfo);
         private static readonly System.Collections.Generic.List<object> OurPinnedDelegates = new System.Collections.Generic.List<object>();
 
@@ -341,6 +343,7 @@ namespace PendulumClient.Main
             Directory.CreateDirectory("PendulumClient/VRCW");
             ColorSettings.RegisterSettings();
             CheckMLVersion();
+            if (Harmony == null) _harmonyInstance = HarmonyInstance;
             /*try
             {
                 if (Il2CppClassPointerStore<ApiFileHelper>.NativeClassPtr == IntPtr.Zero)
@@ -2200,8 +2203,16 @@ namespace PendulumClient.Main
             }
             return "Visitor";
         }
+
+        public static MethodInfo GetPropertyMethod(Type inClass, string method)
+        {
+            return AccessTools.Property(inClass, method).GetMethod;
+        }
+
+        public static MethodInfo QuestSpoofPatch;
         public static void PatchHarmony(HarmonyLib.Harmony instance)
         {
+
             var AntiPortalMethod1 = "Method_Private_Void_1";
             var AntiPortalMethod2 = "Method_Private_Void_0";
             var EventMethod1 = "Method_Public_Void_Player_VrcEvent_VrcBroadcastType_Int32_Single_";
@@ -2331,6 +2342,10 @@ namespace PendulumClient.Main
 
             var Hook19 = typeof(RootMotion.FinalIK.IKSolverVR).GetMethods().Where(mi => mi.Name == nameof(RootMotion.FinalIK.IKSolverVR.IsValid) && mi.GetParameters().Length == 1);//.GetMethod(nameof(RootMotion.FinalIK.IKSolverVR.IsValid));
             var Hook19Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_IK));
+
+
+            var Hook20 = GetPropertyMethod(typeof(Tools), nameof(Tools.Platform));//typeof(Tools).GetProperty(nameof(Tools.Platform));
+            var Hook20Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.QuestPatch));
             //VRCAvatarManager.Method_Private_Void_LocalAvatarVisibility_0
 
             //var AudioOnEndHook = typeof(AudioSource).GetMethod("get_" + nameof(AudioSource.isPlaying));
@@ -2437,6 +2452,7 @@ namespace PendulumClient.Main
             {
                 instance.Patch(hook, new HarmonyMethod(Hook19Patch));
             }
+            instance.Patch(AccessTools.Property(typeof(Tools), "Platform").GetMethod, null, new HarmonyMethod(Hook20Patch));
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
             instance.Patch(Hook1, new HarmonyMethod(Hook1Patch), null, null);

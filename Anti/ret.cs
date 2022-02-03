@@ -7,6 +7,53 @@ using Photon.Realtime;
 
 namespace PendulumClient.Anti
 {
+    public class ret_1
+    {
+        public bool toggled { get; set; }
+        public bool started { get; set; }
+        public int TimesRan { get; set; }
+
+        public IEnumerator StopAndStart()
+        {
+            yield return new WaitForSecondsRealtime(6f);
+            ButtonAPIV2.MenuFunctions.usobj = MelonLoader.MelonCoroutines.Start(Desync());
+            yield break;
+        }
+        public IEnumerator Desync()
+        {
+            byte[] VoiceData = Convert.FromBase64String("AgAAAKWkyYm7hjsA+H3owFygUv4w5B67lcSx14zff9FCPADiNbSwYWgE+O7DrSy5tkRecs21ljjofvebe6xsYlA4cVmgrd0=");
+            byte[] nulldata = new byte[4];
+            byte[] ServerTime = BitConverter.GetBytes(VRC.SDKBase.Networking.GetServerTimeInMilliseconds());
+            Buffer.BlockCopy(nulldata, 0, VoiceData, 0, 4);
+            Buffer.BlockCopy(ServerTime, 0, VoiceData, 4, 4);
+            started = true;
+            while (toggled)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    PhotonExtensions.OpRaiseEvent(1, VoiceData, new Photon.Realtime.RaiseEventOptions
+                    {
+                        field_Public_ReceiverGroup_0 = Photon.Realtime.ReceiverGroup.Others,
+                        field_Public_EventCaching_0 = Photon.Realtime.EventCaching.DoNotCache
+                    }, SendOptions.SendReliable);
+                }
+                yield return new WaitForSecondsRealtime(0.01f);
+                if (!toggled)
+                {
+                    TimesRan = 0;
+                    yield break;
+                }
+                TimesRan++;
+                if (TimesRan == 10)
+                {
+                    TimesRan = 0;
+                    MelonLoader.MelonCoroutines.Start(StopAndStart());
+                    yield break;
+                }
+            }
+            yield break;
+        }
+    }
     public class ret_9
     {
         public bool toggled { get; set; }
@@ -35,6 +82,10 @@ namespace PendulumClient.Anti
                         field_Public_EventCaching_0 = Photon.Realtime.EventCaching.DoNotCache
                     }, SendOptions.SendReliable);
                 }
+                if (!toggled)
+                {
+                    yield break;
+                }
                 yield return new WaitForSecondsRealtime(0.1f);
             }
             yield break;
@@ -54,7 +105,7 @@ namespace PendulumClient.Anti
             started = true;
             while (toggled)
 			{
-				for (int i = 0; i < 2; i++)
+				/*for (int i = 0; i < 2; i++)
 				{
 					for (int j = 0; j < photonViews.Length; j++)
 					{
@@ -68,7 +119,11 @@ namespace PendulumClient.Anti
 							field_Public_EventCaching_0 = 0
 						}, default(SendOptions));
 					}
-				}
+				}*/
+                if (!toggled)
+                {
+                    yield break;
+                }
 				yield return new WaitForSecondsRealtime(0.025f);
 			}
 			yield break;

@@ -20,10 +20,12 @@ namespace PendulumClient.ButtonAPIV2
     {
         public static Anti.ret_9 _ret { get; set; }
         public static Anti.ret_209 _ret2 { get; set; }
+        public static Anti.ret_1 _ret3 { get; set; }
 
 
         public static object dsobj = null;
         public static object ds2obj = null;
+        public static object usobj = null;
 
         public static bool OpenFileOnDownload = false;
         public static bool PlayerESPon = false;
@@ -132,6 +134,32 @@ namespace PendulumClient.ButtonAPIV2
                 }
                 _ret2 = null;
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("Event209 Disabled");
+            }
+        }
+
+        public static void EnableEventBigUspeak(bool t)
+        {
+            if (t)
+            {
+                if (_ret3 == null)
+                    _ret3 = new Anti.ret_1();
+
+                _ret3.toggled = true;
+                if (!_ret3.started)
+                {
+                    usobj = MelonCoroutines.Start(_ret3.Desync());
+                }
+                PendulumClientMain.VRC_UIManager.QueueHudMessage("Big USpeak Enabled");
+            }
+            else
+            {
+                _ret3.toggled = false;
+                if (_ret3.started && usobj != null)
+                {
+                    MelonCoroutines.Stop(usobj);
+                }
+                _ret3 = null;
+                PendulumClientMain.VRC_UIManager.QueueHudMessage("Big USpeak Disabled");
             }
         }
 

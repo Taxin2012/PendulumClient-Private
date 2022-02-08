@@ -97,7 +97,7 @@ namespace PendulumClient.QMLogAndPlayerlist
         public static string GetFramesColored(this VRC.Player player)
         {
             float fps = (player._playerNet.prop_Byte_0 != 0) ? Mathf.Floor(1000f / (float)player._playerNet.prop_Byte_0) : -1f;
-            if (fps > 80)
+            if (fps > 75)
                 return "<color=green>FPS: " + fps + "</color>";
             else if (fps > 30)
                 return "<color=yellow>FPS: " + fps + "</color>";

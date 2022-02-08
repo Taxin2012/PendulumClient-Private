@@ -219,14 +219,17 @@ namespace PendulumClient.ButtonAPIV2
             yield return new WaitForSecondsRealtime(0.025f);
         }
 
+        public static bool IsCopyingVoice = false;
         public static void CopyVoice(bool enable, VRC.Player player)
         {
             if (enable)
             {
+                IsCopyingVoice = true;
                 copyVoice_photonId = player.field_Private_VRCPlayerApi_0.playerId;
             }
             else
             {
+                IsCopyingVoice = false;
                 copyVoice_photonId = 0;
             }
         }

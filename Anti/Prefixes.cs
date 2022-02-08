@@ -729,7 +729,7 @@ namespace PendulumClient.Anti
                 PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
                 return false;
             }
-            if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0)
+            if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0 && ButtonAPIV2.MenuFunctions.IsCopyingVoice)
             {
                 if (__0.Code == 1)
                 {

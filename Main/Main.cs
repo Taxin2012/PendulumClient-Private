@@ -3247,7 +3247,7 @@ namespace PendulumClient.Main
                     {
                         foreach (VRC.SDK3.Components.VRCObjectSync obj in World_ObjectSyncs)
                         {
-                            TakeOwnershipIfNecessary(obj.gameObject);
+                            Networking.SetOwner(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_VRCPlayerApi_0, obj.gameObject);//TakeOwnershipIfNecessary(obj.gameObject);
                             obj.transform.position = gameObject.transform.position + gameObject.transform.forward;
                             obj.transform.LookAt(player.transform);
                             gameObject.transform.Rotate(new Vector3(0f, 360 / World_ObjectSyncs.Count, 0f));

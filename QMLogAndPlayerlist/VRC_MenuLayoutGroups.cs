@@ -16,7 +16,9 @@ namespace PendulumClient.QMLogAndPlayerlist
         public const string PCColor = "#2bc494ff";
         public const string ClientUserColor = "#c43a2bff";
         public const string DevColor = "#ff0000ff";
-        public const string FriendColor = "#ffbb00ff";
+        public const string FriendColor = "#ffd000ff";
+        public const string MasterColor = "#ffb300ff";
+        public const string HostColor = "#ffb300ff";
         public const string YouColor = "#00ff00ff";
         public const string LegendaryColor = "#004c7fff";
         public const string VeteranColor = "#b2ff00ff";
@@ -26,6 +28,7 @@ namespace PendulumClient.QMLogAndPlayerlist
         public const string NewUserColor = "#1677ffff";
         public const string VisitorColor = "#ccccccff";
         public const string NuisanceColor = "#401d0fff";
+        public const string SelectedColor = "#004c7fff";
         public static string GetPlatform(this VRC.Player player)
         {
             //check if stuff is null before using it will prob fix errors
@@ -66,6 +69,30 @@ namespace PendulumClient.QMLogAndPlayerlist
             if (VRC.Core.APIUser.IsFriendsWith(player.field_Private_APIUser_0.id))
             {
                 return $"<color={FriendColor}>[F]</color>";
+            }
+            return "";
+        }
+        public static string IsInstanceMaster(this VRC.Player player)
+        {
+            if (player.field_Private_VRCPlayerApi_0.isMaster)
+            {
+                return $"<color={MasterColor}>[M]</color>";
+            }
+            return "";
+        }
+        public static string IsInstanceHost(this VRC.Player player)
+        {
+            if (RoomManager.field_Internal_Static_ApiWorldInstance_0.ownerId == player.field_Private_APIUser_0.id)
+            {
+                return $"<color={HostColor}>[H]</color>";
+            }
+            return "";
+        }
+        public static string IsSelectedUser(this VRC.Player player)
+        {
+            if (Main.PendulumClientMain.StoredUserID == player.field_Private_APIUser_0.id)
+            {
+                return $"<color={SelectedColor}>[S]</color>";
             }
             return "";
         }
@@ -152,6 +179,9 @@ namespace PendulumClient.QMLogAndPlayerlist
             {
                 if (player.GetPlatform() != "") output += player.GetPlatform();
             }
+            if (player.IsInstanceHost() != "") output += " " + player.IsInstanceHost();
+            if (player.IsInstanceMaster() != "") output += " " + player.IsInstanceMaster();
+            if (player.IsSelectedUser() != "") output += " " + player.IsSelectedUser();
             if (player.IsClientUser() != "") output += " " + player.IsClientUser();
             if (player.IsDev() != "") output += " " + player.IsDev();
             if (player.IsFriend() != "") output += " " + player.IsFriend();

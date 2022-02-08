@@ -106,16 +106,20 @@ namespace PendulumClient.Wrapper
         }
         public static Player GetPlayer(string UserID)
         {
-            var Players = GetAllPlayers();
             Player FoundPlayer = null;
-            for (int i = 0; i < Players.Count; i++)
+            try
             {
-                var player = Players[i];
-                if (player.GetAPIUser().id == UserID)
+                var Players = GetAllPlayers();
+                for (int i = 0; i < Players.Count; i++)
                 {
-                    FoundPlayer = player;
+                    var player = Players[i];
+                    if (player.GetAPIUser().id == UserID)
+                    {
+                        FoundPlayer = player;
+                    }
                 }
             }
+            catch { }
 
             return FoundPlayer;
         }

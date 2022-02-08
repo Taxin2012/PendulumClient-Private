@@ -426,7 +426,11 @@ namespace PendulumClient.Anti
                 PendulumLogger.Log("Empty Event Sent From " + __0.prop_APIUser_0.displayName);
                 return;
             }
-
+            if (__1.ParameterString == "" && __1.ParameterObject == null && __1.ParameterObjects.Length == 0)
+            {
+                PendulumLogger.Log("Empty Event Sent From " + __0.prop_APIUser_0.displayName);
+                return;
+            }
             if (debugmode == true && __0 != null && __1 != null && __1.ParameterObject != null)
             {
                     bool param1 = __2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered && __1.ParameterString == "ReceiveVoiceStatsSyncRPC" && __1.ParameterObject.name == "USpeak" && __1.ParameterString == "SanityCheck";
@@ -741,7 +745,7 @@ namespace PendulumClient.Anti
             }
             try
             {
-                if (debugmode == true || __0.Code == 209 || __0.Code == 210)
+                if (debugmode == true) //&& (__0.Code == 209 || __0.Code == 210))
                 {
                     if (__0.Code != 7)
                     {

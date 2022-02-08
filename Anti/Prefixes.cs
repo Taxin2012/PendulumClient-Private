@@ -21,6 +21,7 @@ using Transmtn.DTO.Notifications;
 using System.Security.Cryptography;
 using System.Reflection;
 using UnhollowerRuntimeLib;
+using Newtonsoft.Json.Linq;
 
 using Player = VRC.Player;
 
@@ -34,6 +35,7 @@ namespace PendulumClient.Anti
         public static bool debugmode = false;
         public static bool Anti9 = false;
         public static bool Anti209 = false;
+        public static bool IsOnLoadingScreen = false;
 
         public static bool patch__false()
         {
@@ -57,7 +59,8 @@ namespace PendulumClient.Anti
 
         public static void postpatch__QMOnOpen()
         {
-            ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
+            try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { if (debugmode) { PendulumLogger.LogError("DebugPanel ColorChange Failed! Retrying in 5 threads..."); } }
+            PendulumClientMain.SetupDebugPanelNextThread = true;
         }
 
         public static bool prepatch__PortalAwake(PortalInternal __instance)
@@ -73,7 +76,7 @@ namespace PendulumClient.Anti
 
         public static void postpatch__OnLoading()
         {
-
+            IsOnLoadingScreen = true;
             if (ColorModuleV2.CMV2_ColorModule.MenuMusicShuffle)
             {
                 ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
@@ -96,7 +99,7 @@ namespace PendulumClient.Anti
             }
         }
 
-        public static bool patch_avatarVisibilityBool(bool __0)
+        /*public static bool patch_avatarVisibilityBool(bool __0)
         {
             PendulumLogger.Log("Bool: " + __0);
             return __0;
@@ -112,7 +115,7 @@ namespace PendulumClient.Anti
             PendulumLogger.Log("IK Event: " + message);
             PendulumLogger.Log("IK Iterations: " + __instance.maxIterations);
             return true;
-        }
+        }*/
         public static bool showHead = false;
         public static bool patch_Head()
         {
@@ -159,93 +162,118 @@ namespace PendulumClient.Anti
 			ApplyBlockedNamePlateColor(player);*/
         //PendulumLogger.Log("IsBlockedOutputString: " + ǅǅǅǄǄǄǅǅǅǄǅǅǅǅǅǅǄǅǅǄǅǄǄǄǄǅǅǅǄǄǅǄǄǄǅǅǅǅǅǅǅǅǅǄǅǅǅ);
         /*return false;
-    }
-    public static bool KickUserPatch(string __0, string __1, string __2, string __3, Player __4)
-    {
-        PendulumLogger.Log("World Owner ({0})\nTried To Kick {1}.", __4.prop_APIUser_0.displayName, PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-        PendulumLogger.Log("WOTKPS1: {0}", __0);
-        PendulumLogger.Log("WOTKPS2: {0}", __1);
-        PendulumLogger.Log("WOTKPS3: {0}", __2);
-        PendulumLogger.Log("WOTKPS4: {0}", __3);
-        AlertPopup.SendAlertPopup("World Owner ({0})\nTried To Kick {1}.", __4.prop_APIUser_0.displayName, PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-        return false;
-    }
+        }
+        public static bool KickUserPatch(string __0, string __1, string __2, string __3, Player __4)
+        {
+            PendulumLogger.Log("World Owner ({0})\nTried To Kick {1}.", __4.prop_APIUser_0.displayName, PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            PendulumLogger.Log("WOTKPS1: {0}", __0);
+            PendulumLogger.Log("WOTKPS2: {0}", __1);
+            PendulumLogger.Log("WOTKPS3: {0}", __2);
+            PendulumLogger.Log("WOTKPS4: {0}", __3);
+            AlertPopup.SendAlertPopup("World Owner ({0})\nTried To Kick {1}.", __4.prop_APIUser_0.displayName, PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+            return false;
+        }
 
-    public static bool BlockStateChangePrefix(string __0, bool __1, Player __2)
-    {
-        PendulumLogger.Log("Block Event Triggered!");
-        PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
-        PendulumLogger.Log("State: {0}", __1);
-        if (PlayerWrappers.GetPlayer(__0) != null)
+        public static bool BlockStateChangePrefix(string __0, bool __1, Player __2)
         {
-            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-            PendulumClientMain.DebugPlayerLog(__2, __1 ? "BLOCKED" : "UNBLOCKED", __0);
-        }
-        else
-        {
-            PendulumLogger.Log("Receiver Not Found!");
-        }
-        return true;
-    }
-
-    public static void AvatarStateChangePrefix(string __0, bool __1, Player __2)
-    {
-        PendulumLogger.Log("Avatar Event Triggered!");
-        PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
-        PendulumLogger.Log("State: {0}", __1 ? "Shown" : "Hidden");
-        if (PlayerWrappers.GetPlayer(__0) != null)
-        {
-            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-            PendulumClientMain.DebugPlayerLog(__2, __1 ? "SHOWN" : "HIDDEN", __0);
-        }
-        else
-        {
-            PendulumLogger.Log("Receiver Not Found!");
-        }
-    }
-
-    public static void MuteStateChangePrefix(string __0, bool __1, Player __2)
-    {
-        PendulumLogger.Log("Mute Event Triggered!");
-        PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
-        PendulumLogger.Log("State: {0}", __1 ? "Muted" : "Unmuted");
-        if (PlayerWrappers.GetPlayer(__0) != null)
-        {
-            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-            PendulumClientMain.DebugPlayerLog(__2, __1 ? "MUTED" : "UNMUTED", __0);
-        }
-        else
-        {
-            PendulumLogger.Log("Receiver Not Found!");
-        }
-    }
-
-    public static void FriendStateChangePrefix(string __0, Player __1)
-    {
-        PendulumLogger.Log("Friend State Changed!");
-        PendulumLogger.Log("Sender: {0}", __1.prop_APIUser_0.displayName);
-        if (PlayerWrappers.GetPlayer(__0) != null)
-        {
-            PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-            PendulumClientMain.DebugPlayerLog(__1, "Friended/Unfriended", __0);
-        }
-        else
-        {
-            PendulumLogger.Log("Receiver Not Found!");
-        }
-    }
-
-    public static bool ForceMicOffPrefix(string __0, Player __1)
-    {
-        //PendulumLogger.Log("Friend State Changed!");
-        //PendulumLogger.Log("Sender: {0}", __1.prop_APIUser_0.displayName);
-        if (PlayerWrappers.GetPlayer(__0) != null)
-        {
-            //PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
-            PendulumClientMain.DebugMicLog(__1, "Forced", __0);
-            if (APIUser.CurrentUser.id == __0)
+            PendulumLogger.Log("Block Event Triggered!");
+            PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
+            PendulumLogger.Log("State: {0}", __1);
+            if (PlayerWrappers.GetPlayer(__0) != null)
             {
-                AlertPopup.SendAlertPopup(__1.prop_APIUser_0.displayName + "\nTried to force your mic off!");
+                PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+                PendulumClientMain.DebugPlayerLog(__2, __1 ? "BLOCKED" : "UNBLOCKED", __0);
+            }
+            else
+            {
+                PendulumLogger.Log("Receiver Not Found!");
+            }
+            return true;
+        }
+
+        public static void AvatarStateChangePrefix(string __0, bool __1, Player __2)
+        {
+            PendulumLogger.Log("Avatar Event Triggered!");
+            PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
+            PendulumLogger.Log("State: {0}", __1 ? "Shown" : "Hidden");
+            if (PlayerWrappers.GetPlayer(__0) != null)
+            {
+                PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+                PendulumClientMain.DebugPlayerLog(__2, __1 ? "SHOWN" : "HIDDEN", __0);
+            }
+            else
+            {
+                PendulumLogger.Log("Receiver Not Found!");
+            }
+        }
+
+        public static void MuteStateChangePrefix(string __0, bool __1, Player __2)
+        {
+            PendulumLogger.Log("Mute Event Triggered!");
+            PendulumLogger.Log("Sender: {0}", __2.prop_APIUser_0.displayName);
+            PendulumLogger.Log("State: {0}", __1 ? "Muted" : "Unmuted");
+            if (PlayerWrappers.GetPlayer(__0) != null)
+            {
+                PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+                PendulumClientMain.DebugPlayerLog(__2, __1 ? "MUTED" : "UNMUTED", __0);
+            }
+            else
+            {
+                PendulumLogger.Log("Receiver Not Found!");
+            }
+        }
+
+        public static void FriendStateChangePrefix(string __0, Player __1)
+        {
+            PendulumLogger.Log("Friend State Changed!");
+            PendulumLogger.Log("Sender: {0}", __1.prop_APIUser_0.displayName);
+            if (PlayerWrappers.GetPlayer(__0) != null)
+            {
+                PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+                PendulumClientMain.DebugPlayerLog(__1, "Friended/Unfriended", __0);
+            }
+            else
+            {
+                PendulumLogger.Log("Receiver Not Found!");
+            }
+        }
+
+        public static bool ForceMicOffPrefix(string __0, Player __1)
+        {
+            //PendulumLogger.Log("Friend State Changed!");
+            //PendulumLogger.Log("Sender: {0}", __1.prop_APIUser_0.displayName);
+            if (PlayerWrappers.GetPlayer(__0) != null)
+            {
+                //PendulumLogger.Log("Receiver: {0}", PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName);
+                PendulumClientMain.DebugMicLog(__1, "Forced", __0);
+                if (APIUser.CurrentUser.id == __0)
+                {
+                    AlertPopup.SendAlertPopup(__1.prop_APIUser_0.displayName + "\nTried to force your mic off!");
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+                //PendulumLogger.Log("Receiver Not Found!");
+            }
+        }
+
+        public static bool ApiModerationPrefix(string __0, ApiModeration.ModerationType __1, string __2, ApiModeration. ModerationTimeRange __3, string __4 = "", string __5 = "", Il2CppSystem.Action<ApiModelContainer<ApiModeration>> __6 = null, Il2CppSystem.Action<ApiModelContainer<ApiModeration>> __7 = null)
+        {
+            PendulumLogger.Log("ApiModeration Called!");
+            PendulumLogger.Log("Target: " + PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName + " (" + __0 + ")");
+            PendulumLogger.Log("Type: " + __1.ToString());
+            PendulumLogger.Log("Reason: " + __2);
+            PendulumLogger.Log("TimeRange: " + __3);
+            PendulumLogger.Log("WorldID: " + __4);
+            PendulumLogger.Log("InstanceID: " + __5);
+            if (__0 == APIUser.CurrentUser.id)
+            {
                 return false;
             }
             else
@@ -253,528 +281,609 @@ namespace PendulumClient.Anti
                 return true;
             }
         }
-        else
-        {
-            return true;
-            //PendulumLogger.Log("Receiver Not Found!");
-        }
-    }
 
-    public static bool ApiModerationPrefix(string __0, ApiModeration.ModerationType __1, string __2, ApiModeration. ModerationTimeRange __3, string __4 = "", string __5 = "", Il2CppSystem.Action<ApiModelContainer<ApiModeration>> __6 = null, Il2CppSystem.Action<ApiModelContainer<ApiModeration>> __7 = null)
-    {
-        PendulumLogger.Log("ApiModeration Called!");
-        PendulumLogger.Log("Target: " + PlayerWrappers.GetPlayer(__0).prop_APIUser_0.displayName + " (" + __0 + ")");
-        PendulumLogger.Log("Type: " + __1.ToString());
-        PendulumLogger.Log("Reason: " + __2);
-        PendulumLogger.Log("TimeRange: " + __3);
-        PendulumLogger.Log("WorldID: " + __4);
-        PendulumLogger.Log("InstanceID: " + __5);
-        if (__0 == APIUser.CurrentUser.id)
+        public static bool FlowManagerPatch1(string __0, bool __1)
+        {
+            //PendulumLogger.Log("FMP1");
+            //PendulumLogger.Log("String: " + __0);
+            //PendulumLogger.Log("Bool: " + __1);
+            //__1 = false;
+            return false;
+        }
+
+        public static bool FlowManagerPatch2(string __0, string __1, bool __2)
+        {
+            //PendulumLogger.Log("FMP2");
+            //PendulumLogger.Log("String1: " + __0);
+            //PendulumLogger.Log("String2: " + __1);
+            //PendulumLogger.Log("Bool: " + __2);
+            //__2 = false;
+            return false;
+        }
+
+        public static bool FlowManagerPatch3(string __0, int __1)
+        {
+            //PendulumLogger.Log("FMP3");
+            //PendulumLogger.Log("String: " + __0);
+            //PendulumLogger.Log("Int: " + __1);
+            return false;
+        }
+        public static bool SerializePrefix()
+        {
+            return PendulumClientMain.Serialization;
+        }
+
+        public static bool VoteToKickInit(string __0, Player __1)
+        {
+            LogVTKDetails(__0, __1);
+            PendulumClientMain.DebugPlayerLog(__1, "Started a Vote to Kick on", __0);
+            return true;
+        }
+
+        public static void LogVTKDetails(string ǅǄǄǄǄǄǄǅǅǅǅǅǄǄǅǄǅǄǅǄǅǄǅǅǄǅǅǄǄǅǅǅǄǅǄǄǅǄǅǅǄǅǄǅǄǄǄ, Player ǄǄǄǅǅǄǅǄǄǄǄǅǄǅǅǅǄǅǄǅǅǄǄǅǅǄǅǄǅǅǅǄǅǅǅǅǄǅǄǅǅǅǄǅǄǄǅ)
+        {
+            PendulumLogger.Log("Vote Kick Init: {0}", ǅǄǄǄǄǄǄǅǅǅǅǅǄǄǅǄǅǄǅǄǅǄǅǅǄǅǅǄǄǅǅǅǄǅǄǄǅǄǅǅǄǅǄǅǄǄǄ);
+            PendulumLogger.Log("Player of Init: {0}", ǄǄǄǅǅǄǅǄǄǄǄǅǄǅǅǅǄǅǄǅǅǄǄǅǅǄǅǄǅǅǅǄǅǅǅǅǄǅǄǅǅǅǄǅǄǄǅ.prop_APIUser_0.displayName);
+        }
+
+        public static bool TStringOutput(string __0, string __1, string __2)
+        {
+            PendulumLogger.Log("String1: {0}", __0);
+            PendulumLogger.Log("String2: {0}", __1);
+            PendulumLogger.Log("String3: {0}", __2);
+            PendulumLogger.Log("IsKickedFromWorld");
+            PendulumClientMain.IsLoading = true;
+            return false;
+        }
+
+        public static bool TStringOutputFalse(string __0, string __1, string __2)
         {
             return false;
         }
-        else
+
+        public static bool TryKickPatch(APIUser __0)
         {
-            return true;
+            PendulumLogger.Log("TKP-ApiUser: {0}", __0.displayName);
+            return false;
         }
-    }
 
-    public static bool FlowManagerPatch1(string __0, bool __1)
-    {
-        //PendulumLogger.Log("FMP1");
-        //PendulumLogger.Log("String: " + __0);
-        //PendulumLogger.Log("Bool: " + __1);
-        //__1 = false;
-        return false;
-    }
-
-    public static bool FlowManagerPatch2(string __0, string __1, bool __2)
-    {
-        //PendulumLogger.Log("FMP2");
-        //PendulumLogger.Log("String1: " + __0);
-        //PendulumLogger.Log("String2: " + __1);
-        //PendulumLogger.Log("Bool: " + __2);
-        //__2 = false;
-        return false;
-    }
-
-    public static bool FlowManagerPatch3(string __0, int __1)
-    {
-        //PendulumLogger.Log("FMP3");
-        //PendulumLogger.Log("String: " + __0);
-        //PendulumLogger.Log("Int: " + __1);
-        return false;
-    }
-    public static bool SerializePrefix()
-    {
-        return PendulumClientMain.Serialization;
-    }
-
-    public static bool VoteToKickInit(string __0, Player __1)
-    {
-        LogVTKDetails(__0, __1);
-        PendulumClientMain.DebugPlayerLog(__1, "Started a Vote to Kick on", __0);
-        return true;
-    }
-
-    public static void LogVTKDetails(string ǅǄǄǄǄǄǄǅǅǅǅǅǄǄǅǄǅǄǅǄǅǄǅǅǄǅǅǄǄǅǅǅǄǅǄǄǅǄǅǅǄǅǄǅǄǄǄ, Player ǄǄǄǅǅǄǅǄǄǄǄǅǄǅǅǅǄǅǄǅǅǄǄǅǅǄǅǄǅǅǅǄǅǅǅǅǄǅǄǅǅǅǄǅǄǄǅ)
-    {
-        PendulumLogger.Log("Vote Kick Init: {0}", ǅǄǄǄǄǄǄǅǅǅǅǅǄǄǅǄǅǄǅǄǅǄǅǅǄǅǅǄǄǅǅǅǄǅǄǄǅǄǅǅǄǅǄǅǄǄǄ);
-        PendulumLogger.Log("Player of Init: {0}", ǄǄǄǅǅǄǅǄǄǄǄǅǄǅǅǅǄǅǄǅǅǄǄǅǅǄǅǄǅǅǅǄǅǅǅǅǄǅǄǅǅǅǄǅǄǄǅ.prop_APIUser_0.displayName);
-    }
-
-    public static bool TStringOutput(string __0, string __1, string __2)
-    {
-        PendulumLogger.Log("String1: {0}", __0);
-        PendulumLogger.Log("String2: {0}", __1);
-        PendulumLogger.Log("String3: {0}", __2);
-        PendulumLogger.Log("IsKickedFromWorld");
-        PendulumClientMain.IsLoading = true;
-        return false;
-    }
-
-    public static bool TStringOutputFalse(string __0, string __1, string __2)
-    {
-        return false;
-    }
-
-    public static bool TryKickPatch(APIUser __0)
-    {
-        PendulumLogger.Log("TKP-ApiUser: {0}", __0.displayName);
-        return false;
-    }
-
-    public static bool UserKickUserPatch(APIUser __0, string __1, APIUser __2)
-    {
-        PendulumLogger.Log("Sender User: {0}", __0.displayName);
-        PendulumLogger.Log("Sender Type: {0}", __1);
-        PendulumLogger.Log("Target User: {0}", __2.displayName);
-        AlertPopup.SendAlertPopup("UserKickUser Detected.\nKick Sent By: {0}\nKick From: {1}\nKick Target: {2}", __0.displayName, __1, __2.displayName);
-        if (__0.id == APIUser.CurrentUser.id)
+        public static bool UserKickUserPatch(APIUser __0, string __1, APIUser __2)
         {
-            return true;
+            PendulumLogger.Log("Sender User: {0}", __0.displayName);
+            PendulumLogger.Log("Sender Type: {0}", __1);
+            PendulumLogger.Log("Target User: {0}", __2.displayName);
+            AlertPopup.SendAlertPopup("UserKickUser Detected.\nKick Sent By: {0}\nKick From: {1}\nKick Target: {2}", __0.displayName, __1, __2.displayName);
+            if (__0.id == APIUser.CurrentUser.id)
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
-    public static void SendVoteKickPatch(string __0, string __1, bool __2)
-    {
-        PendulumLogger.Log("FirstString: {0}", __0);
-        PendulumLogger.Log("SecondString: {0}", __1);
-        PendulumLogger.Log("Bool: {0}", __2);
-    }
+        public static void SendVoteKickPatch(string __0, string __1, bool __2)
+        {
+            PendulumLogger.Log("FirstString: {0}", __0);
+            PendulumLogger.Log("SecondString: {0}", __1);
+            PendulumLogger.Log("Bool: {0}", __2);
+        }
 
-    public static bool IsKickedPatch(bool __0 = false)
-    {
-        __0 = false;
-        PendulumLogger.Log("FirstBool: {0}", __0);
-        PendulumLogger.Log("You have been kicked from this world!");
-        AlertPopup.SendAlertPopup("You have been kicked from this world!");
-        return false;
-    }*/
+        public static bool IsKickedPatch(bool __0 = false)
+        {
+            __0 = false;
+            PendulumLogger.Log("FirstBool: {0}", __0);
+            PendulumLogger.Log("You have been kicked from this world!");
+            AlertPopup.SendAlertPopup("You have been kicked from this world!");
+            return false;
+        }*/
 
         public static bool patch__1(ApiWorld __0, ApiWorldInstance __1, string __2, int __3)
-    {
-        if (debugmode)
         {
-            PendulumLogger.DebugLog("WorldName: " + __0.name);
-            //PendulumLogger.DebugLog("WorldId: " + __0.id + ":" + __1.idWithTags);
-            PendulumLogger.DebugLog("WorldCount: " + __1.count);
-            //PendulumLogger.Log("String: " + __2);
-            PendulumLogger.DebugLog("Int: " + __3);
-            if (__1.users != null)
+            if (debugmode)
             {
-                if (__1.users.Count > 0)
+                PendulumLogger.DebugLog("WorldName: " + __0.name);
+                //PendulumLogger.DebugLog("WorldId: " + __0.id + ":" + __1.idWithTags);
+                PendulumLogger.DebugLog("WorldCount: " + __1.count);
+                //PendulumLogger.Log("String: " + __2);
+                PendulumLogger.DebugLog("Int: " + __3);
+                if (__1.users != null)
                 {
-                    foreach (APIUser user in __1.users)
+                    if (__1.users.Count > 0)
                     {
-                        PendulumLogger.DebugLog("User: " + user.displayName);
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    public static void patch__2__unused(string __0, ApiPlayerModeration.ModerationType __1, Il2CppSystem.Action<ApiPlayerModeration> __2, Il2CppSystem.Action<string> __3)
-    {
-        PendulumLogger.Log("epic {0} you sent", __1.ToString().ToLower());
-        //var moderation = new ApiPlayerModeration(__2.method);
-        //PendulumLogger.Log(moderation.moderationType);
-        //PendulumLogger.Log(moderation.targetUserId);
-       // PendulumLogger.Log(moderation.sourceUserId);
-    }
-
-    public static void patch__3(Player __0, VRC_EventHandler.VrcEvent __1, VRC_EventHandler.VrcBroadcastType __2, int __3, float __4)
-    {
-        //PendulumLogger.Log("CustomRPC: " + __0);
-        //PendulumLogger.Log("Player: " + __1.prop_APIUser_0.displayName);
-        //PendulumLogger.Log("eventsent");
-        if (__0 == null || __0.field_Private_APIUser_0 == null)
-        {
-            if (string.IsNullOrEmpty(__1.ParameterString))
-            {
-                    //PendulumLogger.Log("Empty Event: " + __1.ParameterString);
-            }
-            return;
-        }
-        if (__1 == null)
-        {
-            PendulumLogger.Log("Empty Event Sent From " + __0.prop_APIUser_0.displayName);
-            return;
-        }
-
-        if (debugmode == true && __0 != null && __1 != null && __1.ParameterObject != null)
-        {
-                bool param1 = __2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered && __1.ParameterString == "ReceiveVoiceStatsSyncRPC" && __1.ParameterObject.name == "USpeak" && __1.ParameterString == "SanityCheck";
-                if (!param1)
-                {
-                    PendulumLogger.EventLog("----------Basic Event----------");
-                    PendulumLogger.EventLog("EventSender: " + __0.prop_APIUser_0.displayName);
-                    PendulumLogger.EventLog("EventType: " + __1.EventType.ToString());
-                    PendulumLogger.EventLog("BroadcastType: " + __2.ToString());
-                    PendulumLogger.EventLog("EventString: " + __1.ParameterString);
-                    PendulumLogger.EventLog("EventBool: " + __1.ParameterBool);
-                    PendulumLogger.EventLog("ObjectName: " + __1.ParameterObject.name);
-                    //PendulumLogger.Log("PhotonID: " + __3);
-                    //return true;
-                    if (__1.ParameterObject.name == "SceneEventHandlerAndInstantiator")
-                    {
-                        var allComponents = __1.ParameterObject.GetComponents(Component.Il2CppType);
-                        foreach (var Component in allComponents)
+                        foreach (APIUser user in __1.users)
                         {
-                            PendulumLogger.EventLog("ComponentName: " + Component.name);
-                            PendulumLogger.EventLog("ComponentTag: " + Component.tag);
-                            PendulumLogger.EventLog("ComponentType: " + Component.GetType().ToString());
+                            PendulumLogger.DebugLog("User: " + user.displayName);
                         }
                     }
-                    PendulumLogger.EventLog("----------End Event----------");
                 }
+            }
+            return true;
         }
 
-        if (__0.prop_APIUser_0.id != APIUser.CurrentUser.id)
+        public static void patch__2__unused(string __0, ApiPlayerModeration.ModerationType __1, Il2CppSystem.Action<ApiPlayerModeration> __2, Il2CppSystem.Action<string> __3)
         {
-            if (__1.EventType == VRC_EventHandler.VrcEventType.SendRPC)
+            PendulumLogger.Log("epic {0} you sent", __1.ToString().ToLower());
+            //var moderation = new ApiPlayerModeration(__2.method);
+            //PendulumLogger.Log(moderation.moderationType);
+            //PendulumLogger.Log(moderation.targetUserId);
+           // PendulumLogger.Log(moderation.sourceUserId);
+        }
+
+        public static void patch__3(Player __0, VRC_EventHandler.VrcEvent __1, VRC_EventHandler.VrcBroadcastType __2, int __3, float __4)
+        {
+            //PendulumLogger.Log("CustomRPC: " + __0);
+            //PendulumLogger.Log("Player: " + __1.prop_APIUser_0.displayName);
+            //PendulumLogger.Log("eventsent");
+            if (__0 == null || __0.field_Private_APIUser_0 == null)
             {
-                if (__2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+                if (string.IsNullOrEmpty(__1.ParameterString))
                 {
-                    if (__1.ParameterString == "_DestroyObject")
+                        //PendulumLogger.Log("Empty Event: " + __1.ParameterString);
+                }
+                return;
+            }
+            if (__1 == null)
+            {
+                PendulumLogger.Log("Empty Event Sent From " + __0.prop_APIUser_0.displayName);
+                return;
+            }
+
+            if (debugmode == true && __0 != null && __1 != null && __1.ParameterObject != null)
+            {
+                    bool param1 = __2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered && __1.ParameterString == "ReceiveVoiceStatsSyncRPC" && __1.ParameterObject.name == "USpeak" && __1.ParameterString == "SanityCheck";
+                    if (!param1)
                     {
-                        PendulumClientMain.DebugLog(__0.prop_APIUser_0.displayName + " Deleted a Portal!");
+                        PendulumLogger.EventLog("----------Basic Event----------");
+                        PendulumLogger.EventLog("EventSender: " + __0.prop_APIUser_0.displayName);
+                        PendulumLogger.EventLog("EventType: " + __1.EventType.ToString());
+                        PendulumLogger.EventLog("BroadcastType: " + __2.ToString());
+                        PendulumLogger.EventLog("EventString: " + __1.ParameterString);
+                        PendulumLogger.EventLog("EventBool: " + __1.ParameterBool);
+                        PendulumLogger.EventLog("ObjectName: " + __1.ParameterObject.name);
+                        //PendulumLogger.Log("PhotonID: " + __3);
+                        //return true;
+                        if (__1.ParameterObject.name == "SceneEventHandlerAndInstantiator")
+                        {
+                            var allComponents = __1.ParameterObject.GetComponents(Component.Il2CppType);
+                            foreach (var Component in allComponents)
+                            {
+                                PendulumLogger.EventLog("ComponentName: " + Component.name);
+                                PendulumLogger.EventLog("ComponentTag: " + Component.tag);
+                                PendulumLogger.EventLog("ComponentType: " + Component.GetType().ToString());
+                            }
+                        }
+                        PendulumLogger.EventLog("----------End Event----------");
+                    }
+            }
+
+            if (__0.prop_APIUser_0.id != APIUser.CurrentUser.id)
+            {
+                if (__1.EventType == VRC_EventHandler.VrcEventType.SendRPC)
+                {
+                    if (__2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+                    {
+                        if (__1.ParameterString == "_DestroyObject")
+                        {
+                            PendulumClientMain.DebugLog(__0.prop_APIUser_0.displayName + " Deleted a Portal!");
+                        }
                     }
                 }
             }
-        }
-         //return true;
-        if (Moderation)
-        {
-            if (JoinNotifierMod.DevUserIDs.Contains(__0.prop_APIUser_0.id))
+             //return true;
+            if (Moderation)
             {
-                if (__2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
+                if (JoinNotifierMod.DevUserIDs.Contains(__0.prop_APIUser_0.id))
                 {
-                    if (__1.ParameterString.Contains("PCM:") && __1.EventType == VRC_EventHandler.VrcEventType.SendRPC)
+                    if (__2 == VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered)
                     {
-                        var Moderation = __1.ParameterString.Split(new char[]
+                        if (__1.ParameterString.Contains("PCM:") && __1.EventType == VRC_EventHandler.VrcEventType.SendRPC)
                         {
-                            ':'
-                        });
-                        if (Moderation[1] == APIUser.CurrentUser.id)
-                        {
-                            if (Moderation[2] == "Logout")
+                            var Moderation = __1.ParameterString.Split(new char[]
                             {
-                                PendulumClientMain.FakeBanToggle = true;
-                                APIUser.Logout();
-                            }
-                            if (Moderation[2] == "EndProcess")
+                                ':'
+                            });
+                            if (Moderation[1] == APIUser.CurrentUser.id)
                             {
-                                Process.GetCurrentProcess().Kill();
-                            }
-                            if (Moderation[2] == "GoHome")
-                            {
-                                if (!string.IsNullOrEmpty(APIUser.CurrentUser.homeLocation))
+                                if (Moderation[2] == "Logout")
                                 {
-                                    var HomeInstance = APIUser.CurrentUser.homeLocation + ":" + new System.Random().Next(1, 99999) + "~private(" + APIUser.CurrentUser.id + ")~nonce(" + PendulumClientMain.RandomInstance8Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance12Char() + ")";
-                                    Networking.GoToRoom(HomeInstance);
-                                    //PendulumLogger.Log(HomeInstance);
-                                    PendulumClientMain.IsLoading = true;
+                                    PendulumClientMain.FakeBanToggle = true;
+                                    APIUser.Logout();
                                 }
-                                else
+                                if (Moderation[2] == "EndProcess")
                                 {
-                                    var HomeInstance = "wrld_4432ea9b-729c-46e3-8eaf-846aa0a37fdd:" + new System.Random().Next(1, 99999) + "~private(" + APIUser.CurrentUser.id + ")~nonce(" + PendulumClientMain.RandomInstance8Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance12Char() + ")";
-                                    Networking.GoToRoom(HomeInstance);
-                                    PendulumClientMain.IsLoading = true;
+                                    Process.GetCurrentProcess().Kill();
+                                }
+                                if (Moderation[2] == "GoHome")
+                                {
+                                    if (!string.IsNullOrEmpty(APIUser.CurrentUser.homeLocation))
+                                    {
+                                        var HomeInstance = APIUser.CurrentUser.homeLocation + ":" + new System.Random().Next(1, 99999) + "~private(" + APIUser.CurrentUser.id + ")~nonce(" + PendulumClientMain.RandomInstance8Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance12Char() + ")";
+                                        Networking.GoToRoom(HomeInstance);
+                                        //PendulumLogger.Log(HomeInstance);
+                                        PendulumClientMain.IsLoading = true;
+                                    }
+                                    else
+                                    {
+                                        var HomeInstance = "wrld_4432ea9b-729c-46e3-8eaf-846aa0a37fdd:" + new System.Random().Next(1, 99999) + "~private(" + APIUser.CurrentUser.id + ")~nonce(" + PendulumClientMain.RandomInstance8Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance4Char() + PendulumClientMain.RandomInstance12Char() + ")";
+                                        Networking.GoToRoom(HomeInstance);
+                                        PendulumClientMain.IsLoading = true;
+                                    }
+                                }
+                                if (Moderation[2] == "ResetAvatar")
+                                {
+                                    //PendulumClientMain.ChangeToAvatar("avtr_c38a1615-5bf5-42b4-84eb-a8b6c37cbd11");
+                                }
+                                if (Moderation[2] == "Rejoin")
+                                {
+                                    //Networking.GoToRoom(RoomManager.field_Internal_Static_ApiWorld_0.id + ":" + RoomManager.field_Internal_Static_ApiWorld_0.currentInstanceIdWithTags);
+                                }
+                                if (Moderation[2] == "Respawn")
+                                {
+                                    VRCPlayer.field_Internal_Static_VRCPlayer_0.transform.position = PendulumClientMain.GetSpawnPoint().gameObject.transform.position;
+                                }
+                                if (Moderation[2] == "RickRoll")
+                                {
+                                    Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                                }
+                                if (Moderation[2] == "ISPCUSER")
+                                {
+                                    prefix__return(APIUser.CurrentUser.id, PendulumClientMain.PendulumClientBuildVersion, PendulumClientMain.PendulumClientBranchVersion);
+                                }
+                                if (Moderation[2] == "Propane")
+                                {
+                                    Process.Start("https://www.youtube.com/watch?v=Ve4qfo7kXho&t=89");
+                                }
+                                if (Moderation[2] == "ChangeAvatar")
+                                {
+                                     //PendulumClientMain.ChangeToAvatar(Moderation[3]);
+                                }
+                                if (Moderation[2] == "Driver")
+                                {
+                                    Process.Start("https://www.youtube.com/watch?v=O3FKMYBV01U&t=47s");
+                                }
+                                if (Moderation[2] == "NFF")
+                                {
+                                    Process.Start("https://open.spotify.com/track/7eJqLdEQ96D5Xzc406xkeZ");
                                 }
                             }
-                            if (Moderation[2] == "ResetAvatar")
+                            if (Moderation[1] == "VOID_MC")
                             {
-                                //PendulumClientMain.ChangeToAvatar("avtr_c38a1615-5bf5-42b4-84eb-a8b6c37cbd11");
-                            }
-                            if (Moderation[2] == "Rejoin")
-                            {
-                                //Networking.GoToRoom(RoomManager.field_Internal_Static_ApiWorld_0.id + ":" + RoomManager.field_Internal_Static_ApiWorld_0.currentInstanceIdWithTags);
-                            }
-                            if (Moderation[2] == "Respawn")
-                            {
-                                VRCPlayer.field_Internal_Static_VRCPlayer_0.transform.position = PendulumClientMain.GetSpawnPoint().gameObject.transform.position;
-                            }
-                            if (Moderation[2] == "RickRoll")
-                            {
-                                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                            }
-                            if (Moderation[2] == "ISPCUSER")
-                            {
-                                prefix__return(APIUser.CurrentUser.id, PendulumClientMain.PendulumClientBuildVersion, PendulumClientMain.PendulumClientBranchVersion);
-                            }
-                            if (Moderation[2] == "Propane")
-                            {
-                                Process.Start("https://www.youtube.com/watch?v=Ve4qfo7kXho&t=89");
-                            }
-                            if (Moderation[2] == "ChangeAvatar")
-                            {
-                                 //PendulumClientMain.ChangeToAvatar(Moderation[3]);
-                            }
-                            if (Moderation[2] == "Driver")
-                            {
-                                Process.Start("https://www.youtube.com/watch?v=O3FKMYBV01U&t=47s");
-                            }
-                            if (Moderation[2] == "NFF")
-                            {
-                                Process.Start("https://open.spotify.com/track/7eJqLdEQ96D5Xzc406xkeZ");
+                                if (RoomManager.field_Internal_Static_ApiWorld_0.id == "wrld_7e10376a-29b6-43af-ac5d-6eb72732e90c")
+                                {
+                                    //GameObject.Find("Main_2019_Assets/Systems/Music/VRCVideoSync").GetComponent<VideoPlayer>().Stop();
+                                    PendulumClientMain.ChangeVPLink(Moderation[2] + ":" + Moderation[3]);
+                                    PendulumLogger.Log(Moderation[2] + ":" + Moderation[3]);
+                                    //GameObject.Find("Main_2019_Assets/Systems/Music/VRCVideoSync").GetComponent<VideoPlayer>().Play();
+                                }
                             }
                         }
-                        if (Moderation[1] == "VOID_MC")
+                        else if (__1.ParameterString.Contains("PCU"))
                         {
-                            if (RoomManager.field_Internal_Static_ApiWorld_0.id == "wrld_7e10376a-29b6-43af-ac5d-6eb72732e90c")
+                            var Moderation = __1.ParameterString.Split(new char[]
                             {
-                                //GameObject.Find("Main_2019_Assets/Systems/Music/VRCVideoSync").GetComponent<VideoPlayer>().Stop();
-                                PendulumClientMain.ChangeVPLink(Moderation[2] + ":" + Moderation[3]);
-                                PendulumLogger.Log(Moderation[2] + ":" + Moderation[3]);
-                                //GameObject.Find("Main_2019_Assets/Systems/Music/VRCVideoSync").GetComponent<VideoPlayer>().Play();
+                                ':'
+                            });
+                            if (Moderation[1] == PendulumClientMain.StoredPCU)
+                            {
+                                if (Moderation[2] == "TRUE")
+                                {
+                                    PendulumLogger.Log(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + " is a PCU");
+                                    AlertPopup.SendAlertPopup(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + "\nPendClientVer = {0}\nPendClientBranch = {1}", Moderation[3], Moderation[4]);
+                                }
+                            }
+                        }
+                        else if (__1.ParameterString.Contains("BCU"))
+                        {
+                            var Moderation = __1.ParameterString.Split(new char[]
+                            {
+                                ':'
+                            });
+                            if (Moderation[1] == PendulumClientMain.StoredPCU)
+                            {
+                                if (Moderation[2] == "TRUE")
+                                {
+                                    PendulumLogger.Log(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + " is a BCU");
+                                    AlertPopup.SendAlertPopup(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + "\nBreadClientUser = true");
+                                }
                             }
                         }
                     }
-                    else if (__1.ParameterString.Contains("PCU"))
+                }
+            }
+        }
+
+        private static VRC_EventHandler bruhhandler;
+        public static void prefix__return(string stringr, string ver, string branc)
+        {
+            string output = "PCU:" + stringr + ":TRUE:" + ver + ":" + branc;
+
+            if (bruhhandler == null) bruhhandler = Resources.FindObjectsOfTypeAll<VRC_EventHandler>()[0];
+
+            VRC_EventHandler.VrcEvent CustomEvent = new VRC_EventHandler.VrcEvent
+            {
+                EventType = VRC_EventHandler.VrcEventType.SendRPC,
+                Name = "卐",
+                ParameterObject = bruhhandler.gameObject,
+                ParameterInt = int.MinValue,
+                ParameterFloat = float.MinValue,
+                ParameterString = output,
+            };
+            bruhhandler.TriggerEvent(CustomEvent, VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered, VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject, 0f);
+         }
+
+        public static bool patch__anti__steam(ref ulong __result)
+        {
+            __result = Convert.ToUInt64(File.ReadAllLines("PendulumClient/SteamID.txt")[1]);
+            return false;
+        }
+
+            public static bool AntiBlock = true;
+        public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
+        {
+            if (debugmode && !Directory.Exists("PendulumClient/PhotonLogs"))
+            {
+                Directory.CreateDirectory("PendulumClient/PhotonLogs");
+            }
+            if (__0.Code == 1 && debugmode)
+            {
+                var bytearray = Serialization.ToByteArray(__0.CustomData);
+                var arraystring = "";
+                foreach (var byt in bytearray)
+                {
+                    if (arraystring == "")
                     {
-                        var Moderation = __1.ParameterString.Split(new char[]
-                        {
-                            ':'
-                        });
-                        if (Moderation[1] == PendulumClientMain.StoredPCU)
-                        {
-                            if (Moderation[2] == "TRUE")
-                            {
-                                PendulumLogger.Log(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + " is a PCU");
-                                AlertPopup.SendAlertPopup(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + "\nPendClientVer = {0}\nPendClientBranch = {1}", Moderation[3], Moderation[4]);
-                            }
-                        }
+                        arraystring = byt.ToString();
                     }
-                    else if (__1.ParameterString.Contains("BCU"))
+                    else
                     {
-                        var Moderation = __1.ParameterString.Split(new char[]
-                        {
-                            ':'
-                        });
-                        if (Moderation[1] == PendulumClientMain.StoredPCU)
-                        {
-                            if (Moderation[2] == "TRUE")
-                            {
-                                PendulumLogger.Log(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + " is a BCU");
-                                AlertPopup.SendAlertPopup(PlayerWrappers.GetPlayer(Moderation[1]).prop_APIUser_0.displayName + "\nBreadClientUser = true");
-                            }
-                        }
+                        arraystring += ", " + byt.ToString();
                     }
                 }
-            }
-        }
-    }
-
-    private static VRC_EventHandler bruhhandler;
-    public static void prefix__return(string stringr, string ver, string branc)
-    {
-        string output = "PCU:" + stringr + ":TRUE:" + ver + ":" + branc;
-
-        if (bruhhandler == null) bruhhandler = Resources.FindObjectsOfTypeAll<VRC_EventHandler>()[0];
-
-        VRC_EventHandler.VrcEvent CustomEvent = new VRC_EventHandler.VrcEvent
-        {
-            EventType = VRC_EventHandler.VrcEventType.SendRPC,
-            Name = "卐",
-            ParameterObject = bruhhandler.gameObject,
-            ParameterInt = int.MinValue,
-            ParameterFloat = float.MinValue,
-            ParameterString = output,
-        };
-        bruhhandler.TriggerEvent(CustomEvent, VRC_EventHandler.VrcBroadcastType.AlwaysUnbuffered, VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject, 0f);
-     }
-
-    public static bool patch__anti__steam(ref ulong __result)
-    {
-        __result = Convert.ToUInt64(File.ReadAllLines("PendulumClient/SteamID.txt")[1]);
-        return false;
-    }
-
-    public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
-    {
-        if (debugmode && !Directory.Exists("PendulumClient/PhotonLogs"))
-        {
-            Directory.CreateDirectory("PendulumClient/PhotonLogs");
-        }
-        if (__0.Code == 1 && debugmode)
-        {
-            var bytearray = Serialization.ToByteArray(__0.CustomData);
-            var arraystring = "";
-            foreach (var byt in bytearray)
-            {
-                if (arraystring == "")
+                if (arraystring != null)
                 {
-                    arraystring = byt.ToString();
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                    PendulumLogger.Log("Event1 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
+                    File.WriteAllText("PendulumClient/PhotonLogs/event1 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", arraystring);
+                }
+            }
+            if (__0.Code == 209 && debugmode)
+            {
+                var bytearray = Serialization.ToByteArray(__0.CustomData);
+                var arraystring = "";
+                foreach (var byt in bytearray)
+                {
+                    if (arraystring == "")
+                    {
+                        arraystring = byt.ToString();
+                    }
+                    else
+                    {
+                        arraystring += ", " + byt.ToString();
+                    }
+                }
+                if (arraystring != null)
+                {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                    PendulumLogger.Log("Event209 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
+                    File.WriteAllText("PendulumClient/PhotonLogs/event209 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", arraystring);
+                }
+            }
+            if (__0.Code == 210 && debugmode)
+            {
+                var bytearray = Serialization.ToByteArray(__0.CustomData);
+                var arraystring = "";
+                foreach (var byt in bytearray)
+                {
+                    if (arraystring == "")
+                    {
+                        arraystring = byt.ToString();
+                    }
+                    else
+                    {
+                        arraystring += ", " + byt.ToString();
+                    }
+                }
+                if (arraystring != "")
+                {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                    PendulumLogger.Log("Event210 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
+                    File.WriteAllText("PendulumClient/PhotonLogs/event210 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", bytearray.ToString());
+                }
+            }
+            if (__0.Code == 9 && Anti9)
+            {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                if (__0.Parameters[245].ToString().Length > 150)
+                {
+                    PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                    return false;
                 }
                 else
                 {
-                    arraystring += ", " + byt.ToString();
+                    PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                    return false;
                 }
             }
-            if (arraystring != null)
+            if ((__0.Code == 209 || __0.Code == 210) && Anti209)
             {
                 var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                PendulumLogger.Log("Event1 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/PhotonLogs/event1 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", arraystring);
-            }
-        }
-        if (__0.Code == 209 && debugmode)
-        {
-            var bytearray = Serialization.ToByteArray(__0.CustomData);
-            var arraystring = "";
-            foreach (var byt in bytearray)
-            {
-                if (arraystring == "")
+                if (__0.Parameters[245].ToString().Length > 150)
                 {
-                    arraystring = byt.ToString();
+                    PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                    return false;
                 }
                 else
                 {
-                    arraystring += ", " + byt.ToString();
+                    PendulumLogger.Log("Blocked Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                    return false;
                 }
             }
-            if (arraystring != null)
+            if (__0.Code == 9 && __0.Parameters[245].ToString().Length > 150)
             {
                 var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                PendulumLogger.Log("Event209 [" + __0.Sender + "] " + arraystring, ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/PhotonLogs/event209 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", arraystring);
-            }
-        }
-        if (__0.Code == 210 && debugmode)
-        {
-            var bytearray = Serialization.ToByteArray(__0.CustomData);
-            var arraystring = "";
-            foreach (var byt in bytearray)
-            {
-                if (arraystring == "")
-                {
-                    arraystring = byt.ToString();
-                }
-                else
-                {
-                    arraystring += ", " + byt.ToString();
-                }
-            }
-            if (arraystring != "")
-            {
-                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                PendulumLogger.Log("Event210 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
-                File.WriteAllText("PendulumClient/PhotonLogs/event210 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", bytearray.ToString());
-            }
-        }
-        if (__0.Code == 9 && Anti9)
-        {
-            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-            if (__0.Parameters[245].ToString().Length > 150)
-            {
                 PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
                 return false;
             }
-            else
+            if (__0.Code == 209 && __0.Parameters[245].ToString().Length > 150)
             {
-                PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-                return false;
-            }
-        }
-        if ((__0.Code == 209 || __0.Code == 210) && Anti209)
-        {
-            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-            if (__0.Parameters[245].ToString().Length > 150)
-            {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
                 PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
                 return false;
             }
-            else
+            if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0)
             {
-                PendulumLogger.Log("Blocked Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-                return false;
-            }
-        }
-        if (__0.Code == 9 && __0.Parameters[245].ToString().Length > 150)
-        {
-            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-            PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-            return false;
-        }
-        if (__0.Code == 209 && __0.Parameters[245].ToString().Length > 150)
-        {
-            var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-            PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-            return false;
-        }
-        if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0)
-        {
-            if (__0.Code == 1)
-            {
-                if (__0.Sender == ButtonAPIV2.MenuFunctions.copyVoice_photonId)
+                if (__0.Code == 1)
                 {
-                    PhotonExtensions.OpRaiseEvent(1, __0.CustomData, PhotonExtensions.UnreliableEventOptions, PhotonExtensions.UnreliableOptions);
+                    if (__0.Sender == ButtonAPIV2.MenuFunctions.copyVoice_photonId)
+                    {
+                        PhotonExtensions.OpRaiseEvent(1, __0.CustomData, PhotonExtensions.UnreliableEventOptions, PhotonExtensions.UnreliableOptions);
+                    }
                 }
             }
-        }
-        try
-        {
-            if (debugmode == true || __0.Code == 209 || __0.Code == 210)
+            try
             {
-                if (__0.Code != 7)
+                if (debugmode == true || __0.Code == 209 || __0.Code == 210)
                 {
-                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                    if (plr != null)
+                    if (__0.Code != 7)
                     {
-                        if (plr.field_Private_APIUser_0.id != APIUser.CurrentUser.id)
+                        var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                        if (plr != null)
                         {
-                            PendulumLogger.EventLog("----------Photon Event----------");
-                            PendulumLogger.EventLog("From: " + __0.Sender + " (" + plr.field_Private_APIUser_0.displayName + ")");
-                            PendulumLogger.EventLog("Code: " + __0.Code);
-                            PendulumLogger.EventLog("----------End Photon Event----------");
+                            if (plr.field_Private_APIUser_0.id != APIUser.CurrentUser.id)
+                            {
+                                PendulumLogger.EventLog("----------Photon Event----------");
+                                PendulumLogger.EventLog("From: " + __0.Sender + " (" + plr.field_Private_APIUser_0.displayName + ")");
+                                PendulumLogger.EventLog("Code: " + __0.Code);
+                                PendulumLogger.EventLog("----------End Photon Event----------");
+                            }
                         }
                     }
                 }
-            }
-
-            /*if (__0.Code == 209 || __0.Code == 210 || __0.Code == 6)
-            {
-                PendulumLogger.Log(PlayerWrappers.GetPlayerByPhotonID(__0.Sender).prop_APIUser_0.displayName + " is trying to desync the world!");
-                return false;
-            }
-            if (__0.Code == 7)
-            {
-                if (__0.Sender == PlayerWrappers.GetCurrentPlayer().field_Private_VRCPlayerApi_0.playerId)
+                if (__0.Code == 33)
                 {
-                    if (PendulumClientMain.Serialization)
+                    object Data = Serialization.FromIL2CPPToManaged<object>(__0.Parameters);
+                    //PendulumLogger.Log(Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented));
+                    if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"10\": false,"))
+                    {
+                        JObject jObject = JObject.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented));
+                        var jo = JObject.Parse(jObject.ToString());
+                        var id = jo["245"]["1"].ToString();
+
+                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        string ParsedName = "?";
+                        string ParsedUserID = "";
+                        if (ParsedAPIuser != null)
+                        {
+                            ParsedName = ParsedAPIuser.displayName;
+                            ParsedUserID = ParsedAPIuser.id;
+                        }
+
+                        if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
+                        {
+                            PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
+                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unblocked you");
+                            PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
+                        }
+                        if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": false"))
+                        {
+                            if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
+                            }
+                        }
+                        else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": true"))
+                        {
+                            if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
+                            }
+                        }
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"10\": true,"))
+                    {
+                        JObject jObject = JObject.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented));
+                        var jo = JObject.Parse(jObject.ToString());
+                        var id = jo["245"]["1"].ToString();
+
+                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        string ParsedName = "?";
+                        string ParsedUserID = "";
+                        if (ParsedAPIuser != null)
+                        {
+                            ParsedName = ParsedAPIuser.displayName;
+                            ParsedUserID = ParsedAPIuser.id;
+                        }
+
+                        if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
+                        {
+                            PendulumLogger.ModerationLog($"{ParsedName} blocked you");
+                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} blocked you");
+                            if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
+                        }
+                        if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": false"))
+                        {
+                            if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
+                            }
+                        }
+                        else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": true"))
+                        {
+                            if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
+                            }
+                        }
+                        return !AntiBlock;
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("You have been warned"))
+                    {
+                        PendulumLogger.ModerationLog($"Instance owner tried to warn you");
+                        AlertPopup.SendAlertPopupNOPC($"[Moderation]\nInstance owner tried to warn you");
+                        return false;
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("A vote kick has been"))
+                    {
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("Unable to start a vote to kick"))
                     {
                         return false;
                     }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"0\": 8"))
+                    {
+                        PendulumLogger.ModerationLog("Instance owner tried force muting you");
+                        AlertPopup.SendAlertPopupNOPC("[Moderation]\nInstance owner tried force muting you");
+                        return false;
+                    }
                 }
-            }*/
-        }
-        catch { }
-        return true;
 
-    }
+                /*if (__0.Code == 209 || __0.Code == 210 || __0.Code == 6)
+                {
+                    PendulumLogger.Log(PlayerWrappers.GetPlayerByPhotonID(__0.Sender).prop_APIUser_0.displayName + " is trying to desync the world!");
+                    return false;
+                }
+                if (__0.Code == 7)
+                {
+                    if (__0.Sender == PlayerWrappers.GetCurrentPlayer().field_Private_VRCPlayerApi_0.playerId)
+                    {
+                        if (PendulumClientMain.Serialization)
+                        {
+                            return false;
+                        }
+                    }
+                }*/
+            }
+            catch { }
+            return true;
+
+        }
 
         /*public static void NotifacationPatch(Notification __0)
         {
@@ -881,15 +990,15 @@ namespace PendulumClient.Anti
         public static bool patch__6(bool __result, ApiModeration __0)
         {
             __result = false;
+            //PendulumLogger.DebugLog("String1: " + __0.targetUserId);
+            //PendulumLogger.DebugLog("String1: " + __0.moderatorDisplayName);
+            return true;
             if (debugmode)
             {
-                PendulumLogger.DebugLog("String1: " + __0.targetUserId);
-                PendulumLogger.DebugLog("String1: " + __0.moderatorDisplayName);
                 //PendulumLogger.Log("Float1: " + __1);
                 //PendulumLogger.Log("String3: " + __2.ToString());
                 //PendulumLogger.Log("String4: " + __3.ToString());
             }
-            return false;
         }
 
         public static bool patch__7(bool __result, ApiModeration __0)
@@ -1126,6 +1235,40 @@ namespace PendulumClient.Anti
             yield break;
         }
 
+        public static bool BlockWingInteraction = false;
+        public static bool OnPointerEnter(UnityEngine.EventSystems.PointerEventData __0, VRC.UI.Core.Styles.StyleElement __instance)
+        {
+            //MelonLogger.Log("[ENTER]: " + __instance.gameObject.name);
+            if (__instance.gameObject.name == "PC_RightWingPlayerList")
+            {
+                PendulumClientMain.DisableWingInteraction(true);
+                BlockWingInteraction = true;
+            }
+            if (__instance.gameObject.name == "Button" && BlockWingInteraction == true)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool OnPointerExit(UnityEngine.EventSystems.PointerEventData __0, VRC.UI.Core.Styles.StyleElement __instance)
+        {
+            //MelonLogger.Log("[EXIT]: " + __instance.gameObject.name);
+            if (__instance.gameObject.name == "PC_RightWingPlayerList")
+            {
+                PendulumClientMain.DisableWingInteraction(false);
+                BlockWingInteraction = false;
+            }
+            if (__instance.gameObject.name == "Button" && BlockWingInteraction == true)
+            {
+                return false;
+            }
+            return true;
+        }
+        public static void OnQMAwake(VRC.UI.Elements.QuickMenu __instance)
+        {
+            PendulumLogger.Log("QuickMenu Awoke! " + __instance.gameObject.name);
+        }
         public static bool FloatPatch(PlayerNameplate __instance, ref float __0, ref bool __1)//, float __1, float __2)
         {
             if (__1 == false) return true;

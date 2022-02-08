@@ -223,6 +223,7 @@ namespace PendulumClient.Main
         public static bool UiManagerInitEarly = false;
         public static bool FlightKeybind = false;
         public static bool DeleteNewPortals = false;
+        public static bool QMOpenedFromCode = false;
 
         public static bool SetupDebugPanelNextThread = false;
         public static int DebugThreadsToBypass = 0;
@@ -265,6 +266,9 @@ namespace PendulumClient.Main
         public static System.Collections.Generic.List<string> DebugLogList = new System.Collections.Generic.List<string>();
         public static System.Collections.Generic.List<string> FriendReqList = new System.Collections.Generic.List<string>();
         public static System.Collections.Generic.List<string> StoredPlayer = new System.Collections.Generic.List<string>();
+
+        public static System.Collections.Generic.List<string> BlockedUserIDs = new System.Collections.Generic.List<string>();
+        public static System.Collections.Generic.List<string> MutedUserIDs = new System.Collections.Generic.List<string>();
 
         public static string SteamBL = string.Empty;
         public static string NormalBL = string.Empty;
@@ -774,6 +778,11 @@ namespace PendulumClient.Main
                         UiManagerInit1 = true;
                         UiManagerInit2 = true;
                     }
+                    else if (APIUser.IsLoggedIn == true && Anti.Prefixes.IsOnLoadingScreen == true && GameObject.Find("_Application/UIManager") != null && GameObject.Find("_Application/UIManager").GetComponent<UIManagerImpl>() != null && GameObject.Find("_Application/UIManager").GetComponent<UIManagerImpl>().field_Private_GameObject_0 != null)
+                    {
+                        GameObject.Find("_Application/UIManager").GetComponent<UIManagerImpl>().field_Private_GameObject_0.SetActive(true);
+                        QMOpenedFromCode = true;
+                    }
                 }
             }
 
@@ -781,6 +790,7 @@ namespace PendulumClient.Main
             {
                 VRChat_OnUiManagerInit();
                 UiManagerInit2 = false;
+                StartWingColliderFix();
             }
 
             if (UiManagerInit3 == true && UiManagerInitEarly == false)
@@ -886,7 +896,6 @@ namespace PendulumClient.Main
                     PendulumLogger.Log("Music changed to: " + a);
                 }));
             }
-
             if (FollowSelected && StoredUserInInstance)
             {
                 PlayerWrappers.GetCurrentPlayer().transform.position = PlayerWrappers.GetPlayer(StoredUserID).transform.position;
@@ -1129,7 +1138,7 @@ namespace PendulumClient.Main
             {
                 //ColorModule.ColorModule.SetColorTheme();
                 //ColorModule.ColorModule.SetColorThemeV2();
-                UIColorsSetup = true;
+                //UIColorsSetup = true;
 
                 try
                 {
@@ -1147,11 +1156,17 @@ namespace PendulumClient.Main
                             JoinNotifierMod.PendulumSprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
                             ColorModuleV2.CMV2_ColorModule.SetupColors();
                             MenuSetup.SetupMenu(VRC_UIManager, sprite);
-                            ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
-                            SetupDebugPanelNextThread = true;
+                            try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { } //we dont know if they have the panel pinned so try anyway idgaf to check theres no point
+                            SetupDebugPanelNextThread = true; //ancient thread delay system
+                            QMLogAndPlayerlist.QM_PlayerListV2.OnUI();
+                            UIColorsSetup = true;
                             PendulumLogger.Log("UI Recolored");
+                            if (QMOpenedFromCode)
+                            {
+                                GameObject.Find("_Application/UIManager").GetComponent<UIManagerImpl>().field_Private_GameObject_0.SetActive(false);
+                                QMOpenedFromCode = false;//is there any reason to do this? im so tired idk what to do im just doing it
+                            }
                         }
-                        UIColorsSetup = true;
                     }
                     else
                     {
@@ -1164,11 +1179,17 @@ namespace PendulumClient.Main
                             JoinNotifierMod.PendulumSprite.hideFlags |= HideFlags.DontUnloadUnusedAsset;
                             ColorModuleV2.CMV2_ColorModule.SetupColors();
                             MenuSetup.SetupMenu(VRC_UIManager, sprite);
-                            ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
+                            try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { }
                             SetupDebugPanelNextThread = true;
+                            QMLogAndPlayerlist.QM_PlayerListV2.OnUI();
+                            UIColorsSetup = true;
                             PendulumLogger.Log("UI Recolored");
+                            if (QMOpenedFromCode)
+                            {
+                                GameObject.Find("_Application/UIManager").GetComponent<UIManagerImpl>().field_Private_GameObject_0.SetActive(false);
+                                QMOpenedFromCode = false;
+                            }
                         }
-                        UIColorsSetup = true;
                     }
                 }
                 catch (Exception e)
@@ -1182,7 +1203,8 @@ namespace PendulumClient.Main
                 DebugThreadsToBypass++;
                 if (DebugThreadsToBypass == 5)
                 {
-                    ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel();
+                    try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { if (Anti.Prefixes.debugmode) { PendulumLogger.LogError("DebugPanel ColorChange Failed! Retrying in 5 threads..."); } }
+                    DebugThreadsToBypass = 0;
                     SetupDebugPanelNextThread = false;
                 }
             }
@@ -2251,7 +2273,6 @@ namespace PendulumClient.Main
             var RoomPatch = "patch__1";
             var TriggerPatch = "patch__4";
             var GoToRoomPatch = "patch__5";
-            var AntiKickPatch = "patch__6";
             var NotiPatch = "patch__10";
             var PingPatch = "patch__ping";
             //var AvatarChangePatch = "patch__avatar__logging";
@@ -2325,28 +2346,33 @@ namespace PendulumClient.Main
             var Hook12 = typeof(VRCUiPageLoading).GetMethod(nameof(VRCUiPageLoading.OnEnable));
             var Hook12PostPatch = typeof(Prefixes).GetMethod("postpatch__OnLoading");
 
-            var Hook13 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_5));
+            /*var Hook13 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_5));
             var Hook13v2 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_2));
             var Hook14 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Boolean_GameObject_String_Single_String_0));
             var Hook15 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_Boolean_0));
             var Hook16 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_AvatarKind_0));
             var Hook17 = typeof(VRC_AnimationController).GetMethod(nameof(VRC_AnimationController.Reset));
-            var Hook18 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_3));
             //var Hook16 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Public_Void_Animator_byref_Vector3_byref_Vector3_byref_Vector3_byref_Vector3_0));
             var Hook13Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch__false));
             var Hook14Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_avatarVisibility));
             var Hook15Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_avatarVisibilityBool));
             var Hook16Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_AvatarKind));
             var Hook17Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_AvatarReset));
+           */
+            //var Hook19 = typeof(RootMotion.FinalIK.IKSolverVR).GetMethods().Where(mi => mi.Name == nameof(RootMotion.FinalIK.IKSolverVR.IsValid) && mi.GetParameters().Length == 1);//.GetMethod(nameof(RootMotion.FinalIK.IKSolverVR.IsValid));
+            //var Hook19Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_IK));
+
+            //what the fuck how the hell would this be anti block tf am i doin
+
+            var Hook18 = typeof(VRCAvatarManager).GetMethod(nameof(VRCAvatarManager.Method_Private_Void_3));
             var Hook18Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_Head));
-
-            var Hook19 = typeof(RootMotion.FinalIK.IKSolverVR).GetMethods().Where(mi => mi.Name == nameof(RootMotion.FinalIK.IKSolverVR.IsValid) && mi.GetParameters().Length == 1);//.GetMethod(nameof(RootMotion.FinalIK.IKSolverVR.IsValid));
-            var Hook19Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.patch_IK));
-
 
             var Hook20 = GetPropertyMethod(typeof(Tools), nameof(Tools.Platform));//typeof(Tools).GetProperty(nameof(Tools.Platform));
             var Hook20Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.QuestPatch));
             //VRCAvatarManager.Method_Private_Void_LocalAvatarVisibility_0
+
+            var Hook21 = typeof(VRC.UI.Elements.QuickMenu).GetMethod(nameof(VRC.UI.Elements.QuickMenu.Start));
+            var Hook21Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.OnQMAwake));
 
             //var AudioOnEndHook = typeof(AudioSource).GetMethod("get_" + nameof(AudioSource.isPlaying));
             var AudioOnEndHook = typeof(AudioSource).GetMethods().Where(mi => mi.GetParameters().Length == 0 && mi.Name == "Stop").First();
@@ -2380,7 +2406,7 @@ namespace PendulumClient.Main
             var RoomPrefix = typeof(Prefixes).GetMethod(RoomPatch);
             var triggerprefix = typeof(Prefixes).GetMethod(TriggerPatch);
             var GoToRoomPrefix = typeof(Prefixes).GetMethod(GoToRoomPatch);
-            var AntiKickPrefix = typeof(Prefixes).GetMethod(AntiKickPatch);
+            var AntiKickPrefix = typeof(Prefixes).GetMethod(nameof(Prefixes.patch__6));
             var NotiPrefix = typeof(Prefixes).GetMethod(NotiPatch);
             var PingPrefix = typeof(Prefixes).GetMethod(PingPatch);
             var AvatarChangePrefix = typeof(Prefixes).GetMethod(AvatarChangePatch);
@@ -2404,6 +2430,7 @@ namespace PendulumClient.Main
             instance.Patch(original5, new HarmonyMethod(triggerprefix), null, null);
             instance.Patch(original7, new HarmonyMethod(NotiPrefix), null, null);
             instance.Patch(NamePlateHook1, new HarmonyMethod(NamePlatePatch1), null, null);
+            instance.Patch(ModOrg1, new HarmonyMethod(AntiKickPrefix), null, null);
             //instance.Patch(NamePlateHook2, new HarmonyMethod(NamePlatePatch1), null, null);
             //instance.Patch(NamePlateHook3, new HarmonyMethod(NamePlatePatch1), null, null);
             //instance.Patch(testoriginal, new HarmonyMethod(GoToRoomPrefix), null, null);
@@ -2441,18 +2468,19 @@ namespace PendulumClient.Main
             instance.Patch(Hook11, new HarmonyMethod(Hook11PrePatch), new HarmonyMethod(Hook11PostPatch));
             instance.Patch(Hook12, null, new HarmonyMethod(Hook12PostPatch));
             instance.Patch(AudioOnEndHook, new HarmonyMethod(AudioOnEndPatch));
-            instance.Patch(Hook13, new HarmonyMethod(Hook13Patch));
+            /*instance.Patch(Hook13, new HarmonyMethod(Hook13Patch));
             instance.Patch(Hook13v2, new HarmonyMethod(Hook13Patch));
             instance.Patch(Hook14, new HarmonyMethod(Hook14Patch));
             instance.Patch(Hook15, new HarmonyMethod(Hook15Patch));
             instance.Patch(Hook16, new HarmonyMethod(Hook16Patch));
-            instance.Patch(Hook17, new HarmonyMethod(Hook17Patch));
+            instance.Patch(Hook17, new HarmonyMethod(Hook17Patch));*/
             instance.Patch(Hook18, new HarmonyMethod(Hook18Patch));
-            foreach(var hook in Hook19)
+            /*foreach(var hook in Hook19)
             {
                 instance.Patch(hook, new HarmonyMethod(Hook19Patch));
-            }
-            instance.Patch(AccessTools.Property(typeof(Tools), "Platform").GetMethod, null, new HarmonyMethod(Hook20Patch));
+            }*/
+            instance.Patch(Hook20, null, new HarmonyMethod(Hook20Patch));
+            instance.Patch(Hook21, null, new HarmonyMethod(Hook21Patch));
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
             instance.Patch(Hook1, new HarmonyMethod(Hook1Patch), null, null);
@@ -2477,7 +2505,7 @@ namespace PendulumClient.Main
             if (FirstTimeinit == true && LogoDataDownloaded == true)
             {
                 PendulumLogger.Log("First Time Initalization Detected.");
-                PendulumLogger.Log("Restarting game to apply AssetBundle.");
+                PendulumLogger.Log("Restarting game to apply Assets.");
                 ForceRestart();
             }
             //SetupEventPatches();
@@ -2697,6 +2725,43 @@ namespace PendulumClient.Main
             harmony.Patch(original25, new HarmonyMethod(SteamIDPrefix), null, null);
         }
 
+        public static VRC.SDKBase.VRC_UiShape GetCursorRaycast()
+        {
+            if (GameObject.Find("_Application/CursorManager") == null) return null;
+            if (GameObject.Find("_Application/CursorManager").GetComponent<VRCUiCursorManager>() == null) return null;
+            if (GameObject.Find("_Application/CursorManager").GetComponent<VRCUiCursorManager>().field_Private_CursorRaycast_1 == null) return null;
+            if (GameObject.Find("_Application/CursorManager").GetComponent<VRCUiCursorManager>().field_Private_CursorRaycast_1.field_Public_VRC_UiShape_0 == null) return null;
+
+            return GameObject.Find("_Application/CursorManager").GetComponent<VRCUiCursorManager>().field_Private_CursorRaycast_1.field_Public_VRC_UiShape_0;
+        }
+        public void StartWingColliderFix()
+        {
+            //MelonCoroutines.Start(WingColliderFix()); wow im fucking retarted styleElement already has onpointer funcs
+            HarmonyInstance.Patch(typeof(VRC.UI.Core.Styles.StyleElement).GetMethod(nameof(VRC.UI.Core.Styles.StyleElement.OnPointerEnter)), new HarmonyMethod(typeof(Prefixes).GetMethod(nameof(Prefixes.OnPointerEnter))));
+            HarmonyInstance.Patch(typeof(VRC.UI.Core.Styles.StyleElement).GetMethod(nameof(VRC.UI.Core.Styles.StyleElement.OnPointerExit)), new HarmonyMethod(typeof(Prefixes).GetMethod(nameof(Prefixes.OnPointerExit))));
+        }
+        public static void DisableWingInteraction(bool e)
+        {
+            var newqm = ButtonAPIV2.NewQuickMenu.Instance;
+            var RightWing = newqm.transform.Find("Container/Window/Wing_Right/Button").gameObject;
+            var LeftWing = newqm.transform.Find("Container/Window/Wing_Left/Button").gameObject;
+
+            RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Private_Void_Boolean_0(!e);
+            RightWing.GetComponent<Button>().interactable = !e;
+            RightWing.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>().enabled = !e;
+
+            LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Private_Void_Boolean_0(!e);
+            LeftWing.GetComponent<Button>().interactable = !e;
+            LeftWing.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>().enabled = !e;
+
+            if (e)
+            {
+                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
+                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
+                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
+                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
+            }
+        }
         private static VRC_EventHandler bruhhandler1;
         public static void PendulumClientUserModeration(string userid, string moderationtype)
         {

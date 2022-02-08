@@ -392,6 +392,23 @@ namespace PendulumClient
             Console.Write(Log + "\n");
         }
 
+        public static void ModerationLog(string Log)
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("] [");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("PendulumClient");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("] ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("[MODERATION] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(Log + "\n");
+        }
 
         public static void LogWarning(string Warning)
         {

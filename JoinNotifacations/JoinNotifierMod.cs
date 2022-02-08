@@ -54,6 +54,8 @@ namespace JoinNotifier
         public const string MooniUID = "usr_71704e0d-ac55-4e40-8368-725e7c69466b";
         //public const string CermetUID = "usr_e0c7a496-ecd1-4158-873a-481be21cc5be";
 
+        public static List<string> PreUIPlayers = new List<string>();
+
         private static int myLastLevelLoad;
         private static bool myObservedLocalPlayerJoin;
 
@@ -71,6 +73,9 @@ namespace JoinNotifier
         private Sprite MooniPFP;
 
         private Player DevPlayer;
+
+        public static bool HasLocalPlayerLoaded = false;
+        private static object PLUpdate = null;
 
         //old unused accs
         //"usr_bb365107-c1d1-4bf5-bd56-e63fd02060b1",
@@ -551,6 +556,11 @@ namespace JoinNotifier
                     LogoPositioning = true;
                     DevPlayer = player;
                 }*/
+                if (!HasLocalPlayerLoaded)
+                {
+                    HasLocalPlayerLoaded = true;
+                    PLUpdate = MelonCoroutines.Start(PendulumClient.QMLogAndPlayerlist.PlayerlistV2.PlayerListUpdate());
+                }
             }
 
             /*AssetBundleRequest NoTalkSprite = myAssetBundle.LoadAssetAsync("NamePlateSilent.png", Il2CppType.Of<Sprite>());
@@ -1190,6 +1200,8 @@ namespace JoinNotifier
 
             //PendulumClientMain.UpdatePlayerList();
 
+            PendulumClient.QMLogAndPlayerlist.PlayerlistV2.PlayerListUpdate1Time();
+
             if (false)//player.prop_APIUser_0.id == APIUser.CurrentUser.id)//(player.gameObject.transform.Find("Player Nameplate"))
             {
                 var nameplate = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Dev Circle");
@@ -1276,8 +1288,9 @@ namespace JoinNotifier
             {
                 PendulumClientMain.DebugLogPlayerJoinLeave(player, "Left", false);
             }
-            if (LeftPlayer.id == APIUser.CurrentUser.id) return;
+            if (LeftPlayer.id == APIUser.CurrentUser.id) { if (PLUpdate != null) { MelonCoroutines.Stop(PLUpdate); } HasLocalPlayerLoaded = false; return; }
             //PendulumClientMain.UpdatePlayerList();
+            PendulumClient.QMLogAndPlayerlist.PlayerlistV2.PlayerListUpdate1Time();
             if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
             if (Environment.TickCount - myLastLevelLoad < 5_000) return;
             var playerName = player.prop_APIUser_0.displayName ?? "!null!";

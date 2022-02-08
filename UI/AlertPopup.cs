@@ -25,6 +25,23 @@ namespace PendulumClient.UI
             //VRCUiManager.prop_VRCUiManager_0.Method_Public_Void_String_0("[PendulumClient]\n\n" + outputtext);
         }
 
+        public static void SendAlertPopupNOPC(string text, float osdelay = 3f, float predelay = 0f, UnityEngine.Color color = default)
+        {
+            NewUIExtensions.QueueHudMessage(Main.PendulumClientMain.VRC_UIManager, text, osdelay, predelay, color);
+            //VRCUiManager.prop_VRCUiManager_0.field_Public_Text_0.color = new Color(0.8f, 0.8f, 0.8f);
+            //VRCUiManager.prop_VRCUiManager_0.field_Private_Single_0 = 0f;
+            //VRCUiManager.prop_VRCUiManager_0.Method_Public_Void_String_0("[PendulumClient]\n\n" + text);
+        }
+
+        public static void SendAlertPopupNOPC(string text, params object[] args)
+        {
+            string outputtext = string.Format(text, args);
+            NewUIExtensions.QueueHudMessage(Main.PendulumClientMain.VRC_UIManager, outputtext);
+            //VRCUiManager.prop_VRCUiManager_0.field_Public_Text_0.color = new Color(0.8f, 0.8f, 0.8f);
+            //VRCUiManager.prop_VRCUiManager_0.field_Private_Single_0 = 0f;
+            //VRCUiManager.prop_VRCUiManager_0.Method_Public_Void_String_0("[PendulumClient]\n\n" + outputtext);
+        }
+
         public static void SendDefaultPopup(string text)
         {
             VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.Method_Public_Void_String_0(text);

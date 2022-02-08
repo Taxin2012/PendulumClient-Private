@@ -1288,6 +1288,9 @@ namespace PendulumClient.Anti
                 if (__0 == 166.32f)
                 {
                     //PendulumLogger.Log("start change corbin nameplate size");
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>().prop_Sprite_0 = null;
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = null;
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>().prop_Sprite_0 = JoinNotifierMod.DevOutline;
                     __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = JoinNotifierMod.DevOutline;
                     MelonCoroutines.Start(changename(__instance.gameObject.GetComponent<RectTransform>(), 248f));//__instance.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(248f, __instance.gameObject.GetComponent<RectTransform>().sizeDelta.y);
                     //__0 = 248f;
@@ -1307,6 +1310,9 @@ namespace PendulumClient.Anti
                 if (__0 == 213.31f)
                 {
                     //PendulumLogger.Log("start change corbin nameplate size");
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>().prop_Sprite_0 = null;
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = null;
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>().prop_Sprite_0 = JoinNotifierMod.DevOutline;
                     __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = JoinNotifierMod.DevOutline;
                     MelonCoroutines.Start(changename(__instance.gameObject.GetComponent<RectTransform>(), __0 + 81.68f));//__instance.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(248f, __instance.gameObject.GetComponent<RectTransform>().sizeDelta.y);
                     //__0 = 248f;
@@ -1323,9 +1329,11 @@ namespace PendulumClient.Anti
 
             if (player.field_Private_APIUser_0.id == JoinNotifierMod.KyranUID2)
             {
-                if (__0 == 150f)
+                if (true)//__0 == 150f)
                 {
-                    //PendulumLogger.Log("start change corbin nameplate size");
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>().prop_Sprite_0 = null;
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = null;
+                    __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>().prop_Sprite_0 = JoinNotifierMod.DevOutline;
                     __instance.gameObject.transform.Find("Contents/Main/Background").gameObject.GetComponent<ImageThreeSlice>()._sprite = JoinNotifierMod.DevOutline;
                     MelonCoroutines.Start(changename(__instance.gameObject.GetComponent<RectTransform>(), __0 + 81.68f));//__instance.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(248f, __instance.gameObject.GetComponent<RectTransform>().sizeDelta.y);
                     //__0 = 248f;

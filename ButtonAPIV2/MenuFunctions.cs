@@ -231,6 +231,27 @@ namespace PendulumClient.ButtonAPIV2
             }
         }
 
+        public static void DropItems()
+        {
+            foreach (VRCSDK2.VRC_Pickup vrc_Pickup in Resources.FindObjectsOfTypeAll<VRCSDK2.VRC_Pickup>())
+            {
+                if (vrc_Pickup.IsHeld)
+                {
+                    PendulumClientMain.TakeOwnershipIfNecessary(vrc_Pickup.gameObject);
+                    vrc_Pickup.Drop();
+                }
+            }
+
+            foreach (VRC.SDK3.Components.VRCPickup vrc_Pickup in Resources.FindObjectsOfTypeAll<VRC.SDK3.Components.VRCPickup>())
+            {
+                if (vrc_Pickup.IsHeld)
+                {
+                    PendulumClientMain.TakeOwnershipIfNecessary(vrc_Pickup.gameObject);
+                    vrc_Pickup.Drop();
+                }
+            }
+        }
+
         public static VRC.Player GetSelectedPlayer()
         {
             var selectedUser = NewQuickMenu.Instance.field_Private_UIPage_1.Cast<VRC.UI.Elements.Menus.SelectedUserMenuQM>().field_Private_IUser_0;

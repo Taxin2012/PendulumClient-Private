@@ -3176,11 +3176,12 @@ namespace PendulumClient.Main
             }
         }
 
-        public static void SaveUserID(APIUser apiuser)
+        public static void SaveUserID(VRC.Player player)
         {
-            if (apiuser.id != APIUser.CurrentUser.id) StoredUserID = apiuser.id; PendulumLogger.Log("Set Selected User to: {0} ({1})", apiuser.displayName, apiuser.id);
+            if (player.field_Private_APIUser_0.id != APIUser.CurrentUser.id) StoredUserID = player.field_Private_APIUser_0.id; PendulumLogger.Log("Set Selected User to: {0} ({1})", player.field_Private_APIUser_0.displayName, player.field_Private_APIUser_0.id);
+            MenuFunctions.copyVoice_photonId = player.field_Private_VRCPlayerApi_0.playerId;
             //StoredUserInInstance = true;
-            AlertPopup.SendAlertPopup("Selected:\n" + apiuser.displayName);
+            AlertPopup.SendAlertPopup("Selected:\n" + player.field_Private_VRCPlayerApi_0.displayName);
             //UpdatePlayerList();
         }
 
@@ -3207,6 +3208,59 @@ namespace PendulumClient.Main
             }
         }
 
+        public static Player getOwnerOfGameObject(GameObject gameObject)
+        {
+            foreach (Player player in PlayerWrappers.GetAllPlayers())
+            {
+                if (player.field_Private_VRCPlayerApi_0.IsOwner(gameObject))
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
+        public static void TakeOwnershipIfNecessary(GameObject gameObject)
+        {
+            if (getOwnerOfGameObject(gameObject).field_Private_APIUser_0.id != VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_APIUser_0.id)
+            {
+                Networking.SetOwner(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_VRCPlayerApi_0, gameObject);
+            }
+        }
+
+        public static IEnumerator ItemOrbitEnum()
+        {
+            var World_ObjectSyncs = Resources.FindObjectsOfTypeAll<VRC.SDK3.Components.VRCObjectSync>().ToArray().ToList();
+            for (; ; )
+            {
+                if (!ItemOrbitEnabled)
+                {
+                    yield break;
+                }
+                if (PlayerWrappers.GetPlayer(StoredUserID) != null)
+                {
+                    var player = PlayerWrappers.GetPlayer(StoredUserID);
+                    GameObject gameObject = new GameObject();
+                    Transform transform = gameObject.transform;
+                    transform.position = player.transform.position + new Vector3(0f, 0.2f, 0f);
+                    gameObject.transform.Rotate(new Vector3(0f, 360f * (Time.time / 1.5f), 0f));
+                    try
+                    {
+                        foreach (VRC.SDK3.Components.VRCObjectSync obj in World_ObjectSyncs)
+                        {
+                            TakeOwnershipIfNecessary(obj.gameObject);
+                            obj.transform.position = gameObject.transform.position + gameObject.transform.forward;
+                            obj.transform.LookAt(player.transform);
+                            gameObject.transform.Rotate(new Vector3(0f, 360 / World_ObjectSyncs.Count, 0f));
+                        }
+                    }
+                    catch { }
+                    UnityEngine.Object.Destroy(gameObject);
+                }
+                yield return new WaitForSeconds(0.035f);
+            }
+            yield break;
+        }
+        public static bool ItemOrbitEnabled = false;
         public static string GetRegion(ApiWorldInstance instance)
         {
             var region = "";

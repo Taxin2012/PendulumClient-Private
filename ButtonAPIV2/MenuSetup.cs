@@ -167,6 +167,9 @@ namespace PendulumClient.ButtonAPIV2
                 var data19 = new byte[] { };
                 PendulumClient.Anti.PhotonExtensions.OpRaiseEvent(1, data, Anti.PhotonExtensions.UnreliableEventOptions, Anti.PhotonExtensions.UnreliableOptions);*/
             });
+            ExploitsMenu.AddButton("Drop Pickups", "Drop all pickups in the world", () => {
+                MenuFunctions.DropItems();
+            });
             ProtectionMenu.AddToggle("Anti Event9", "Block all Code9 Photon Events\n(you cant see avatar 3.0 changes)", b => {
                 Anti.Prefixes.Anti9 = b;
             });
@@ -238,7 +241,7 @@ namespace PendulumClient.ButtonAPIV2
                 if (plr == null)
                     return;
 
-                PendulumClientMain.SaveUserID(plr.field_Private_APIUser_0);
+                PendulumClientMain.SaveUserID(plr);
             });
             var DownloadsMenu = FunctionMenu.AddMenuPage("VRCA/VRCW Downloads", "Download World and Avatar .VRCAs");
             DownloadsMenu.AddToggle("Open Folder on Download", "Open File Explorer to your .vrca/.vrcw on download", b => 
@@ -311,6 +314,26 @@ namespace PendulumClient.ButtonAPIV2
                 MenuFunctions.CopyVoice(b, plr);
                 if (b)
                     PendulumClientMain.VRC_UIManager.QueueHudMessage("Copying " + plr.field_Private_APIUser_0.displayName + "\'s voice");
+            });
+
+            SelectedUserMenu.AddToggle("Item Orbit", "Make all items orbit player", b =>
+            {
+                var plr = MenuFunctions.GetSelectedUser();
+                if (plr == null)
+                {
+                    PendulumClientMain.VRC_UIManager.QueueHudMessage("No Selected User Found!");
+                    return;
+                }
+
+                if (b)
+                {
+                    PendulumClientMain.ItemOrbitEnabled = true;
+                    MelonCoroutines.Start(PendulumClientMain.ItemOrbitEnum());
+                }
+                else
+                {
+                    PendulumClientMain.ItemOrbitEnabled = false;
+                }
             });
         }
     }

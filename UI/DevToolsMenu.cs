@@ -340,7 +340,7 @@ namespace PendulumClient.UI
                 }));
             GameObject SelectUserButton = ButtonAPI.CreateButton(ButtonType.Default, "Select\nUser", "Select this user for the client to target.", Color.white, Color.white, -4f, 3f, user_menu.transform, delegate
             {
-                var currentplayer = Wrappers.GetQuickMenu().GetSelectedPlayer().prop_APIUser_0;
+                var currentplayer = Wrappers.GetQuickMenu().GetSelectedPlayer();
                 PendulumClientMain.SaveUserID(currentplayer);
             });
             GameObject PortalOntopButton = ButtonAPI.CreateButton(ButtonType.Default, "Drop Portal\n(Ontop)", "Drop Portal on Selected Player.", Color.white, Color.white, -3f, 3f, portal_menu.transform, delegate

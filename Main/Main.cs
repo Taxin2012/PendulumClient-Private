@@ -890,11 +890,15 @@ namespace PendulumClient.Main
             }
             if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.O))
             {
-                text_popup("Enter Direct MP4 Link", "Change Music", new System.Action<string>(a =>
+                try
                 {
-                    StoredVideoLink = a;
-                    PendulumLogger.Log("Music changed to: " + a);
-                }));
+                    text_popup("Enter Direct MP4 Link", "Change Music", new System.Action<string>(a =>
+                    {
+                        StoredVideoLink = a;
+                        PendulumLogger.Log("Music changed to: " + a);
+                    }));
+                }
+                catch { }
             }
             if (FollowSelected && StoredUserInInstance)
             {
@@ -983,49 +987,72 @@ namespace PendulumClient.Main
                 AntiPortalMsg = false;
             }
 
-            bool Toggle1 = Input.GetKeyDown(KeyCode.N);
-            if (Toggle1)
+            try
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation = new Quaternion(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation.x, -180f, VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation.z, VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation.w);
+                if (Input.GetKeyDown(KeyCode.N))
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation = new Quaternion(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation.x, -180f, VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation.z, VRCPlayer.field_Internal_Static_VRCPlayer_0._player.gameObject.transform.Find("SelectRegion").gameObject.transform.rotation.w);
+                }
             }
+            catch { }
 
             if (Input.GetKeyDown(KeyCode.Mouse2))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(16);
+                try
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(16);
+                }
+                catch { }
             }
             if (Input.GetKeyDown(KeyCode.Mouse4))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(40);
+                try
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(40);
+                }
+                catch { }
             }
             if (Input.GetKeyDown(KeyCode.Mouse3))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
+                try
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
+                }
+                catch { }
             }
             if (Input.GetKeyDown(KeyCode.F15))
             {
-                VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(5);
+                try
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(5);
+                }
+                catch { }
             }
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                if (hwndSpotify == IntPtr.Zero)
+                try
                 {
-                    hwndSpotify = Win32.FindWindow(null, "Spotify Free");
-                }
-
-                if (hwndSpotify == IntPtr.Zero)
-                {
-                    hwndSpotify = Win32.FindWindow(null, "Spotify Premium");
-                }
-
-                if (hwndSpotify == IntPtr.Zero)
-                {
-                    foreach (Process p in Process.GetProcesses())
+                    if (hwndSpotify == IntPtr.Zero)
                     {
-                        hwndSpotify = Win32.FindWindowInProcess(p, s => s.Contains("Spotify Free") || s.Contains("Spotify Premium") || s.Contains(" - "));
-                        break;
+                        hwndSpotify = Win32.FindWindow(null, "Spotify Free");
+                    }
+
+                    if (hwndSpotify == IntPtr.Zero)
+                    {
+                        hwndSpotify = Win32.FindWindow(null, "Spotify Premium");
+                    }
+
+                    if (hwndSpotify == IntPtr.Zero)
+                    {
+                        foreach (Process p in Process.GetProcesses())
+                        {
+                            hwndSpotify = Win32.FindWindowInProcess(p, s => s.Contains("Spotify Free") || s.Contains("Spotify Premium") || s.Contains(" - "));
+                            break;
+                        }
                     }
                 }
+                catch { }
 
                 if (hwndSpotify != IntPtr.Zero)
                 {
@@ -1054,64 +1081,88 @@ namespace PendulumClient.Main
 
             if (boocorbin)
             {
-                if (GameObject.Find("Options/Canvas/Invert") != null)
+                try
                 {
-                    var Trigger = GameObject.Find("Options/Canvas/Invert").GetComponent<Button>();
-                    Trigger.Press();
+                    if (GameObject.Find("Options/Canvas/Invert") != null)
+                    {
+                        var Trigger = GameObject.Find("Options/Canvas/Invert").GetComponent<Button>();
+                        Trigger.Press();
+                    }
                 }
+                catch { }
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 //Wrappers.GetPlayerCamera().transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
                 //CheckNotifacations();
-                DisablePickupCollision();
-                PendulumLogger.Log("Pickup Collision Disabled");
+                try
+                {
+                    DisablePickupCollision();
+                    PendulumLogger.Log("Pickup Collision Disabled");
+                }
+                catch { }
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                PlayerWrappers.GetCurrentPlayer().transform.Rotate(0f, -0.2f, 0f);
+                try
+                {
+                    PlayerWrappers.GetCurrentPlayer().transform.Rotate(0f, -0.2f, 0f);
+                }
+                catch { }
             }
 
             if (Input.GetKeyDown(KeyCode.T))
             {
                 //CameraTickRPC();
-                StartCameraCrash();
+                try
+                {
+                    StartCameraCrash();
+                }
+                catch { }
             }
 
             if (Input.GetKeyDown(KeyCode.Y))
             {
-                CameraPictureRPC();
+                try
+                {
+                    CameraPictureRPC();
+                }
+                catch { }
             }
 
             if (Input.GetKeyDown(KeyCode.M))
             {
-                //NameESP = !NameESP;
-                DropAllObjects();
-                //ChangePortals();
-                foreach (GameObject prefab in VRC_SceneDescriptor.Instance.DynamicPrefabs)
+                try
                 {
-                    /*if (prefab.transform.parent.gameObject.transform.parent.gameObject == null)
+                    //NameESP = !NameESP;
+                    DropAllObjects();
+                    //ChangePortals();
+                    foreach (GameObject prefab in VRC_SceneDescriptor.Instance.DynamicPrefabs)
                     {
-                        if (prefab.transform.parent.gameObject == null)
+                        /*if (prefab.transform.parent.gameObject.transform.parent.gameObject == null)
+                        {
+                            if (prefab.transform.parent.gameObject == null)
+                            {
+                                PendulumLogger.Log("DynamicPrefab: " + prefab.transform.parent.gameObject.name + "/" + prefab.name);
+                            }
+                        }*/
+                        bool ParentCheck = prefab.transform.parent == null;
+                        if (ParentCheck)
+                        {
+                            PendulumLogger.Log("DynamicPrefab: " + prefab.name);
+                        }
+                        else
                         {
                             PendulumLogger.Log("DynamicPrefab: " + prefab.transform.parent.gameObject.name + "/" + prefab.name);
                         }
-                    }*/
-                    bool ParentCheck = prefab.transform.parent == null;
-                    if (ParentCheck)
-                    {
-                        PendulumLogger.Log("DynamicPrefab: " + prefab.name);
                     }
-                    else
+                    foreach (var b in Resources.FindObjectsOfTypeAll<VRC.SDKBase.VRC_Pickup>())
                     {
-                        PendulumLogger.Log("DynamicPrefab: " + prefab.transform.parent.gameObject.name + "/" + prefab.name);
+                        PendulumLogger.Log(b.gameObject.name);
                     }
                 }
-                foreach (var b in Resources.FindObjectsOfTypeAll<VRC.SDKBase.VRC_Pickup>())
-                {
-                    PendulumLogger.Log(b.gameObject.name);
-                }
+                catch { }
                 //PendulumLogger.Log("NameESP has been " + (NameESP ? "Enabled" : "Disabled") + ".");
             }
 
@@ -1373,60 +1424,75 @@ namespace PendulumClient.Main
             }
             if (FlightEnabled)
             {
-                var motioncomponent = VRCPlayer.field_Internal_Static_VRCPlayer_0.GetComponent<VRCMotionState>();
-                var inputcomponent = VRCPlayer.field_Internal_Static_VRCPlayer_0.GetComponent<InputStateController>();
-                motioncomponent.Method_Public_Void_0();
-                inputcomponent.Method_Public_Void_0();
-                GameObject playerCamera = Wrappers.GetPlayerCamera();
+                VRCPlayer currentPlayer = null;
+                GameObject playerCamera = null;
                 float num = Input.GetKey(KeyCode.LeftShift) ? FlightSpeed * 2 : FlightSpeed;
-                VRCPlayer currentPlayer = PlayerWrappers.GetCurrentPlayer();
-                if (Input.GetKey(KeyCode.W))
+
+                try
                 {
-                    currentPlayer.transform.position += playerCamera.transform.forward * num * Time.deltaTime;
+                    var motioncomponent = VRCPlayer.field_Internal_Static_VRCPlayer_0.GetComponent<VRCMotionState>();
+                    var inputcomponent = VRCPlayer.field_Internal_Static_VRCPlayer_0.GetComponent<InputStateController>();
+                    motioncomponent.Method_Public_Void_0();
+                    inputcomponent.Method_Public_Void_0();
+                    playerCamera = Wrappers.GetPlayerCamera();
+                    currentPlayer = PlayerWrappers.GetCurrentPlayer();
                 }
-                if (Input.GetKey(KeyCode.A))
+                catch { }
+
+                if (currentPlayer != null && playerCamera != null)
                 {
-                    currentPlayer.transform.position += playerCamera.transform.right * -1f * num * Time.deltaTime;
-                }
-                if (Input.GetKey(KeyCode.S))
-                {
-                    currentPlayer.transform.position += playerCamera.transform.forward * -1f * num * Time.deltaTime;
-                }
-                if (Input.GetKey(KeyCode.D))
-                {
-                    currentPlayer.transform.position += playerCamera.transform.right * num * Time.deltaTime;
-                }
-                if (Input.GetKey(KeyCode.Space))
-                {
-                    currentPlayer.transform.position += currentPlayer.transform.up * num * Time.deltaTime * 2f;
-                }
-                if (Input.GetKey(KeyCode.LeftControl))
-                {
-                    currentPlayer.transform.position += currentPlayer.transform.up * -1f * num * Time.deltaTime * 2f;
-                }
-                if (System.Math.Abs(Input.GetAxis("Vertical")) > 0f)
-                {
-                    currentPlayer.transform.position += playerCamera.transform.forward * num * Time.deltaTime * Input.GetAxis("Vertical") * 2f;
-                }
-                if (System.Math.Abs(Input.GetAxis("Horizontal")) > 0f)
-                {
-                    currentPlayer.transform.position += playerCamera.transform.right * num * Time.deltaTime * Input.GetAxis("Horizontal") * 2f;
-                }
-                if (System.Math.Abs(Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical")) > 0f)
-                {
-                    currentPlayer.transform.position += currentPlayer.transform.up * num * Time.deltaTime * Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical") * 2f;
-                }
-                if (NoClip == true)
-                {
-                    Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_0();
-                    Quaternion quaternion = currentPlayer.gameObject.transform.rotation * Quaternion.Inverse(VRCTrackingManager.Method_Public_Static_Quaternion_0());
-                    VRCTrackingManager.Method_Public_Static_Void_Vector3_Quaternion_1(vector, quaternion);
+                    if (Input.GetKey(KeyCode.W))
+                    {
+                        currentPlayer.transform.position += playerCamera.transform.forward * num * Time.deltaTime;
+                    }
+                    if (Input.GetKey(KeyCode.A))
+                    {
+                        currentPlayer.transform.position += playerCamera.transform.right * -1f * num * Time.deltaTime;
+                    }
+                    if (Input.GetKey(KeyCode.S))
+                    {
+                        currentPlayer.transform.position += playerCamera.transform.forward * -1f * num * Time.deltaTime;
+                    }
+                    if (Input.GetKey(KeyCode.D))
+                    {
+                        currentPlayer.transform.position += playerCamera.transform.right * num * Time.deltaTime;
+                    }
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        currentPlayer.transform.position += currentPlayer.transform.up * num * Time.deltaTime * 2f;
+                    }
+                    if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                        currentPlayer.transform.position += currentPlayer.transform.up * -1f * num * Time.deltaTime * 2f;
+                    }
+                    if (System.Math.Abs(Input.GetAxis("Vertical")) > 0f)
+                    {
+                        currentPlayer.transform.position += playerCamera.transform.forward * num * Time.deltaTime * Input.GetAxis("Vertical") * 2f;
+                    }
+                    if (System.Math.Abs(Input.GetAxis("Horizontal")) > 0f)
+                    {
+                        currentPlayer.transform.position += playerCamera.transform.right * num * Time.deltaTime * Input.GetAxis("Horizontal") * 2f;
+                    }
+                    if (System.Math.Abs(Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical")) > 0f)
+                    {
+                        currentPlayer.transform.position += currentPlayer.transform.up * num * Time.deltaTime * Input.GetAxis("Oculus_CrossPlatform_SecondaryThumbstickVertical") * 2f;
+                    }
+                    if (NoClip == true)
+                    {
+                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_0();
+                        Quaternion quaternion = currentPlayer.gameObject.transform.rotation * Quaternion.Inverse(VRCTrackingManager.Method_Public_Static_Quaternion_0());
+                        VRCTrackingManager.Method_Public_Static_Void_Vector3_Quaternion_1(vector, quaternion);
+                    }
                 }
             }
             bool ToggleHeadFlipper = Input.GetKeyDown(KeyCode.Tab);
             if (ToggleHeadFlipper)
             {
-                GetInstance().GetComponentInChildren<NeckMouseRotator>().field_Public_NeckRange_0 = new VRC.DataModel.NeckRange(float.MinValue, float.MaxValue, 0f);
+                try
+                {
+                    GetInstance().GetComponentInChildren<NeckMouseRotator>().field_Public_NeckRange_0 = new VRC.DataModel.NeckRange(float.MinValue, float.MaxValue, 0f);
+                }
+                catch { }
                 /*HeadFlipper = !HeadFlipper;
                 if (HeadFlipper && UIManagerInit == true)
                 {
@@ -2286,7 +2352,6 @@ namespace PendulumClient.Main
 
             var UiListPatch = "UIList__Hook";
             var AvatarChangePatch = "AvatarChange__Hook";
-            var AvatarLoadPatch = "AvatarLoad__Hook";
             var UserInfoPatch = "UserInfo__Hook";
             var HWIDMethod = "GetDeviceUniqueIdentifier";
             var HWIDPatch = "HWID__Hook";
@@ -2306,8 +2371,8 @@ namespace PendulumClient.Main
             var Hook1Patch = typeof(Prefixes).GetMethod(UiListPatch);
             var Hook2 = typeof(AssetBundleDownloadManager).GetMethods().Where(mi => mi.GetParameters().Length == 1 && mi.GetParameters().First().ParameterType == typeof(ApiAvatar) && mi.ReturnType == typeof(void));
             var Hook2Patch = typeof(Prefixes).GetMethod(AvatarChangePatch);
-            var Hook3 = typeof(VRCAvatarManager.AvatarCreationCallback).GetMethod(nameof(VRCAvatarManager.AvatarCreationCallback.Invoke));//typeof(VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique).GetMethod(nameof(VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique.Invoke));
-            var Hook3Patch = typeof(Prefixes).GetMethod(AvatarLoadPatch);
+            var Hook3 = typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake));//typeof(VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique).GetMethod(nameof(VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique.Invoke));
+            var Hook3Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.AvatarLoad__Hook));
             var Hook4 = typeof(PageUserInfo).GetMethod(nameof(PageUserInfo.Method_Public_Void_APIUser_InfoType_ListType_0));
             var Hook4Patch = typeof(Prefixes).GetMethod(UserInfoPatch);
             var Hook5 = typeof(SystemInfo).GetMethod(HWIDMethod);
@@ -2454,6 +2519,7 @@ namespace PendulumClient.Main
             /*instance.Patch(ModOrg18, new HarmonyMethod(ApiModBoolPrefix), null, null);
             instance.Patch(ModOrg19, new HarmonyMethod(ApiPlrModBoolPrefix), null, null);*/
             //instance.Patch(original8, new HarmonyMethod(PingPrefix), null, null);
+            //instance.Patch(Hook2, new HarmonyMethod(Hook2Patch));
             instance.Patch(Hook6, new HarmonyMethod(Hook6Patch));
             instance.Patch(Hook7, new HarmonyMethod(Hook7Patch));
             instance.Patch(Hook7V2, new HarmonyMethod(Hook7Patch));
@@ -2756,8 +2822,11 @@ namespace PendulumClient.Main
 
             if (e)
             {
-                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
-                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
+                var Eventdata = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+                Eventdata.position = new Vector2(0f, 0f);
+                Eventdata.eligibleForClick = false;
+                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(Eventdata);
+                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(Eventdata);
                 RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
                 LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
             }
@@ -3188,6 +3257,7 @@ namespace PendulumClient.Main
         public static void UnloadUserID()
         {
             StoredUserInInstance = false;
+            MenuFunctions.copyVoice_photonId = 0;
             StoredUserID = string.Empty;
         }
 
@@ -3221,10 +3291,11 @@ namespace PendulumClient.Main
         }
         public static void TakeOwnershipIfNecessary(GameObject gameObject)
         {
-            if (getOwnerOfGameObject(gameObject).field_Private_APIUser_0.id != VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_APIUser_0.id)
+            /*if (getOwnerOfGameObject(gameObject).field_Private_APIUser_0.id != VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_APIUser_0.id)
             {
                 Networking.SetOwner(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_VRCPlayerApi_0, gameObject);
-            }
+            }*/
+            Networking.SetOwner(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_VRCPlayerApi_0, gameObject);
         }
 
         public static IEnumerator ItemOrbitEnum()
@@ -5261,13 +5332,13 @@ namespace PendulumClient.Main
             Errormsg("Moderator Ban", string.Format("You have been banned until {2} {1}, 2025 {0}.\nReason: Community Guidelines Violation\nCommunity Guidelines: www.vrchat.com/community", DateTime.Now.ToString("HH:mm"), DateTime.Now.Day, DateTime.Now.ToString("MMM")));
         }
 
-        public static void CheckShaderBlacklist(Player player)
+        public static void CheckShaderBlacklist(Player player, GameObject avatar)
         {
             if (File.Exists("PendulumClient/ShaderBlacklist.txt"))
             {
                 var blacklist = File.ReadAllLines("PendulumClient/ShaderBlacklist.txt");
-                var players = player;
-                string plrname = players.field_Private_APIUser_0.displayName;
+                var players = avatar;
+                string plrname = player.field_Private_APIUser_0.displayName;
                 int totalmatsremoved = 0;
                 Renderer[] componentsInChildren3 = players.GetComponentsInChildren<Renderer>(true);
                 System.Collections.Generic.List<string> RemovedShaders = new System.Collections.Generic.List<string>();
@@ -5284,10 +5355,10 @@ namespace PendulumClient.Main
                             matsremoved = matsremoved + 1;
                             totalmatsremoved = totalmatsremoved + 1;
                         }
+                        PendulumLogger.Log("--------------------------");
                         PendulumLogger.Log("Renderer has more than 200 materials! (" + matsremoved + ")");
                         PendulumLogger.Log("Player: " + plrname);
                         PendulumLogger.Log("Object: " + componentsInChildren3[num2].name);
-                        PendulumLogger.Log("--------------------------");
                     }
                     else
                     {
@@ -5308,19 +5379,29 @@ namespace PendulumClient.Main
                                     var msgs = new System.Collections.Generic.List<string>() { msg1, msg2, msg3 };
                                     if (!RemovedShaders.Contains(tempshadername))
                                     {
+                                        PendulumLogger.Log("--------------------------");
                                         RemovedShaders.Add(tempshadername);
                                         foreach (var msg in msgs)
                                         {
                                             PendulumLogger.Log(msg);
                                         }
-                                        PendulumLogger.Log("--------------------------");
                                     }
                                 }
                             }
                         }
                     }
                 }
-                if (totalmatsremoved > 0)
+                if (totalmatsremoved > 1)
+                {
+                    PendulumLogger.Log("--------------------------");
+                    PendulumLogger.Log("Cleaned " + totalmatsremoved + " shaders from " + plrname);
+                }
+                else if (totalmatsremoved == 1)
+                {
+                    PendulumLogger.Log("--------------------------");
+                    PendulumLogger.Log("Cleaned " + totalmatsremoved + " shader from " + plrname);
+                }
+                else
                 {
                     PendulumLogger.Log("Cleaned " + totalmatsremoved + " shaders from " + plrname);
                 }
@@ -5757,12 +5838,20 @@ namespace PendulumClient.Main
 
         public static void PostEmbedApi(string uri, DSharpPlus.RestWebhookExecutePayload embed)
         {
-            System.Net.Http.HttpClient webClient = new System.Net.Http.HttpClient();
-            webClient.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(embed), Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
-
-            //WebClient wc = new WebClient();
-            //wc.UploadData(uri, new StringContent(JsonConvert.SerializeObject(embed), Encoding.UTF8, "application/json").ReadAsByteArrayAsync().Result);
+            System.Net.Http.HttpClient http = new System.Net.Http.HttpClient();
+            http.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(embed), Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
         }
+
+        public static void PostEmbedApiAsync(string uri, DSharpPlus.RestWebhookExecutePayload embed)
+        {
+            System.Net.Http.HttpClient http = new System.Net.Http.HttpClient();
+            try
+            {
+                var req = http.PostAsync(uri, new StringContent(JsonConvert.SerializeObject(embed), Encoding.UTF8, "application/json"));
+            }
+            catch { }
+        }
+
 
         public static void TryOpenNewMenu()
         {

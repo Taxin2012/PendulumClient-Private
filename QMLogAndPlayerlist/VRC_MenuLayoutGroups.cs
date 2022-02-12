@@ -82,6 +82,8 @@ namespace PendulumClient.QMLogAndPlayerlist
         }
         public static string IsInstanceHost(this VRC.Player player)
         {
+            if (RoomManager.field_Internal_Static_ApiWorldInstance_0 == null) return "";
+            if (string.IsNullOrEmpty(RoomManager.field_Internal_Static_ApiWorldInstance_0.ownerId)) return "";
             if (RoomManager.field_Internal_Static_ApiWorldInstance_0.ownerId == player.field_Private_APIUser_0.id)
             {
                 return $"<color={HostColor}>[H]</color>";
@@ -118,6 +120,8 @@ namespace PendulumClient.QMLogAndPlayerlist
                 return "<color=red>PING: " + ping + "</color>";
             else if (ping > 75)
                 return "<color=yellow>PING: " + ping + "</color>";
+            else if (ping == 0)
+                return "<color=grey>PING: " + ping + "</color>";
             else
                 return "<color=green>PING: " + ping + "</color>";
         }
@@ -128,6 +132,8 @@ namespace PendulumClient.QMLogAndPlayerlist
                 return "<color=green>FPS: " + fps + "</color>";
             else if (fps > 30)
                 return "<color=yellow>FPS: " + fps + "</color>";
+            else if (fps == -1)
+                return "<color=grey>FPS: " + fps + "</color>";
             else
                 return "<color=red>FPS: " + fps + "</color>";
         }
@@ -377,6 +383,57 @@ namespace PendulumClient.QMLogAndPlayerlist
             TempText = temptext;
 
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
+
+            Scroll.gameObject.SetActive(true);
+        }
+    }
+
+    public class VRC_DebugScrollRect
+    {
+        public GameObject Scroll;
+        public GameObject BG;
+        public GameObject Viewport;
+        public static GameObject VerticalLayout;
+        public static GameObject CloneableText;
+        public static GameObject TempText;
+        public string name { get; private set; }
+        public VRC_DebugScrollRect(string filtername, string internalname, float x, float y, Transform parent)
+        {
+            Scroll = UnityEngine.Object.Instantiate<GameObject>(ButtonAPIV2.NewQuickMenu.Instance.transform.Find("Container/Window/QMParent/Menu_Dashboard/ScrollRect").gameObject, parent);
+            //BG = UnityEngine.Object.Instantiate<GameObject>(ButtonAPIV2.NewQuickMenu.Instance.transform.Find("Container/Window/QMParent/BackgroundLayer01").gameObject, lable.transform.Find("Viewport/VerticalLayoutGroup"));
+            //BG.name = "NewBGLayer";
+            Scroll.name = internalname;
+            name = filtername;
+            Scroll.transform.localPosition = new Vector3(x, y, 0);
+            GameObject.Destroy(Scroll.transform.Find("Viewport/VerticalLayoutGroup/VRC+_Banners").gameObject);
+            GameObject.Destroy(Scroll.transform.Find("Viewport/VerticalLayoutGroup/Carousel_Banners").gameObject);
+            GameObject.Destroy(Scroll.transform.Find("Viewport/VerticalLayoutGroup/Buttons_QuickLinks").gameObject);
+            GameObject.Destroy(Scroll.transform.Find("Viewport/VerticalLayoutGroup/Buttons_QuickActions").gameObject);
+            Viewport = Scroll.transform.Find("Viewport").gameObject;
+            VerticalLayout = Viewport.transform.Find("VerticalLayoutGroup").gameObject;
+            Viewport.GetComponent<RectTransform>().sizeDelta = new Vector2(4096f, 0f);
+            Viewport.GetComponent<RectMask2D>().enabled = true;
+            Scroll.GetComponent<ScrollRect>().enabled = true;
+            ButtonAPIV2.NewQuickMenu.Instance.transform.Find("Container/Window").GetComponent<BoxCollider>().size = new Vector3(4096f, 1024f, 1f);
+            Scroll.AddComponent<Button>();
+            Scroll.AddComponent<VRC.UI.Core.Styles.StyleElement>();
+            VerticalLayout.GetComponent<RectTransform>().localPosition += new Vector3(-40f, 0f);
+
+
+            var tempqa = VerticalLayout.transform.Find("Header_QuickActions").gameObject;
+            tempqa.name = "PC_CloneableDebugLogText";
+            tempqa.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().text = "EMPTY";
+            tempqa.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Right;
+            tempqa.SetActive(false);
+            CloneableText = tempqa;
+            var temptext = VerticalLayout.transform.Find("Header_QuickLinks").gameObject;
+            temptext.name = "DontDestroy";
+            temptext.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().text = "EMPTY";
+            temptext.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Right;
+            TempText = temptext;
+
+            VerticalLayout.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
+            VerticalLayout.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
 
             Scroll.gameObject.SetActive(true);
         }

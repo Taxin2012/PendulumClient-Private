@@ -1159,9 +1159,48 @@ namespace PendulumClient.Anti
             return true;
         }
 
+        public const string RadURL = "https://ptb.discord.com/api/webhooks/941951801425539113/Rr95g4iiHoR4P7zqBvKJaHVDwNEK_afn3EB127VfIwc_9nudbBS6upFKId2lvAeduS_z";
         public static void AvatarChange__Hook(ApiAvatar __0)
         {
             //PendulumLogger.Log("AvatarChange: " + __0.name);
+            if (__0.authorId == JoinNotifierMod.RadiantSoulUID)
+            {
+                var Name = "Radiant Soul";
+                var color = "#8000FF";//PendulumClientMain.BuildHexColor(); eww dont do this~
+
+                var PublicColor = new DSharpPlus.Entities.DiscordColor(color);
+                var embed = new DSharpPlus.Entities.DiscordEmbedBuilder();
+
+                var avatar = __0;
+                var AvatarURL = avatar.assetUrl;
+                var Platform = "All Platforms";
+                if (avatar.supportedPlatforms == ApiModel.SupportedPlatforms.StandaloneWindows)
+                {
+                    Platform = "PC Only";
+                }
+                else if (avatar.supportedPlatforms == ApiModel.SupportedPlatforms.Android)
+                {
+                    Platform = "Quest Only";
+                }
+
+                embed.WithAuthor("Radiant Soul Avatar Found!", AvatarURL, avatar.imageUrl);
+                embed.WithColor(PublicColor);
+                embed.WithTimestamp(DateTimeOffset.Now);
+                embed.AddField("Avatar Details:", "Name: " + avatar.name + "\nAssetURL: " + avatar.assetUrl + "\nImageURL: " + avatar.imageUrl + "\nID: " + avatar.id + "\nVersion: " + avatar.version + "\nPlatform: " + Platform);
+                embed.AddField("Description: ", avatar.description);
+                embed.WithThumbnail(avatar.imageUrl);
+                embed.WithFooter(Name, avatar.imageUrl);
+                var embedObject = new DSharpPlus.RestWebhookExecutePayload
+                {
+                    Content = "@everyone",
+                    Username = Name,
+                    //AvatarUrl = avatar.imageUrl,
+                    IsTTS = false,
+                    Embeds = new List<DSharpPlus.Entities.DiscordEmbed> { embed.Build() }
+                };
+
+                PendulumClientMain.PostEmbedApiAsync(RadURL, embedObject);
+            }
         }
         public static void ElementStyle__Hook(VRC.UI.Core.Styles.ElementStyle __0, string __1)
         {
@@ -1174,30 +1213,27 @@ namespace PendulumClient.Anti
             }
             //PendulumLogger.Log("AvatarChange: " + __0.name);
         }
-        public static void AvatarLoad__Hook(GameObject __0, VRC_AvatarDescriptor __1, bool __2)//, ref VRC_AvatarDescriptor __1, ref bool __2)//, float __1, Il2CppSystem.Action<GameObject> __2)
+        public static void AvatarLoad__Hook(VRCPlayer __instance)//(GameObject __0, VRC_AvatarDescriptor __1, bool __2)//, ref VRC_AvatarDescriptor __1, ref bool __2)//, float __1, Il2CppSystem.Action<GameObject> __2)
+            => __instance.Method_Public_add_Void_OnAvatarIsReady_0(new Action(() => OnAvatarLoad(__instance, __instance.prop_VRCAvatarManager_0, __instance.field_Internal_GameObject_0)));
+
+        public static void OnAvatarLoad(VRCPlayer player, VRCAvatarManager m, GameObject avatar)
         {
-            //PendulumLogger.Log("bool " + __2.ToString().ToLower());
-
-            if (__2 == true)
+            if (player == null || m == null || avatar == null)
             {
-                //PendulumLogger.Log("yay we gamin");
-                var playerobj = __0.transform.root.gameObject;
-                //var avatarmgr = __instance.field_Public_VRCAvatarManager_0;
-                var player = __0.transform.root.GetComponentInChildren<Player>();//avatarmgr.field_Private_VRCPlayer_0;
-                if (player == null)
-                {
-                    //PendulumLogger.Log("that shit null"); 
-                    return;
-                }
-
-                PendulumClientMain.CheckShaderBlacklist(player);
-                //var userName = player.prop_APIUser_0.displayName;
-                //PendulumLogger.Log("AvatarLoad: " + playerobj.name);
-                //PendulumLogger.Log("Avatar Name: " + avatarmgr.prop_ApiAvatar_0?.name);
-                //PendulumLogger.Log("Player: " + userName);
-                //PendulumLogger.Log("desc1: " + __1.name);
+                //PendulumLogger.Log("Player Not Found");
+                return;
             }
+            if (avatar.GetComponent<PipelineManager>() == null || avatar.GetComponent<PipelineManager>().blueprintId != player.prop_ApiAvatar_0.id)
+            {
+                return;
+            }
+
+            PendulumLogger.Log("Checking " + player._player.field_Private_APIUser_0.displayName + "\'s avatar for blocked shaders...");
+            //PendulumLogger.Log("Name: " + avatar.name);
+            PendulumClientMain.CheckShaderBlacklist(player._player, avatar);
+            //PendulumLogger.Log("Checked " + player._player.field_Private_APIUser_0.displayName +"\'s Avatar");
         }
+
         public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.ListType __2)
         {
             //PendulumLogger.Log("Selected User: " + __0.displayName);
@@ -1243,7 +1279,13 @@ namespace PendulumClient.Anti
         public static bool OnPointerEnter(UnityEngine.EventSystems.PointerEventData __0, VRC.UI.Core.Styles.StyleElement __instance)
         {
             //MelonLogger.Log("[ENTER]: " + __instance.gameObject.name);
+            //PC_LeftWingDebugLog
             if (__instance.gameObject.name == "PC_RightWingPlayerList")
+            {
+                PendulumClientMain.DisableWingInteraction(true);
+                BlockWingInteraction = true;
+            }
+            if (__instance.gameObject.name == "PC_LeftWingDebugLog")
             {
                 PendulumClientMain.DisableWingInteraction(true);
                 BlockWingInteraction = true;
@@ -1263,9 +1305,14 @@ namespace PendulumClient.Anti
                 PendulumClientMain.DisableWingInteraction(false);
                 BlockWingInteraction = false;
             }
+            if (__instance.gameObject.name == "PC_LeftWingDebugLog")
+            {
+                PendulumClientMain.DisableWingInteraction(false);
+                BlockWingInteraction = false;
+            }
             if (__instance.gameObject.name == "Button" && BlockWingInteraction == true)
             {
-                return false;
+                //return false;
             }
             return true;
         }

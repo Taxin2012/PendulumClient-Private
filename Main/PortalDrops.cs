@@ -292,7 +292,7 @@ namespace PendulumClient.Main
 
         public static void DropPortalInvalidSideways()
         {
-            if (PlayerWrappers.GetAllPlayers() != null)
+            if (PlayerWrappers.GetAllPlayers() != null || PlayerWrappers.GetCurrentPlayer() != null)
             {
                 //var player = PlayerWrappers.GetAllPlayers()[new System.Random().Next(PlayerWrappers.GetAllPlayers()._size-1)];
                 //var OutputDisplayName = player.prop_APIUser_0.displayName;

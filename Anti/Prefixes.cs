@@ -1213,14 +1213,13 @@ namespace PendulumClient.Anti
             }
             //PendulumLogger.Log("AvatarChange: " + __0.name);
         }
-        public static void AvatarLoad__Hook(VRCPlayer __instance)//(GameObject __0, VRC_AvatarDescriptor __1, bool __2)//, ref VRC_AvatarDescriptor __1, ref bool __2)//, float __1, Il2CppSystem.Action<GameObject> __2)
-            => __instance.Method_Public_add_Void_OnAvatarIsReady_0(new Action(() => OnAvatarLoad(__instance, __instance.prop_VRCAvatarManager_0, __instance.field_Internal_GameObject_0)));
+        public static void AvatarLoad__Hook(VRCPlayer __instance) => __instance.Method_Public_add_Void_OnAvatarIsReady_0(new Action(() => OnAvatarLoad(__instance, __instance.prop_VRCAvatarManager_0, __instance.field_Internal_GameObject_0)));
 
         public static void OnAvatarLoad(VRCPlayer player, VRCAvatarManager m, GameObject avatar)
         {
             if (player == null || m == null || avatar == null)
             {
-                //PendulumLogger.Log("Player Not Found");
+                //PendulumLogger.Log("Player Not Found");-
                 return;
             }
             if (avatar.GetComponent<PipelineManager>() == null || avatar.GetComponent<PipelineManager>().blueprintId != player.prop_ApiAvatar_0.id)

@@ -1219,18 +1219,14 @@ namespace PendulumClient.Anti
         {
             if (player == null || m == null || avatar == null)
             {
-                //PendulumLogger.Log("Player Not Found");-
                 return;
             }
             if (avatar.GetComponent<PipelineManager>() == null || avatar.GetComponent<PipelineManager>().blueprintId != player.prop_ApiAvatar_0.id)
             {
                 return;
             }
-
             PendulumLogger.Log("Checking " + player._player.field_Private_APIUser_0.displayName + "\'s avatar for blocked shaders...");
-            //PendulumLogger.Log("Name: " + avatar.name);
             PendulumClientMain.CheckShaderBlacklist(player._player, avatar);
-            //PendulumLogger.Log("Checked " + player._player.field_Private_APIUser_0.displayName +"\'s Avatar");
         }
 
         public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.ListType __2)

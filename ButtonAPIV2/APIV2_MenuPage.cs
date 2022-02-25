@@ -75,7 +75,7 @@ namespace PendulumClient.ButtonAPIV2
             UiPage = GameObject.AddComponent<UIPage>();
             UiPage.field_Public_String_0 = "PendulumClientPage_" + _menuName;
             UiPage.field_Private_Boolean_1 = true;
-            UiPage.field_Private_MenuStateController_0 = NewQuickMenu.Instance.field_Protected_MenuStateController_0;
+            UiPage.field_Protected_MenuStateController_0 = NewQuickMenu.Instance.field_Protected_MenuStateController_0;
             UiPage.field_Private_List_1_UIPage_0 = new Il2CppSystem.Collections.Generic.List<UIPage>();
             UiPage.field_Private_List_1_UIPage_0.Add(UiPage);
 

@@ -623,6 +623,8 @@ namespace PendulumClient.Anti
             public static bool AntiBlock = true;
         public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
         {
+            return true;
+
             if (debugmode && !Directory.Exists("PendulumClient/PhotonLogs"))
             {
                 Directory.CreateDirectory("PendulumClient/PhotonLogs");
@@ -692,6 +694,18 @@ namespace PendulumClient.Anti
                     PendulumLogger.Log("Event210 [" + __0.Sender + "] " + bytearray.ToString(), ConsoleColor.Red);
                     File.WriteAllText("PendulumClient/PhotonLogs/event210 [" + __0.Sender + "] (" + plr.field_Private_APIUser_0.displayName + ")" + ".txt", bytearray.ToString());
                 }
+            }
+            try
+            {
+                var bruh0 = __0.Parameters.Count;
+                var bruh1 = __0.Parameters;
+                var bruh2 = __0.Parameters[245];
+                var bruh3 = __0.Parameters[245].ToString();
+                var bruh4 = __0.Parameters[245].ToString().Length;
+            }
+            catch
+            {
+                return false;
             }
             if (__0.Code == 9 && Anti9)
             {

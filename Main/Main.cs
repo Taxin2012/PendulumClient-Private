@@ -74,6 +74,8 @@ using System.Security.Cryptography;
 using Transmtn;
 using BestHTTP;
 
+using VRCWebSocketsManager = MonoBehaviourPublicObApAcApStAcBoStBoObUnique;
+
 namespace PendulumClient.Main
 {
     internal class Win32
@@ -1000,7 +1002,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(16);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(16);
                 }
                 catch { }
             }
@@ -1008,7 +1010,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(40);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(40);
                 }
                 catch { }
             }
@@ -1016,7 +1018,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(3);
                 }
                 catch { }
             }
@@ -1024,7 +1026,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(5);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(5);
                 }
                 catch { }
             }
@@ -2171,7 +2173,7 @@ namespace PendulumClient.Main
 
         public static void FriendUser(string userid)
         {
-            VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(userid, Notification.NotificationType.FRIEND_REQUEST, "why cant we be friends", null));
+            VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(userid, Notification.NotificationType.FRIEND_REQUEST, "why cant we be friends", null));
         }
 
         public static void InviteAll()
@@ -2180,7 +2182,7 @@ namespace PendulumClient.Main
             {
                 foreach (Player player in PlayerWrappers.GetAllPlayers())
                 {
-                    //VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(player.prop_APIUser_0.id, "", new Location(RoomManager.field_Internal_Static_ApiWorld_0.id, new Transmtn.DTO.Instance(RoomManager.field_Internal_Static_ApiWorld_0.currentInstanceIdWithTags, "", "", "", "", false)), RoomManager.field_Internal_Static_ApiWorld_0.name));
+                    //VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Invite.Create(player.prop_APIUser_0.id, "", new Location(RoomManager.field_Internal_Static_ApiWorld_0.id, new Transmtn.DTO.Instance(RoomManager.field_Internal_Static_ApiWorld_0.currentInstanceIdWithTags, "", "", "", "", false)), RoomManager.field_Internal_Static_ApiWorld_0.name));
                 }
                 Errormsg("Invites Sent!", "Invites Sent!");
             }
@@ -2192,7 +2194,7 @@ namespace PendulumClient.Main
             {
                 foreach (Player player in PlayerWrappers.GetAllPlayers())
                 {
-                    VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(player.prop_APIUser_0.id, Notification.NotificationType.REQUEST_INVITE, "lemme in bitch", null));
+                    VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(player.prop_APIUser_0.id, Notification.NotificationType.REQUEST_INVITE, "lemme in bitch", null));
                 }
                 Errormsg("Requests Sent!", "Invite Requests Sent!");
             }
@@ -2455,10 +2457,10 @@ namespace PendulumClient.Main
             var ModOrg7 = typeof(ModerationManager.__c).GetMethod(ModMethod7);
             //var ModOrg8 = typeof(ModerationManager.ObjectNPrivateSealedStAc1ApUnique).GetMethod(ModMethod8);
             //var ModOrg9 = typeof(ModerationManager.ObjectNPrivateSealedStAc1ApUnique).GetMethod(ModMethod9);
-            var ModOrg10 = typeof(ModerationManager.ObjectNPrivateSealedApVoBomAp1).GetMethod(ModMethod10);
+            //var ModOrg10 = typeof(ModerationManager.ObjectNPrivateSealedApVoBomAp1).GetMethod(ModMethod10);
             //var ModOrg11 = typeof(ModerationManager.ObjectNPrivateSealedIE1ApLiVo1ApBotmm1).GetMethod(ModMethod11);
             //var ModOrg12 = typeof(ModerationManager.ObjectNPrivateSealedIE1ApLiVo1ApBotmm1).GetMethod(ModMethod12);
-            var ModOrg13 = typeof(ModerationManager.ObjectNPrivateSealedApVoBomAp0).GetMethod(ModMethod13);
+            //var ModOrg13 = typeof(ModerationManager.ObjectNPrivateSealedApVoBomAp0).GetMethod(ModMethod13);
             //var ModOrg14 = typeof(ModerationManager.ObjectNPrivateSealedIE1ApLiVo1ApBotmm0).GetMethod(ModMethod14);
             //var ModOrg15 = typeof(ModerationManager.ObjectNPrivateSealedIE1ApLiVo1ApBotmm0).GetMethod(ModMethod15);
             var ModOrg16 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod16);
@@ -3430,7 +3432,7 @@ namespace PendulumClient.Main
             var WorldName = RoomManager.field_Internal_Static_ApiWorld_0.name;
             if (userInfo != null)
             {
-                VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.field_Private_APIUser_0.id, "", new Location(a, new Transmtn.DTO.Instance(b, "", "", "", "", false)), WorldName));
+                VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.field_Private_APIUser_0.id, "", new Location(a, new Transmtn.DTO.Instance(b, "", "", "", "", false)), WorldName));
                 PendulumLogger.Log(a + ":" + b);
                 Errormsg("Sent Invite!", "Invite sent to: " + userInfo.field_Private_APIUser_0.displayName + "!");
             };
@@ -3443,7 +3445,7 @@ namespace PendulumClient.Main
             var userInfo = ff.transform.GetComponentInChildren<VRC.UI.PageUserInfo>();
             text_popup("Enter text to send to " + userInfo.field_Private_APIUser_0.displayName + ".", "Send Message", new System.Action<string>((a) =>
             {
-                //VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.field_Public_APIUser_0.id, "", new Location("", new Transmtn.DTO.Instance("", "", "", "", "", false)), "\nMessage: " + a));
+                //VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.field_Public_APIUser_0.id, "", new Location("", new Transmtn.DTO.Instance("", "", "", "", "", false)), "\nMessage: " + a));
                 var msg = "PendulumClient MSG: " + a;
                 NotificationDetails notificationDetails = new NotificationDetails();
                 //notificationDetails.Add("worldId", "");
@@ -3453,7 +3455,7 @@ namespace PendulumClient.Main
 
                 notificationDetails.Add("responseSlot", Number);
                 notificationDetails.Add("rsvp", boolean);
-                VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Private_APIUser_0.id, Notification.NotificationType.INVITE_RESPONSE, msg, notificationDetails));
+                VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Private_APIUser_0.id, Notification.NotificationType.INVITE_RESPONSE, msg, notificationDetails));
             }));
         }
 
@@ -3463,7 +3465,7 @@ namespace PendulumClient.Main
             var userInfo = menu.transform.GetComponentInChildren<VRC.UI.PageUserInfo>();
             if (userInfo != null)
             {
-                VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Private_APIUser_0.id, Notification.NotificationType.REQUEST_INVITE, "lemme in bitch", null));
+                VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Private_APIUser_0.id, Notification.NotificationType.REQUEST_INVITE, "lemme in bitch", null));
                 Errormsg("Invite Request Sent!", "Sent invite request to " + userInfo.field_Private_APIUser_0.displayName + ".");
                 PendulumLogger.Log("Sent Invite Request to " + userInfo.field_Private_APIUser_0.displayName + ".");
             }
@@ -3475,7 +3477,7 @@ namespace PendulumClient.Main
             var userInfo = menu.transform.GetComponentInChildren<VRC.UI.PageUserInfo>();
             if (userInfo != null)
             {
-                VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Private_APIUser_0.id, Notification.NotificationType.FRIEND_REQUEST, "why cant we be friends", null));
+                VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Private_APIUser_0.id, Notification.NotificationType.FRIEND_REQUEST, "why cant we be friends", null));
                 Errormsg("Friend Request Sent!", "Sent Friend request to " + userInfo.field_Private_APIUser_0.displayName + ".");
                 PendulumLogger.Log("Sent Friend Request to " + userInfo.field_Private_APIUser_0.displayName + ".");
             }
@@ -3490,7 +3492,7 @@ namespace PendulumClient.Main
                 NotificationDetails Details = new NotificationDetails();
                 Details.Add("VOTE_TO_KICK", userInfo.field_Private_APIUser_0.GetIl2CppType());
                 //ModerationManager.field_Private_Static_ModerationManager_0.ReceiveVoteToKickInitiation(userInfo.field_Public_APIUser_0.id, PlayerWrappers.GetPlayer(APIUser.CurrentUser.id));
-                //VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Public_APIUser_0.id, Notification.NotificationType.VOTE_TO_KICK, "niggermoment", Details));
+                //VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(userInfo.field_Public_APIUser_0.id, Notification.NotificationType.VOTE_TO_KICK, "niggermoment", Details));
                 Errormsg("Invite Request Sent!", "Sent invite request to " + userInfo.field_Private_APIUser_0.displayName + ".");
                 PendulumLogger.Log("Sent Invite Request to " + userInfo.field_Private_APIUser_0.displayName + ".");
             }
@@ -3760,7 +3762,7 @@ namespace PendulumClient.Main
             }
         }
         public static bool IsDownloadingFile = false;
-        public static void DowloadVRCA(Player player)
+        public static void DownloadVRCA(Player player)
         {
             //GameObject.Destroy(user_menu.transform.Find("VRCAButton").gameObject);
             /*WebClient downloadhandler = new WebClient();
@@ -4747,20 +4749,20 @@ namespace PendulumClient.Main
             {
                 if (noti.receiverUserId == JoinNotifierMod.CorbinUID)
                 {
-                    VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.Method_Public_Void_Notification_1(noti);
+                    VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.Method_Public_Void_Notification_1(noti);
                     QuickMenu.prop_QuickMenu_0.Method_Public_Void_0();
                     InviteReqUser(noti.senderUserId);
                     InviteUser(noti.senderUserId);
                 }
                 else
                 {
-                    VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.Method_Public_Void_Notification_1(noti);
+                    VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.Method_Public_Void_Notification_1(noti);
                     QuickMenu.prop_QuickMenu_0.Method_Public_Void_0();
                 }
             }
             else
             {
-                VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.Method_Public_Void_Notification_1(noti);
+                VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.Method_Public_Void_Notification_1(noti);
                 QuickMenu.prop_QuickMenu_0.Method_Public_Void_0();
             }*/
         }
@@ -4961,12 +4963,12 @@ namespace PendulumClient.Main
             var a = RoomManager.field_Internal_Static_ApiWorld_0.id;
             var b = "";//RoomManager.field_Internal_Static_ApiWorld_0.currentInstanceIdWithTags;
             var WorldName = RoomManager.field_Internal_Static_ApiWorld_0.name;
-            VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userid, "", new Location(a, new Transmtn.DTO.Instance(b, "", "", "", "", false)), WorldName));
+            VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Invite.Create(userid, "", new Location(a, new Transmtn.DTO.Instance(b, "", "", "", "", false)), WorldName));
         }
 
         public static void InviteReqUser(string userid)
         {
-            VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Notification.Create(userid, Notification.NotificationType.Requestinvite, "", null));
+            VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Notification.Create(userid, Notification.NotificationType.Requestinvite, "", null));
         }
 
         public static void UpdateText()

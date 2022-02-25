@@ -9,6 +9,8 @@ using VRC.UI.Core.Styles;
 using UnityEngine.Networking;
 using UnhollowerRuntimeLib;
 
+using UiSafetyFeatureToggle = MonoBehaviourPublicIPointerEnterHandlerIEventSystemHandlerIPointerClickHandlerObStCoToCoStImRaCoStUnique;
+
 namespace PendulumClient.ColorModuleV2
 {
     public static class CMV2_ColorModule

@@ -14,6 +14,8 @@ using Transmtn.DTO.Notifications;
 using Transmtn;
 using Transmtn.DTO;
 
+using VRCWebSocketsManager = MonoBehaviourPublicObApAcApStAcBoStBoObUnique;
+
 namespace PendulumClient.ButtonAPIV2
 {
     public class MenuSetup
@@ -243,6 +245,21 @@ namespace PendulumClient.ButtonAPIV2
 
                 PendulumClientMain.SaveUserID(plr);
             });
+            TargetMenu.AddButton("Download VRCA", "Download their VRCA", () =>
+            {
+                var plr = MenuFunctions.GetSelectedPlayer();
+                if (plr == null)
+                    return;
+
+                PendulumClientMain.DownloadVRCA(plr);
+            });
+            TargetMenu.AddButton("Show Shader List", "show a list of shaders on their avatar", () => {
+                var plr = MenuFunctions.GetSelectedPlayer();
+                if (plr == null)
+                    return;
+
+                //VRCUiPopupManager
+            });
             var DownloadsMenu = FunctionMenu.AddMenuPage("VRCA/VRCW Downloads", "Download World and Avatar .VRCAs");
             DownloadsMenu.AddToggle("Open Folder on Download", "Open File Explorer to your .vrca/.vrcw on download", b => 
             {
@@ -250,7 +267,7 @@ namespace PendulumClient.ButtonAPIV2
             });
             DownloadsMenu.AddButton("Download Current .VRCA", "Download your current avatars .VRCA", () =>
             {
-                PendulumClientMain.DowloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
+                PendulumClientMain.DownloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
             });
             DownloadsMenu.AddButton("Download Current .VRCW", "Download your current worlds .VRCW", () =>
             {
@@ -281,7 +298,7 @@ namespace PendulumClient.ButtonAPIV2
                         var worldidlist = s.Split(':');
                         var a = worldidlist[0];
                         var b = worldidlist[1];
-                        VRCWebSocketsManager.field_Private_Static_VRCWebSocketsManager_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.id, "", new Location(a, new Transmtn.DTO.Instance(b)), "" ));
+                        VRCWebSocketsManager.field_Private_Static_MonoBehaviourPublicObApAcApStAcBoStBoObUnique_0.prop_Api_0.PostOffice.Send(Invite.Create(userInfo.id, "", new Location(a, new Transmtn.DTO.Instance(b)), "" ));
                     }
                 }, null);
             });

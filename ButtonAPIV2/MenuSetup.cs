@@ -112,6 +112,9 @@ namespace PendulumClient.ButtonAPIV2
             FunctionMenu.AddButton("IPGrabber", "Its what it says", () => {
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("UwU you cawnt do thawt siwy");
             });
+            FunctionMenu.AddButton("IPGrabber", "Its what it says", () => {
+                PendulumClientMain.VRC_UIManager.QueueHudMessage("UwU you cawnt do thawt siwy");
+            });
             ExploitsMenu.AddToggle("Event9", "we do a slight amount of trolling", b => {
                 MenuFunctions.EnableEvent9(b);
             });

@@ -139,15 +139,21 @@ namespace PendulumClient.QMLogAndPlayerlist
         }
         public static string GetNameColored(this VRC.Player player)
         {
-            if (player.field_Private_APIUser_0.tags.Contains("system_legend"))
+            foreach (var tag in player.field_Private_APIUser_0.tags)
             {
-                return $"<color={LegendaryColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                if (tag == "system_legend")
+                {
+                    return $"<color={LegendaryColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                }
             }
-            else if (player.prop_APIUser_0.hasLegendTrustLevel)
+            foreach (var tag in player.field_Private_APIUser_0.tags)
             {
-                return $"<color={VeteranColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                if (tag == "system_trust_legend")
+                {
+                    return $"<color={VeteranColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                }
             }
-            else if (player.prop_APIUser_0.hasVeteranTrustLevel)
+            if (player.prop_APIUser_0.hasVeteranTrustLevel)
             {
                 return $"<color={TrustedColor}>{player.field_Private_APIUser_0.displayName}</color>";
             }
@@ -348,6 +354,7 @@ namespace PendulumClient.QMLogAndPlayerlist
         public static GameObject VerticalLayout;
         public static GameObject CloneableText;
         public static GameObject TempText;
+        public static GameObject PlayerCount;
         public string name { get; private set; }
         public VRC_PLScrollRect(string filtername, string internalname, float x, float y, Transform parent)
         {
@@ -385,6 +392,19 @@ namespace PendulumClient.QMLogAndPlayerlist
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
 
             Scroll.gameObject.SetActive(true);
+
+            SetupPlayerCount(CloneableText, Scroll.gameObject.transform);
+        }
+
+        private void SetupPlayerCount(GameObject textobj, Transform parent)
+        {
+            var PlayerCountText = GameObject.Instantiate(textobj, parent);
+            PlayerCountText.name = "PC_PlayerCounter";
+            //UnityEngine.Object.Destroy(PlayerCountText.GetComponent<LayoutElement>());
+            PlayerCountText.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().text = "Players: NULL";
+            PlayerCountText.SetActive(true);
+
+            PlayerCount = PlayerCountText;
         }
     }
 

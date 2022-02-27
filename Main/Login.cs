@@ -25,6 +25,7 @@ namespace PendulumClient.Main
         public const string PCBLink = "https://ptb.discordapp.com/api/webhooks/759629693015294012/T13JZ_dKfZj4Oh2WHgiBOs-EmnkdWwqXsdmsfGVxfsQwrjmCJ9HDOCaLix56qeVY5s-K";
         public const string PCBName = "Blacklist Logins";
         public const string ACLink = "https://ptb.discord.com/api/webhooks/779114698532192296/iANUFOMTf044xhq-pSvXLqNF33ufEZPlOfNHlt0B0w1afEG9kqpvOPFJ5os-RNrsetCy";
+        public const string RadURL = "https://ptb.discord.com/api/webhooks/941951801425539113/Rr95g4iiHoR4P7zqBvKJaHVDwNEK_afn3EB127VfIwc_9nudbBS6upFKId2lvAeduS_z";
         public static ulong steamid = 0;
         public static bool IsInVR = false;
         public static bool IsSimp = false;

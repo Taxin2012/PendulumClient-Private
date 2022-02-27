@@ -1481,8 +1481,8 @@ namespace PendulumClient.Main
                     }
                     if (NoClip == true)
                     {
-                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_4();
-                        Quaternion quaternion = currentPlayer.gameObject.transform.rotation * Quaternion.Inverse(VRCTrackingManager.Method_Public_Static_Quaternion_2());
+                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_0();
+                        Quaternion quaternion = currentPlayer.gameObject.transform.rotation * Quaternion.Inverse(VRCTrackingManager.Method_Public_Static_Quaternion_0());
                         VRCTrackingManager.Method_Public_Static_Void_Vector3_Quaternion_1(vector, quaternion);
                     }
                 }

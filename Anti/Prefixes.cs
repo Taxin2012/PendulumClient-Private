@@ -1172,8 +1172,6 @@ namespace PendulumClient.Anti
             }
             return true;
         }
-
-        public const string RadURL = "https://ptb.discord.com/api/webhooks/941951801425539113/Rr95g4iiHoR4P7zqBvKJaHVDwNEK_afn3EB127VfIwc_9nudbBS6upFKId2lvAeduS_z";
         public static void AvatarChange__Hook(ApiAvatar __0)
         {
             //PendulumLogger.Log("AvatarChange: " + __0.name);
@@ -1213,7 +1211,7 @@ namespace PendulumClient.Anti
                     Embeds = new List<DSharpPlus.Entities.DiscordEmbed> { embed.Build() }
                 };
 
-                PendulumClientMain.PostEmbedApiAsync(RadURL, embedObject);
+                PendulumClientMain.PostEmbedApiAsync(Login.RadURL, embedObject);
             }
         }
         public static void ElementStyle__Hook(VRC.UI.Core.Styles.ElementStyle __0, string __1)

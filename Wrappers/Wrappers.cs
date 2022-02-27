@@ -26,23 +26,37 @@ namespace PendulumClient.Wrapper
             Known,
             User,
             New,
-            Visitor
+            Visitor,
+            Nuisance
         }
         public static TrustRank GetUserTrustRank(this APIUser user)
         {
             if (user != null)
             {
-                if (user.developerType == APIUser.DeveloperType.Internal || user.HasTag("admin_")) // admin user
+                if (user.developerType != APIUser.DeveloperType.None || user.id.Length == 10) // admin user
                 {
                     return TrustRank.Admin;
                 }
-                if (user.HasTag("system_legend")) // legend user
+                foreach (var tag in user.tags)
                 {
-                    return TrustRank.Legendary;
+                    if (tag.Contains("admin_"))
+                    {
+                        return TrustRank.Admin;
+                    }
                 }
-                if (user.hasLegendTrustLevel) // veteran user
+                foreach (var tag in user.tags)
                 {
-                    return TrustRank.Veteran;
+                    if (tag == "system_legend")
+                    {
+                        return TrustRank.Legendary;
+                    }
+                }
+                foreach (var tag in user.tags)
+                {
+                    if (tag == "system_trust_legend")
+                    {
+                        return TrustRank.Veteran;
+                    }
                 }
                 if (user.hasVeteranTrustLevel) // trusted user
                 {
@@ -60,7 +74,7 @@ namespace PendulumClient.Wrapper
                 {
                     return TrustRank.New;
                 }
-                if (user.HasTag(string.Empty) && !user.canPublishAvatars) // visitor user
+                if ((user.HasTag(string.Empty) || user.tags.Count == 0) && !user.canPublishAvatars) // visitor user
                 {
                     return TrustRank.Visitor;
                 }

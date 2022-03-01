@@ -623,6 +623,12 @@ namespace PendulumClient.Anti
             public static bool AntiBlock = true;
         public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
         {
+            if (__0.Code == 9 && Anti9)
+            {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                return false;
+            }
             return true;
 
             if (debugmode && !Directory.Exists("PendulumClient/PhotonLogs"))
@@ -1175,7 +1181,7 @@ namespace PendulumClient.Anti
         public static void AvatarChange__Hook(ApiAvatar __0)
         {
             //PendulumLogger.Log("AvatarChange: " + __0.name);
-            if (__0.authorId == JoinNotifierMod.RadiantSoulUID)
+            if (__0.authorId == JoinNotifierMod.RadiantSoulUID || __0.authorId == JoinNotifierMod.ImRadiantUID)
             {
                 var Name = "Radiant Soul";
                 var color = "#8000FF";//PendulumClientMain.BuildHexColor(); eww dont do this~
@@ -1195,7 +1201,7 @@ namespace PendulumClient.Anti
                     Platform = "Quest Only";
                 }
 
-                embed.WithAuthor("Radiant Soul Avatar Found!", AvatarURL, avatar.imageUrl);
+                embed.WithAuthor(__0.authorName + " Avatar Found!", AvatarURL, avatar.imageUrl);
                 embed.WithColor(PublicColor);
                 embed.WithTimestamp(DateTimeOffset.Now);
                 embed.AddField("Avatar Details:", "Name: " + avatar.name + "\nAssetURL: " + avatar.assetUrl + "\nImageURL: " + avatar.imageUrl + "\nID: " + avatar.id + "\nVersion: " + avatar.version + "\nPlatform: " + Platform);

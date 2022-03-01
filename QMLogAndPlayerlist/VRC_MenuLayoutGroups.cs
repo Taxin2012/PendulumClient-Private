@@ -19,6 +19,7 @@ namespace PendulumClient.QMLogAndPlayerlist
         public const string FriendColor = "#ffd000ff";
         public const string MasterColor = "#ffb300ff";
         public const string HostColor = "#ffb300ff";
+        public const string VRCPlusColor = "#ba8604ff";
         public const string YouColor = "#00ff00ff";
         public const string LegendaryColor = "#004c7fff";
         public const string VeteranColor = "#b2ff00ff";
@@ -77,6 +78,17 @@ namespace PendulumClient.QMLogAndPlayerlist
             if (player.field_Private_VRCPlayerApi_0.isMaster)
             {
                 return $"<color={MasterColor}>[M]</color>";
+            }
+            return "";
+        }
+        public static string IsVRCPlusUser(this VRC.Player player)
+        {
+            foreach (var tag in player.field_Private_APIUser_0.tags)
+            {
+                if (tag == "system_supporter")
+                {
+                    return $"<color={VRCPlusColor}>[+]</color>";
+                }
             }
             return "";
         }
@@ -193,6 +205,7 @@ namespace PendulumClient.QMLogAndPlayerlist
             }
             if (player.IsInstanceHost() != "") output += " " + player.IsInstanceHost();
             if (player.IsInstanceMaster() != "") output += " " + player.IsInstanceMaster();
+            if (player.IsVRCPlusUser() != "") output += " " + player.IsVRCPlusUser();
             if (player.IsSelectedUser() != "") output += " " + player.IsSelectedUser();
             if (player.IsClientUser() != "") output += " " + player.IsClientUser();
             if (player.IsDev() != "") output += " " + player.IsDev();
@@ -217,6 +230,14 @@ namespace PendulumClient.QMLogAndPlayerlist
             }
             catch { }
         }
+        public static void UpdatePlayerCount()
+        {
+            if (VRC_PLScrollRect.PlayerCount == null || VRC_PLScrollRect.QuestCount == null)
+                return;
+
+            VRC_PLScrollRect.PlayerCount_T.text = "Players: " + Wrapper.PlayerWrappers.GetAllPlayers()._size;
+            VRC_PLScrollRect.QuestCount_T.text = "Quest Users: " + Wrapper.PlayerWrappers.GetAllQuestUsers()._size;
+        }
         public static List<GameObject> PlayerListTexts = new List<GameObject>();
         public static System.Collections.IEnumerator PlayerListUpdate()
         {
@@ -231,6 +252,8 @@ namespace PendulumClient.QMLogAndPlayerlist
 
                     try
                     {
+                        UpdatePlayerCount();
+
                         var num = 0;
                         foreach (VRC.Player player in VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0)
                         {
@@ -305,6 +328,8 @@ namespace PendulumClient.QMLogAndPlayerlist
 
                 try
                 {
+                    UpdatePlayerCount();
+
                     var num = 0;
                     foreach (VRC.Player player in VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0)
                     {
@@ -355,6 +380,9 @@ namespace PendulumClient.QMLogAndPlayerlist
         public static GameObject CloneableText;
         public static GameObject TempText;
         public static GameObject PlayerCount;
+        public static GameObject QuestCount;
+        public static TextMeshProUGUI PlayerCount_T;
+        public static TextMeshProUGUI QuestCount_T;
         public string name { get; private set; }
         public VRC_PLScrollRect(string filtername, string internalname, float x, float y, Transform parent)
         {
@@ -393,18 +421,27 @@ namespace PendulumClient.QMLogAndPlayerlist
 
             Scroll.gameObject.SetActive(true);
 
-            SetupPlayerCount(CloneableText, Scroll.gameObject.transform);
+            SetupPlayerCount(CloneableText, parent);
         }
 
         private void SetupPlayerCount(GameObject textobj, Transform parent)
         {
             var PlayerCountText = GameObject.Instantiate(textobj, parent);
             PlayerCountText.name = "PC_PlayerCounter";
-            //UnityEngine.Object.Destroy(PlayerCountText.GetComponent<LayoutElement>());
             PlayerCountText.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().text = "Players: NULL";
+            PlayerCountText.transform.localPosition = new Vector3(594.5f, 600f, 0);
             PlayerCountText.SetActive(true);
 
+            var QuestCountText = GameObject.Instantiate(textobj, parent);
+            QuestCountText.name = "PC_QuestCounter";
+            QuestCountText.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>().text = "Quest Users: NULL";
+            QuestCountText.transform.localPosition = new Vector3(594.5f, 550f, 0);
+            QuestCountText.SetActive(true);
+
             PlayerCount = PlayerCountText;
+            PlayerCount_T = PlayerCountText.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
+            QuestCount = QuestCountText;
+            QuestCount_T = QuestCountText.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
         }
     }
 

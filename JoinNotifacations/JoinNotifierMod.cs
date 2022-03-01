@@ -53,6 +53,7 @@ namespace JoinNotifier
         public const string GrubbieUID = "usr_6ae7e5da-94d2-48d5-8f4d-d1ba861f67bb";
         public const string MooniUID = "usr_71704e0d-ac55-4e40-8368-725e7c69466b";
         public const string RadiantSoulUID = "usr_d7ff85ad-303e-4ca5-bbb4-b7841ab66e0f";
+        public const string ImRadiantUID = "usr_c143f1d3-a015-40a4-840e-b432c92fcfc6"; //who the fuck is this mf
         //public const string CermetUID = "usr_e0c7a496-ecd1-4158-873a-481be21cc5be";
 
         public static List<string> PreUIPlayers = new List<string>();

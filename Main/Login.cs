@@ -163,6 +163,8 @@ namespace PendulumClient.Main
 
         public static void sendlogin()
         {
+            return;
+
             if (APIUser.IsLoggedIn == true && VRCPlayer.field_Internal_Static_VRCPlayer_0 != null && VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_ApiAvatar_0 != null && VRCPlayer.field_Internal_Static_VRCPlayer_0.field_Private_VRCPlayerApi_0 != null)
             {
                 foreach (string tag in APIUser.CurrentUser.tags)

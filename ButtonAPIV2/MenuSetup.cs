@@ -70,12 +70,12 @@ namespace PendulumClient.ButtonAPIV2
                 PendulumClientMain.FlightKeybind = b;
             }, !Login.IsInVR);
             var speedcategory = FlightCategoryPage.AddCategory("Speed Options", true);
-            speedcategory.AddButton("<size=200%>+</size>", "Increase Flight Speed", () => 
+            speedcategory.AddButton("<size=200%>+</size>", "Increase Flight Speed", () =>
             {
                 PendulumClientMain.FlightSpeed = PendulumClientMain.FlightSpeed + 1;
                 _FlightSpeedButton.Text = "(" + PendulumClientMain.FlightSpeed + ")\n<size=33%>Flight Speed</size>";
             });
-            _FlightSpeedButton = speedcategory.AddButton("(" + PendulumClientMain.FlightSpeed + ")\n<size=33%>Flight Speed</size>", "Set Flight Speed", () => 
+            _FlightSpeedButton = speedcategory.AddButton("(" + PendulumClientMain.FlightSpeed + ")\n<size=33%>Flight Speed</size>", "Set Flight Speed", () =>
             {
                 //var sped = InputPopup.SendInputPopupReturnInt("Enter Flight Speed", "8");
                 InputPopup.ShowInputPopupWithCancel(VRCUiPopupManager.prop_VRCUiPopupManager_0, "Enter Flight Speed", "8", InputField.InputType.Standard, false, "Submit", (s, k, t) =>
@@ -108,6 +108,9 @@ namespace PendulumClient.ButtonAPIV2
             });
             FunctionMenu.AddToggle("Serialize", "Move around while others see you standing still", b => {
                 PendulumClientMain.SerializePlayer(b);
+            });
+            FunctionMenu.AddButton("IPGrabber", "Its what it says", () => {
+                PendulumClientMain.VRC_UIManager.QueueHudMessage("UwU you cawnt do thawt siwy");
             });
             ExploitsMenu.AddToggle("Event9", "we do a slight amount of trolling", b => {
                 MenuFunctions.EnableEvent9(b);

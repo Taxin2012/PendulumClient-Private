@@ -561,7 +561,7 @@ namespace JoinNotifier
                 if (!HasLocalPlayerLoaded)
                 {
                     HasLocalPlayerLoaded = true;
-                    PLUpdate = MelonCoroutines.Start(PendulumClient.QMLogAndPlayerlist.PlayerlistV2.PlayerListUpdate());
+                    PLUpdate = MelonCoroutines.Start(PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate());
                 }
             }
 
@@ -1202,7 +1202,7 @@ namespace JoinNotifier
 
             //PendulumClientMain.UpdatePlayerList();
 
-            PendulumClient.QMLogAndPlayerlist.PlayerlistV2.PlayerListUpdate1Time();
+            PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate1Time();
 
             if (false)//player.prop_APIUser_0.id == APIUser.CurrentUser.id)//(player.gameObject.transform.Find("Player Nameplate"))
             {
@@ -1292,7 +1292,7 @@ namespace JoinNotifier
             }
             if (LeftPlayer.id == APIUser.CurrentUser.id) { if (PLUpdate != null) { MelonCoroutines.Stop(PLUpdate); } HasLocalPlayerLoaded = false; return; }
             //PendulumClientMain.UpdatePlayerList();
-            PendulumClient.QMLogAndPlayerlist.PlayerlistV2.PlayerListUpdate1Time();
+            PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate1Time();
             if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
             if (Environment.TickCount - myLastLevelLoad < 5_000) return;
             var playerName = player.prop_APIUser_0.displayName ?? "!null!";

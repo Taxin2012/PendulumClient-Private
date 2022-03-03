@@ -1211,7 +1211,7 @@ namespace PendulumClient.Main
                             MenuSetup.SetupMenu(VRC_UIManager, sprite);
                             try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { } //we dont know if they have the panel pinned so try anyway idgaf to check theres no point
                             SetupDebugPanelNextThread = true; //ancient thread delay system
-                            QMLogAndPlayerlist.QM_PlayerListV2.OnUI();
+                            QMLogAndPlayerlist.QM_PlayerListAndDebugLog.OnUI();
                             UIColorsSetup = true;
                             PendulumLogger.Log("UI Recolored");
                             if (QMOpenedFromCode)
@@ -1234,7 +1234,7 @@ namespace PendulumClient.Main
                             MenuSetup.SetupMenu(VRC_UIManager, sprite);
                             try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { }
                             SetupDebugPanelNextThread = true;
-                            QMLogAndPlayerlist.QM_PlayerListV2.OnUI();
+                            QMLogAndPlayerlist.QM_PlayerListAndDebugLog.OnUI();
                             UIColorsSetup = true;
                             PendulumLogger.Log("UI Recolored");
                             if (QMOpenedFromCode)

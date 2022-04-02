@@ -534,7 +534,7 @@ namespace PendulumClient.Main
             {
                 PendulumLogger.LogErrorSevere("Failed to check MelonLoader Version");
             }
-            if (CalculateMD5() != bsmd5)
+            if (false)//CalculateMD5() != bsmd5)
             {
                 PendulumLogger.Error("Invalid MelonLoader Version");
                 Process.GetCurrentProcess().Kill();
@@ -815,6 +815,7 @@ namespace PendulumClient.Main
 
             if (!APIUser.IsLoggedIn && (LoggedIn == true || BlacklistFinalLoad == true))
             {
+                Prefixes.Quest_HasBeenUnpatched = false;
                 LoggedIn = false;
                 BlacklistFinalLoad = false;
                 BlacklistLoadOnce = false;
@@ -1002,7 +1003,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(16);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(16);
                 }
                 catch { }
             }
@@ -1010,7 +1011,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(40);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(40);
                 }
                 catch { }
             }
@@ -1018,7 +1019,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(3);
                 }
                 catch { }
             }
@@ -1026,7 +1027,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(5);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(5);
                 }
                 catch { }
             }
@@ -1481,7 +1482,7 @@ namespace PendulumClient.Main
                     }
                     if (NoClip == true)
                     {
-                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_2();
+                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_1();
                         Quaternion quaternion = currentPlayer.gameObject.transform.rotation * Quaternion.Inverse(VRCTrackingManager.Method_Public_Static_Quaternion_2());
                         VRCTrackingManager.Method_Public_Static_Void_Vector3_Quaternion_1(vector, quaternion);
                     }
@@ -2463,10 +2464,10 @@ namespace PendulumClient.Main
             //var ModOrg13 = typeof(ModerationManager.ObjectNPrivateSealedApVoBomAp0).GetMethod(ModMethod13);
             //var ModOrg14 = typeof(ModerationManager.ObjectNPrivateSealedIE1ApLiVo1ApBotmm0).GetMethod(ModMethod14);
             //var ModOrg15 = typeof(ModerationManager.ObjectNPrivateSealedIE1ApLiVo1ApBotmm0).GetMethod(ModMethod15);
-            var ModOrg16 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod16);
-            var ModOrg17 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod17);
-            var ModOrg18 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod18);
-            var ModOrg19 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod19);
+            //var ModOrg16 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod16);
+            //var ModOrg17 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod17);
+            //var ModOrg18 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod18);
+            //var ModOrg19 = typeof(ModerationManager.ObjectNPrivateSealedObAcUnique).GetMethod(ModMethod19);
 
             var falseprefix = typeof(Prefixes).GetMethods().Where(m => m.GetParameters().Count() == 0).First();
             var CustomRPCPrefix = typeof(Prefixes).GetMethod(EventPatch);
@@ -2968,9 +2969,35 @@ namespace PendulumClient.Main
             ExitButton.GetComponent<BoxCollider>().bounds.Expand(1f);
         }
 
+        public static bool GoHomeOnRestart = true;
         public static void ForceRestart()
         {
-            GoHome();
+            if (GoHomeOnRestart)
+            {
+                try
+                {
+                    GoHome();
+                }
+                catch { }
+                MelonCoroutines.Start(ForceRestartEnum());
+            }
+            else
+            {
+                try
+                {
+                    Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", Environment.CommandLine.ToString());
+                }
+                catch (Exception)
+                {
+                    new Exception();
+                }
+                Process.GetCurrentProcess().Kill();
+            }
+        }
+
+        public static IEnumerator ForceRestartEnum()
+        {
+            yield return new WaitForSecondsRealtime(0.5f);
             try
             {
                 Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", Environment.CommandLine.ToString());
@@ -2980,6 +3007,7 @@ namespace PendulumClient.Main
                 new Exception();
             }
             Process.GetCurrentProcess().Kill();
+            yield break;
         }
 
         private static VRC_EventHandler bruhhandler;

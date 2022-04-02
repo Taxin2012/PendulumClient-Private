@@ -177,7 +177,7 @@ namespace JoinNotifier
             while (ReferenceEquals(NetworkManager.field_Internal_Static_NetworkManager_0, null)) yield return null;
             while (ReferenceEquals(VRCAudioManager.field_Private_Static_VRCAudioManager_0, null)) yield return null;
             while (ReferenceEquals(VRCUiManager.field_Private_Static_VRCUiManager_0, null)) yield return null;
-            GameObject.Find("UserInterface/PlayerDisplay/BlackFade").GetComponent<VRCUiBackgroundFade>().field_Public_Boolean_0 = false;
+            GameObject.Find("UserInterface/PlayerDisplay/BlackFade/inverted_sphere").SetActive(false);//GameObject.Find("UserInterface/PlayerDisplay/BlackFade").GetComponent<VRCUiBackgroundFade>().field_Public_Boolean_0 = false;
 
             //while (ReferenceEquals(PlayerManager.field_Private_Static_PlayerManager_0, null)) yield return null;
             //while (ReferenceEquals(PendulumClientMain.LogoButtonSetup, false)) yield return null;
@@ -1204,6 +1204,8 @@ namespace JoinNotifier
 
             PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate1Time();
 
+            PendulumClient.QMLogAndPlayerlist.DebugLogFunctions.DebugLogPlayerJoin(JoinedPlayer.displayName);
+
             if (false)//player.prop_APIUser_0.id == APIUser.CurrentUser.id)//(player.gameObject.transform.Find("Player Nameplate"))
             {
                 var nameplate = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Dev Circle");
@@ -1282,14 +1284,15 @@ namespace JoinNotifier
             {
                 PendulumLogger.LeaveLog(LeftPlayer.displayName);
             }
-            if (LeftPlayer.id == PendulumClientMain.StoredUserID)
+            /*if (LeftPlayer.id == PendulumClientMain.StoredUserID)
             {
                 PendulumClientMain.DebugLogPlayerJoinLeave(player, "Left", false);
             }
             else
             {
                 PendulumClientMain.DebugLogPlayerJoinLeave(player, "Left", false);
-            }
+            }*/
+            PendulumClient.QMLogAndPlayerlist.DebugLogFunctions.DebugLogPlayerLeave(LeftPlayer.displayName);
             if (LeftPlayer.id == APIUser.CurrentUser.id) { if (PLUpdate != null) { MelonCoroutines.Stop(PLUpdate); } HasLocalPlayerLoaded = false; return; }
             //PendulumClientMain.UpdatePlayerList();
             PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate1Time();

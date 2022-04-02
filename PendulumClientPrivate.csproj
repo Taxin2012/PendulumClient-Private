@@ -501,7 +501,7 @@
     <Compile Include="Main\PortalDrops.cs" />
     <Compile Include="Main\VRCMod.cs" />
     <Compile Include="Main\YoinkUtils.cs" />
-    <Compile Include="QMLogAndPlayerlist\QM_PlayerListV2.cs" />
+    <Compile Include="QMLogAndPlayerlist\QM_PlayerListAndDebugLog.cs" />
     <Compile Include="QMLogAndPlayerlist\VRC_MenuLayoutGroups.cs" />
     <Compile Include="UI\AlertPopup.cs" />
     <Compile Include="UI\ButtonAPI.cs" />

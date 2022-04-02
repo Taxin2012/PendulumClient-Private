@@ -11,7 +11,7 @@ using System.Reflection;
 using HarmonyLib;
 using UnhollowerRuntimeLib.XrefScans;
 
-using ToggleIcon = MonoBehaviourPublicToAwVoBoVoOnBoVoBoVoUnique;
+using ToggleIcon = MonoBehaviourPublicToAwVoBoVoOnVoBoVoVoUnique;//VRC.UI.Elements.Controls.ToggleIcon;
 
 namespace PendulumClient.UI
 {

@@ -16,9 +16,88 @@ namespace PendulumClient.QMLogAndPlayerlist
         {
             PlayerList = new VRC_PLScrollRect("Right_PL_Closed", "PC_RightWingPlayerList", 2222, 0/*609.902f, 457.9203f*/, GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/Wing_Right/Button").transform);
             DebugLog = new VRC_DebugScrollRect("Left_DL_Closed", "PC_LeftWingDebugLog", -2222, 0/*609.902f, 457.9203f*/, GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/Wing_Left/Button").transform);
+            DebugLogFunctions.DebugLogStartup();
         }
     }
 
+    public static class DebugLogFunctions
+    {
+        public static string TimeColor = ColorModule.ColorModule.ColorToHex(ColorModule.ColorModule.CachedColor);
+
+        public const int MaxLogs = 100;
+        public static List<string> Logs = new List<string>();
+        public static List<GameObject> TextObjects = new List<GameObject>(); //logs are TextObjects[#] 0-99
+        public static void DebugLogStartup()
+        {
+            if (QM_PlayerListAndDebugLog.DebugLog != null)
+            {
+                if (VRC_DebugScrollRect.TempText != null)
+                {
+                    UnityEngine.Object.DestroyImmediate(VRC_DebugScrollRect.TempText);
+                    DebugLog("Welcome to Pendulum Client!");
+                }
+                else
+                {
+                    PendulumLogger.LogErrorSevere("Debug Log Setup Error (2)");
+                }
+            }
+            else
+            {
+                PendulumLogger.LogErrorSevere("Debug Log Setup Error (1)");
+            }
+        }
+
+        public static void DebugLogUpdate(string Input)
+        {
+            if (TextObjects.Count >= MaxLogs)
+            {
+                if (TextObjects.ElementAt(0) != null)
+                {
+                    var TextToDelete = TextObjects.ElementAt(0);
+                    TextObjects.RemoveAt(0);
+                    UnityEngine.Object.DestroyImmediate(TextToDelete);
+                    var NewItem = GameObject.Instantiate(VRC_DebugScrollRect.CloneableText, VRC_DebugScrollRect.VerticalLayout.transform);
+                    NewItem.name = "DebugLogItem";
+                    var Text = NewItem.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
+                    Text.text = Input;
+                    NewItem.transform.SetAsFirstSibling();
+                    TextObjects.Add(NewItem);
+                    NewItem.SetActive(true);
+                }
+            }
+            else
+            {
+                var NewItem = GameObject.Instantiate(VRC_DebugScrollRect.CloneableText, VRC_DebugScrollRect.VerticalLayout.transform);
+                NewItem.name = "DebugLogItem";
+                var Text = NewItem.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
+                Text.text = Input;
+                NewItem.transform.SetAsFirstSibling();
+                TextObjects.Add(NewItem);
+                NewItem.SetActive(true);
+            }
+        }
+
+        public static void DebugLog(string log)
+        {
+            Logs.Add(log);
+            string logwithprefix = $"<color=white>[</color><color={TimeColor}>{DateTime.Now.ToString("h:mm:ss tt")}</color><color=white>]</color> {log}";
+            DebugLogUpdate(logwithprefix);
+        }
+
+        public static void DebugLogPlayerJoin(string name)
+        {
+            //66ff66ff
+            string logwithprefix = $"<color=white>[</color><color={TimeColor}>{DateTime.Now.ToString("h:mm:ss tt")}</color><color=white>]</color> <color=#66ff66ff>{name} has joined.</color>";
+            DebugLogUpdate(logwithprefix);
+        }
+
+        public static void DebugLogPlayerLeave(string name)
+        {
+            //ff6666ff
+            string logwithprefix = $"<color=white>[</color><color={TimeColor}>{DateTime.Now.ToString("h:mm:ss tt")}</color><color=white>]</color> <color=#ff6666ff>{name} has left.</color>";
+            DebugLogUpdate(logwithprefix);
+        }
+    }
     public static class PlayerListFunctions
     {
         public const string QuestColor = "grey";

@@ -1,11 +1,11 @@
 ﻿using LZ4;
-using SevenZip;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using SevenZip.Compression.LZMA;
 
 namespace PendulumClient.AssetUploading
 {
@@ -94,10 +94,10 @@ namespace PendulumClient.AssetUploading
                     using (MemoryStream inStream = new MemoryStream(compressedData))
                     using (MemoryStream outStream = new MemoryStream(UncompressedBlock))
                     {
-                        SevenZip.Compression.LZMA.Decoder lzmaDecoder = new SevenZip.Compression.LZMA.Decoder();
+                        /*SevenZip.Compression.LZMA.Decoder lzmaDecoder = new SevenZip.Compression.LZMA.Decoder();
 
                         lzmaDecoder.SetDecoderProperties(DecoderProperties);
-                        lzmaDecoder.Code(inStream, outStream, block.CompressedSize, block.UncompressedSize, null);
+                        lzmaDecoder.Code(inStream, outStream, block.CompressedSize, block.UncompressedSize, null); might have to fix this eventually?*/
                     }
                 }
                 else if (block.Compression == CompressionType.LZ4HC)

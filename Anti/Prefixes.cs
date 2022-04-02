@@ -1262,7 +1262,7 @@ namespace PendulumClient.Anti
             return true;
         }
 
-        public static bool QuestMode = true;
+        public static bool QuestMode = false; //QuestSpoofToggle
         public static bool Quest_HasBeenUnpatched = false;
         public static void QuestPatch(ref string __result)
         {

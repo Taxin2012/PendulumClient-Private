@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-using ToggleIcon = MonoBehaviourPublicToAwVoBoVoOnBoVoBoVoUnique;//VRC.UI.Elements.Controls.ToggleIcon;
+using ToggleIcon = MonoBehaviourPublicToAwVoBoVoOnVoBoVoVoUnique;//VRC.UI.Elements.Controls.ToggleIcon;
 
 namespace PendulumClient.ButtonAPIV2
 {

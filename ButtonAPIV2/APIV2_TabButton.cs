@@ -26,9 +26,9 @@ namespace PendulumClient.ButtonAPIV2
 
         protected APIV2_TabButton(string name, string tooltip, string pageName, Sprite sprite) : base(TabButtonPrefab, TabButtonPrefab.transform.parent, $"Page_{name}")
         {
-            if (GameObject.GetComponent<MonoBehaviourPublicIPointerClickHandlerIEventSystemHandlerVoPoVoOnPoVoPoVoPoVoUnique>() != null)
+            if (GameObject.GetComponent<MonoBehaviourPublicIPointerClickHandlerIEventSystemHandlerVoPoOnVoPoVoPoVoPoVo0>() != null)
             {
-                UnityEngine.Object.DestroyImmediate(GameObject.GetComponent<MonoBehaviourPublicIPointerClickHandlerIEventSystemHandlerVoPoVoOnPoVoPoVoPoVoUnique>()); //double click camera
+                UnityEngine.Object.DestroyImmediate(GameObject.GetComponent<MonoBehaviourPublicIPointerClickHandlerIEventSystemHandlerVoPoOnVoPoVoPoVoPoVo0>()); //double click camera
             }
 
             var menuTab = GameObject.transform.GetComponent<MenuTab>();

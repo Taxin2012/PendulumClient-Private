@@ -73,6 +73,7 @@ using HttpClient = System.Net.Http.HttpClient;
 using System.Security.Cryptography;
 using Transmtn;
 using BestHTTP;
+using PendulumClient.ReModAPI;
 
 using VRCWebSocketsManager = MonoBehaviourPublicObApAcApStAcBoStBoObUnique;
 
@@ -295,6 +296,11 @@ namespace PendulumClient.Main
         public static bool is373 = false;
         public static Sprite DevCircleIcon = null;
 
+        public static AvatarSearch _avatarSearchInstance = null;
+
+        public unsafe delegate IntPtr AttemptAvatarDownloadDelegate(IntPtr hiddenValueTypeReturn, IntPtr thisPtr, IntPtr apiAvatarPtr, IntPtr multicastDelegatePtr, bool idfk, IntPtr nativeMethodInfo);
+        public static AttemptAvatarDownloadDelegate dgAttemptAvatarDownload;
+
         private static System.Random _random = new System.Random();
 
         public static HarmonyLib.Harmony _harmonyInstance;
@@ -493,6 +499,7 @@ namespace PendulumClient.Main
             {
                 ColorModule.ColorModule.CachedColor = new Color(ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorR), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorG), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorB), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorA));
             }
+            _avatarSearchInstance = new AvatarSearch();
         }
 
         public static void LogBootMD5()
@@ -759,7 +766,7 @@ namespace PendulumClient.Main
             {
                 y.OnUpdate();
             });
-
+            _avatarSearchInstance.OnUpdate();
             if (UiManagerInit1 == false)
             {
                 if (UiManagerInit3 == false)
@@ -1027,7 +1034,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(5);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_2(5);
                 }
                 catch { }
             }
@@ -1762,6 +1769,7 @@ namespace PendulumClient.Main
             var MenuStyle = ModPrefs.GetInt("PendulumClient", "MenuStyle");
             bool AnitPortalDefaultEnabled = ModPrefs.GetBool("PendulumClient", "AntiPortal");
             ForceRestartButton();
+            _avatarSearchInstance.OnUiEarly();
             //ColorModuleV2.CMV2_ColorModule.ExtraStuff();
 
             UiManagerInitEarly = true;
@@ -2442,6 +2450,10 @@ namespace PendulumClient.Main
             var Hook21 = typeof(VRC.UI.Elements.QuickMenu).GetMethod(nameof(VRC.UI.Elements.QuickMenu.Start));
             var Hook21Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.OnQMAwake));
 
+            var Hook22 = typeof(AssetBundleDownloadManager).GetMethod(nameof(AssetBundleDownloadManager.Method_Internal_UniTask_1_InterfacePublicAbstractIDisposableGaObGaUnique_ApiAvatar_MulticastDelegateNInternalSealedVoUnUnique_Boolean_0));
+            //var Hook22v2 = typeof(AssetBundleDownloadManager).GetMethod(nameof(AssetBundleDownloadManager.Method_Internal_Void_ApiAvatar_1));
+            //var Hook22Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.DownloadAvatarPatch));
+
             //var AudioOnEndHook = typeof(AudioSource).GetMethod("get_" + nameof(AudioSource.isPlaying));
             var AudioOnEndHook = typeof(AudioSource).GetMethods().Where(mi => mi.GetParameters().Length == 0 && mi.Name == "Stop").First();
             var AudioOnEndPatch = typeof(Prefixes).GetMethod("patch__AudioSourceOnEnd");
@@ -2550,6 +2562,10 @@ namespace PendulumClient.Main
             }*/
             instance.Patch(Hook20, null, new HarmonyMethod(Hook20Patch));
             instance.Patch(Hook21, null, new HarmonyMethod(Hook21Patch));
+
+            //instance.Patch(Hook22, new HarmonyMethod(Hook22Patch));
+
+            //instance.Patch(Hook22v2, new HarmonyMethod(Hook22Patch));
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
             instance.Patch(Hook1, new HarmonyMethod(Hook1Patch), null, null);
@@ -2569,6 +2585,28 @@ namespace PendulumClient.Main
             {
                 if (!string.IsNullOrEmpty(method.Name) && !method.Name.ToLower().Contains("get_") && !method.Name.ToLower().Contains("set_")) PendulumLogger.Log(ConsoleColor.DarkGray, "[Harmony] Patched Method: {0}", method.Name);
             }
+
+            try
+            {
+                unsafe
+                {
+                    var originalMethodPointer = *(IntPtr*)(IntPtr)UnhollowerUtils
+                        .GetIl2CppMethodInfoPointerFieldForGeneratedMethod(typeof(AssetBundleDownloadManager).GetMethod(
+                            nameof(AssetBundleDownloadManager.Method_Internal_UniTask_1_InterfacePublicAbstractIDisposableGaObGaUnique_ApiAvatar_MulticastDelegateNInternalSealedVoUnUnique_Boolean_0)))
+                        .GetValue(null);
+
+                    MelonUtils.NativeHookAttach((IntPtr)(&originalMethodPointer), typeof(Prefixes).GetMethod(nameof(Prefixes.DownloadAvatarPatch), BindingFlags.Static | BindingFlags.Public).MethodHandle.GetFunctionPointer());
+
+                    dgAttemptAvatarDownload = Marshal.GetDelegateForFunctionPointer<AttemptAvatarDownloadDelegate>(originalMethodPointer);
+                    //PendulumLogger.Log(ConsoleColor.Green, $"Successfully able to hook AssetBundleDownLoadManager");
+                    PendulumLogger.Log(ConsoleColor.DarkGray, "[Harmony] Patched Method: {0}", "AssetBundleDownloadManager.Method_Internal_UniTask_1_InterfacePublicAbstractIDisposableGaObGaUnique_ApiAvatar_MulticastDelegateNInternalSealedVoUnUnique_Boolean_0");
+                }
+            }
+            catch (Exception e)
+            {
+                PendulumLogger.LogErrorSevere("Unable to hook AssetBundleDownloadManager: " + e.ToString());
+            }
+
             PendulumLogger.Log(ConsoleColor.Green, "[Harmony] Patched Harmony Instance!");
 
             if (FirstTimeinit == true && LogoDataDownloaded == true)
@@ -3538,7 +3576,7 @@ namespace PendulumClient.Main
                 {
                     if (found_player._vrcplayer.prop_ApiAvatar_0.releaseStatus != "private")
                     {
-                        VRC.Core.API.SendRequest($"avatars/{avi}", BestHTTP.HTTPMethods.Get, new ApiModelContainer<ApiAvatar>(), null, true, false, 3600f, 2, null);
+                        //VRC.Core.API.SendRequest($"avatars/{avi}", BestHTTP.HTTPMethods.Get, new ApiModelContainer<ApiAvatar>(), null, true, false, 3600f, 2, null);
 
 
                         ChangeToAvatar(avi);
@@ -3688,7 +3726,7 @@ namespace PendulumClient.Main
 
             if (avi.releaseStatus != "private")
             {
-                VRC.Core.API.SendRequest($"avatars/{avi.id}", BestHTTP.HTTPMethods.Get, new ApiModelContainer<ApiAvatar>(), null, true, false, 3600f, 2, null);
+                //VRC.Core.API.SendRequest($"avatars/{avi.id}", BestHTTP.HTTPMethods.Get, new ApiModelContainer<ApiAvatar>(), null, true, false, 3600f, 2, null);
 
                 ChangeToAvatar(avi.id);
                 AlertPopup.SendAlertPopup("Cloned Avatar!\n" + avi.name);
@@ -3720,16 +3758,13 @@ namespace PendulumClient.Main
                 }
             }.ChangeToSelectedAvatar();*/
             PageAvatar component = GameObject.Find("Screens").transform.Find("Avatar").GetComponent<PageAvatar>();
-            component.field_Public_SimpleAvatarPedestal_0.field_Internal_ApiAvatar_0 = new ApiAvatar
+            component.field_Public_SimpleAvatarPedestal_0.field_Internal_ApiAvatar_0 = new ApiAvatar { id = AvatarID };
+            /*component.field_Public_SimpleAvatarPedestal_0.Refresh(new ApiAvatar
             {
                 id = AvatarID
-            };
-            component.field_Public_SimpleAvatarPedestal_0.Refresh(new ApiAvatar
-            {
-                id = AvatarID
-            });
+            });*/
             component.ChangeToSelectedAvatar();
-            CloseMenu();
+            //CloseMenu();
         }
 
         public static void TpPlayerRPC(Vector3 pos, Quaternion rot, Player player)

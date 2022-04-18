@@ -650,35 +650,60 @@ namespace PendulumClient.ColorModuleV2
                 gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle/Panel").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/InputKeypadPopup/InputField").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/StandardPopupV2/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/StandardPopupV2/Popup/BorderImage").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
+                //gameObject.transform.Find("Popups/StandardPopupV2/Popup/BorderImage").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
                 gameObject.transform.Find("Popups/InputPopup/InputField").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/StandardPopup/Rectangle").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
                 gameObject.transform.Find("Popups/StandardPopup/MidRing").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/StandardPopup/InnerDashRing").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/StandardPopup/RingGlow").GetComponent<Image>().color = Color.white;
                 gameObject.transform.Find("Popups/UpdateStatusPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/UpdateStatusPopup/Popup/BorderImage").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
+                //gameObject.transform.Find("Popups/UpdateStatusPopup/Popup/BorderImage").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
                 gameObject.transform.Find("Popups/UpdateStatusPopup/Popup/InputFieldStatus").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/AdvancedSettingsPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/AdvancedSettingsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/AdvancedSettingsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/AddToPlaylistPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/AddToPlaylistPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/AddToPlaylistPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/BookmarkFriendPopup/Popup/Panel (2)").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/BookmarkFriendPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/BookmarkFriendPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/EditPlaylistPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/EditPlaylistPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+               // gameObject.transform.Find("Popups/EditPlaylistPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/PerformanceSettingsPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/PerformanceSettingsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
-                gameObject.transform.Find("Popups/AlertPopup/Lighter").GetComponent<Image>().color = color;
+                //gameObject.transform.Find("Popups/PerformanceSettingsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/AlertPopup/Lighter").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/RoomInstancePopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/RoomInstancePopup/Popup/BorderImage").GetComponent<Image>().color = color2;
-                gameObject.transform.Find("Popups/RoomInstancePopup/Popup/BorderImage (1)").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/RoomInstancePopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/RoomInstancePopup/Popup/BorderImage (1)").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/ReportWorldPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/ReportWorldPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/ReportWorldPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/ReportUserPopup/Popup/Panel").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/ReportUserPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/ReportUserPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
                 gameObject.transform.Find("Popups/SearchOptionsPopup/Popup/Panel (1)").GetComponent<Image>().color = color;
-                gameObject.transform.Find("Popups/SearchOptionsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+                //gameObject.transform.Find("Popups/SearchOptionsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
+
+                var newList = gameObject.transform.Find("Popups").GetComponentsInChildren<Image>(true);
+
+                Color borderimagecolor = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
+                foreach (Image image in newList)
+                {
+                    if (image != null && image.gameObject != null && image.sprite != null)
+                    {
+                        if (image.gameObject.name.Contains("BorderImage"))
+                        {
+                            var bordersprite = CMV2_SpriteUtil.GetGrayscaledSprite(image.sprite, true);
+                            image.sprite = bordersprite;
+                            image.color = borderimagecolor;
+                        }
+                        if (image.transform.parent != null)
+                        {
+                            if (image.transform.parent.name.Contains("Checkbox"))
+                            {
+                                var checkboxsprite = CMV2_SpriteUtil.GetGrayscaledSprite(image.sprite, true);
+                                image.sprite = checkboxsprite;
+                                image.color = color;
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {

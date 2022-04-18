@@ -127,7 +127,7 @@ namespace PendulumClient.ButtonAPIV2
             ExploitsMenu.AddButton("big uspeak", "deez", () => 
             {
                 //MelonCoroutines.Start(MenuFunctions.BigUSpeak());
-                byte[] VoiceData = Convert.FromBase64String("AgAAAKWkyYm7hjsA+H3owFygUv4w5B67lcSx14zff9FCPADiNbSwYWgE+O7DrSy5tkRecs21ljjofvebe6xsYlA4cVmgrd0=");
+                byte[] VoiceData = Convert.FromBase64String("AAAAAAAAAAC7hjsA+H3owFygUv4w5B67lcSx14zff9FCPADiNbSwYWgE+O7Dhiy5tkRecs21ljjofvebe6xsYlA4cVmght0=");
 				byte[] nulldata = new byte[4];
 				byte[] ServerTime = BitConverter.GetBytes(VRC.SDKBase.Networking.GetServerTimeInMilliseconds());
 				Buffer.BlockCopy(nulldata, 0, VoiceData, 0, 4);
@@ -180,6 +180,9 @@ namespace PendulumClient.ButtonAPIV2
             });
             ProtectionMenu.AddToggle("Anti Event209", "Block all Code209 Photon Events", b => {
                 Anti.Prefixes.Anti209 = b;
+            });
+            ProtectionMenu.AddToggle("Anti VideoPlayer", "Block all events from VideoPlayers", b => {
+                Anti.Prefixes.AntiVideoPlayer = b;
             });
             ProtectionMenu.AddButton("Delete Portals", "Delete all Portals", () =>
             {

@@ -458,6 +458,7 @@
     <Compile Include="AssetUploading\CompressionType.cs" />
     <Compile Include="ButtonAPIV2\APIV2_ButtonPageInterface.cs" />
     <Compile Include="ButtonAPIV2\APIV2_CategoryPage.cs" />
+    <Compile Include="ButtonAPIV2\APIV2_MainMenuButtons.cs" />
     <Compile Include="ButtonAPIV2\APIV2_MenuButton.cs" />
     <Compile Include="ButtonAPIV2\APIV2_MenuElement.cs" />
     <Compile Include="ButtonAPIV2\APIV2_MenuCategorySetup.cs" />
@@ -476,6 +477,7 @@
     <Compile Include="ColorModuleV2\CMV2_Utils.cs" />
     <Compile Include="ConfigV2\ToggleConfig.cs" />
     <Compile Include="ConfigV2\WingConfig.cs" />
+    <Compile Include="CustomNameplateDetails\NameplateDetails.cs" />
     <Compile Include="Embeds\Entities\DiscordColor.cs" />
     <Compile Include="Embeds\Entities\DiscordEmbed.cs" />
     <Compile Include="Embeds\Entities\DiscordEmbedAuthor.cs" />
@@ -503,6 +505,10 @@
     <Compile Include="Main\YoinkUtils.cs" />
     <Compile Include="QMLogAndPlayerlist\QM_PlayerListAndDebugLog.cs" />
     <Compile Include="QMLogAndPlayerlist\VRC_MenuLayoutGroups.cs" />
+    <Compile Include="ReModAPI\APIClasses.cs" />
+    <Compile Include="ReModAPI\APILogin.cs" />
+    <Compile Include="ReModAPI\AvatarSearch.cs" />
+    <Compile Include="ReModAPI\ReAvatarList.cs" />
     <Compile Include="UI\AlertPopup.cs" />
     <Compile Include="UI\ButtonAPI.cs" />
     <Compile Include="UI\ButtonType.cs" />

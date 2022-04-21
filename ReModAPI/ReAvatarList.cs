@@ -10,6 +10,8 @@ using Object = UnityEngine.Object;
 using System.Linq;
 using UnhollowerRuntimeLib.XrefScans;
 
+using UiAvatarList = MonoBehaviour1PublicObSuStSiHaSi1FaSoObUnique;
+
 namespace ReMod.Core.UI
 {
     public interface IAvatarListOwner
@@ -73,7 +75,7 @@ namespace ReMod.Core.UI
 
             _avatarList = GameObject.GetComponent<UiAvatarList>();
             _avatarList.clearUnseenListOnCollapse = false;
-            _avatarList.field_Public_Category_0 = UiAvatarList.Category.SpecificList;
+            _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLi11Unique_0 = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLi11Unique.SpecificList;
 
             GameObject.transform.SetSiblingIndex(0);
 
@@ -93,20 +95,20 @@ namespace ReMod.Core.UI
             var offset = 0f;
             if (addClearButton)
             {
-                var clearButton = new ReUiButton("Clear", new Vector3(975, 0f), new Vector2(0.3f, 1), () => { _owner.Clear(this); }, expandButton.transform);
+                var clearButton = new ReUiButton("Clear", new Vector3(975, 0f), new Vector2(101.7f, 80f), () => { _owner.Clear(this); }, expandButton.transform);
                 offset = 85f;
             }
 
-            _refreshButton = new ReUiButton("↻", new Vector3(980f - offset, 0f), new Vector2(0.25f, 1), RefreshAvatars, expandButton.transform);
+            _refreshButton = new ReUiButton("↻", new Vector3(980f - offset, 0f), new Vector2(84.75f, 80f), RefreshAvatars, expandButton.transform);
             if (_hasPagination)
             {
-                _nextPageButton = new ReUiButton("→", new Vector2(900f - offset, 0f), new Vector2(0.25f, 1f), () =>
+                _nextPageButton = new ReUiButton("→", new Vector2(900f - offset, 0f), new Vector2(84.75f, 80f), () =>
                 {
                     _currentPage += 1;
                     RefreshAvatars();
                 }, expandButton.transform);
 
-                _prevPageButton = new ReUiButton("←", new Vector2(750f - offset, 0f), new Vector2(0.25f, 1f), () =>
+                _prevPageButton = new ReUiButton("←", new Vector2(750f - offset, 0f), new Vector2(84.75f, 80f), () =>
                 {
                     _currentPage -= 1;
                     RefreshAvatars();
@@ -308,7 +310,7 @@ namespace ReMod.Core.UI
                 Object.DestroyImmediate(t);
             }
 
-            RectTransform.sizeDelta *= scale;
+            RectTransform.sizeDelta = scale;
         }
     }
 

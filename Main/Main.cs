@@ -76,6 +76,8 @@ using BestHTTP;
 using PendulumClient.ReModAPI;
 
 using VRCWebSocketsManager = MonoBehaviourPublicObApAcApStAcBoStBoObUnique;
+using UiUserList = MonoBehaviour1PublicObFaBoTeSiInSiBoHaObUnique;
+using PlayerNameplate = MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique;
 
 namespace PendulumClient.Main
 {
@@ -2384,7 +2386,7 @@ namespace PendulumClient.Main
             var Hook2Patch = typeof(Prefixes).GetMethod(AvatarChangePatch);
             var Hook3 = typeof(VRCPlayer).GetMethod(nameof(VRCPlayer.Awake));//typeof(VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique).GetMethod(nameof(VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique.Invoke));
             var Hook3Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.AvatarLoad__Hook));
-            var Hook4 = typeof(PageUserInfo).GetMethod(nameof(PageUserInfo.Method_Public_Void_APIUser_InfoType_ListType_0));
+            var Hook4 = typeof(PageUserInfo).GetMethod(nameof(PageUserInfo.Method_Public_Void_APIUser_InfoType_EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique_0));
             var Hook4Patch = typeof(Prefixes).GetMethod(UserInfoPatch);
             var Hook5 = typeof(SystemInfo).GetMethod(HWIDMethod);
             var Hook5Patch = typeof(Prefixes).GetMethod(HWIDPatch);
@@ -3400,6 +3402,38 @@ namespace PendulumClient.Main
             yield break;
         }
         public static bool ItemOrbitEnabled = false;
+        public static IEnumerator ItemSpamEnum()
+        {
+            var World_ObjectSyncs = Resources.FindObjectsOfTypeAll<VRC.SDK3.Components.VRCObjectSync>().ToArray().ToList();
+            /*if (World_ObjectSyncs.Count == 0)
+            {
+                World_ObjectSyncs = Resources.FindObjectsOfTypeAll<VRC_Pickup>().ToArray().ToList();
+            }*/
+            for (; ; )
+            {
+                if (!ItemSpamEnabled)
+                {
+                    yield break;
+                }
+                if (PlayerWrappers.GetPlayer(StoredUserID) != null)
+                {
+                    var player = PlayerWrappers.GetPlayer(StoredUserID);
+                    try
+                    {
+                        foreach (VRC.SDK3.Components.VRCObjectSync obj in World_ObjectSyncs)
+                        {
+                            var pos = player.gameObject.transform.Find("AnimationController/HeadAndHandIK/HeadEffector");
+                            Networking.SetOwner(VRCPlayer.field_Internal_Static_VRCPlayer_0._player.field_Private_VRCPlayerApi_0, obj.gameObject);
+                            obj.transform.position = pos.position;
+                        }
+                    }
+                    catch { }
+                }
+                yield return new WaitForSeconds(0.035f);
+            }
+            yield break;
+        }
+        public static bool ItemSpamEnabled = false;
         public static string GetRegion(ApiWorldInstance instance)
         {
             var region = "";
@@ -3647,7 +3681,7 @@ namespace PendulumClient.Main
             camera.StartCoroutine(camera.Method_Private_IEnumerator_Int32_PDM_0(0));
             //Networking.RPC(0, camera.gameObject, "PhotoCapture", new Il2CppSystem.Object[0]);
         }
-        public static void Errormsg(string Title, string Content, float TimeOnScreen = 420f)
+        public static void Errormsg(string Title, string Content, float TimeOnScreen = 420373f)
         {
             VRCUiPopupManager.field_Private_Static_VRCUiPopupManager_0.Method_Public_Void_String_String_Single_0(Title, Content, TimeOnScreen);
         }

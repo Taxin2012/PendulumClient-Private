@@ -690,7 +690,7 @@ namespace JoinNotifier
 
             if (!DevUserIDs.Contains(player.field_Private_APIUser_0.id))
             {
-                if (player._vrcplayer.field_Public_PlayerNameplate_0 != null)
+                if (player._vrcplayer.field_Public_MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique_0 != null)
                 {
                     var textcont = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container").gameObject;
                     var orgname = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container/Name").gameObject;
@@ -728,7 +728,7 @@ namespace JoinNotifier
             }
             else
             {
-                if (player._vrcplayer.field_Public_PlayerNameplate_0 != null)
+                if (player._vrcplayer.field_Public_MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique_0 != null)
                 {
                     var textcont = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container").gameObject;
                     var orgname = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container/Name").gameObject;

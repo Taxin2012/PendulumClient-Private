@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using VRC.UI.Elements.Controls;
 
+using MenuTab = MonoBehaviourPublicStInBoGaObObUnique;
+
 namespace PendulumClient.ButtonAPIV2
 {
     public class APIV2_TabButton : APIV2_MenuElement

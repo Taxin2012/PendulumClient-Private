@@ -9,6 +9,7 @@ using VRC.UI.Elements;
 using VRC.UI.Elements.Menus;
 using Object = UnityEngine.Object;
 
+using LaunchPadQMMenu = MonoBehaviour1PublicBuGaBuGaBuBuBuBuBuBuUnique;
 namespace PendulumClient.ButtonAPIV2
 {
     public class APIV2_CategoryPage : APIV2_MenuElement

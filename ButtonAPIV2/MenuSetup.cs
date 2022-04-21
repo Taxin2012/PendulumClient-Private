@@ -358,6 +358,26 @@ namespace PendulumClient.ButtonAPIV2
                     PendulumClientMain.ItemOrbitEnabled = false;
                 }
             });
+
+            SelectedUserMenu.AddToggle("Item Spam", "Make all items spam their face", b =>
+            {
+                var plr = MenuFunctions.GetSelectedUser();
+                if (plr == null)
+                {
+                    PendulumClientMain.VRC_UIManager.QueueHudMessage("No Selected User Found!");
+                    return;
+                }
+
+                if (b)
+                {
+                    PendulumClientMain.ItemSpamEnabled = true;
+                    MelonCoroutines.Start(PendulumClientMain.ItemSpamEnum());
+                }
+                else
+                {
+                    PendulumClientMain.ItemSpamEnabled = false;
+                }
+            });
         }
     }
 }

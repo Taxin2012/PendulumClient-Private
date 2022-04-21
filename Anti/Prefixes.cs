@@ -23,6 +23,8 @@ using System.Reflection;
 using UnhollowerRuntimeLib;
 using Newtonsoft.Json.Linq;
 
+using UiUserList = MonoBehaviour1PublicObFaBoTeSiInSiBoHaObUnique;
+using PlayerNameplate = MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique;
 using Player = VRC.Player;
 
 namespace PendulumClient.Anti
@@ -756,7 +758,7 @@ namespace PendulumClient.Anti
         }
 
         public static bool AntiBlock = true;
-        public static bool PhotonEvents(ref ExitGames.Client.Photon.EventData __0)
+        public static bool PhotonEvents(ExitGames.Client.Photon.EventData __0)
         {
             if (__0.Code == 9 && Anti9)
             {
@@ -764,8 +766,19 @@ namespace PendulumClient.Anti
                 PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
                 return false;
             }
-            return true;
 
+            if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0 && ButtonAPIV2.MenuFunctions.IsCopyingVoice)
+            {
+                if (__0.Code == 1)
+                {
+                    if (__0.Sender == ButtonAPIV2.MenuFunctions.copyVoice_photonId)
+                    {
+                        PhotonExtensions.OpRaiseEvent(1, __0.CustomData, PhotonExtensions.UnreliableEventOptions, PhotonExtensions.UnreliableOptions);
+                    }
+                }
+            }
+
+            return true;
             if (debugmode && !Directory.Exists("PendulumClient/PhotonLogs"))
             {
                 Directory.CreateDirectory("PendulumClient/PhotonLogs");
@@ -843,50 +856,49 @@ namespace PendulumClient.Anti
                 var bruh2 = __0.Parameters[245];
                 var bruh3 = __0.Parameters[245].ToString();
                 var bruh4 = __0.Parameters[245].ToString().Length;
-            }
-            catch
-            {
-                return false;
-            }
-            if (__0.Code == 9 && Anti9)
-            {
-                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                if (__0.Parameters[245].ToString().Length > 150)
+                if (__0.Code == 9 && Anti9)
                 {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                    if (__0.Parameters[245].ToString().Length > 150)
+                    {
+                        PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                        return false;
+                    }
+                    else
+                    {
+                        PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                        return false;
+                    }
+                }
+                if ((__0.Code == 209 || __0.Code == 210) && Anti209)
+                {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                    if (__0.Parameters[245].ToString().Length > 150)
+                    {
+                        PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                        return false;
+                    }
+                    else
+                    {
+                        PendulumLogger.Log("Blocked Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                        return false;
+                    }
+                }
+                if (__0.Code == 9 && __0.Parameters[245].ToString().Length > 150)
+                {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
                     PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
                     return false;
                 }
-                else
+                if (__0.Code == 209 && __0.Parameters[245].ToString().Length > 150)
                 {
-                    PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-                    return false;
-                }
-            }
-            if ((__0.Code == 209 || __0.Code == 210) && Anti209)
-            {
-                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                if (__0.Parameters[245].ToString().Length > 150)
-                {
+                    var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
                     PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
                     return false;
                 }
-                else
-                {
-                    PendulumLogger.Log("Blocked Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-                    return false;
-                }
             }
-            if (__0.Code == 9 && __0.Parameters[245].ToString().Length > 150)
+            catch
             {
-                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                PendulumLogger.Log("Blocked Long Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-                return false;
-            }
-            if (__0.Code == 209 && __0.Parameters[245].ToString().Length > 150)
-            {
-                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
-                PendulumLogger.Log("Blocked Long Event209 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
-                return false;
             }
             if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0 && ButtonAPIV2.MenuFunctions.IsCopyingVoice)
             {
@@ -1383,7 +1395,7 @@ namespace PendulumClient.Anti
             PendulumClientMain.CheckShaderBlacklist(player._player, avatar);
         }
 
-        public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.ListType __2)
+        public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique __2)
         {
             //PendulumLogger.Log("Selected User: " + __0.displayName);
             var NameText = GameObject.Find("UserInterface/MenuContent/Screens/UserInfo/User Panel/NameText");

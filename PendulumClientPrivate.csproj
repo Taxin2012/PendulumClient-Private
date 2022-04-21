@@ -507,6 +507,7 @@
     <Compile Include="QMLogAndPlayerlist\VRC_MenuLayoutGroups.cs" />
     <Compile Include="ReModAPI\APIClasses.cs" />
     <Compile Include="ReModAPI\APILogin.cs" />
+    <Compile Include="ReModAPI\AvatarFavoriteList.cs" />
     <Compile Include="ReModAPI\AvatarSearch.cs" />
     <Compile Include="ReModAPI\ReAvatarList.cs" />
     <Compile Include="UI\AlertPopup.cs" />

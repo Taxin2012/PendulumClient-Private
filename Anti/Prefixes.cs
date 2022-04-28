@@ -41,6 +41,7 @@ namespace PendulumClient.Anti
         public static bool AntiVideoPlayer = false;
         public static bool BlockPortalCreation = false;
         public static bool FriendOnlyPortal = false;
+        public static bool IsOwner = false;
 
         public static bool patch__false()
         {
@@ -737,9 +738,9 @@ namespace PendulumClient.Anti
                 {
                     var av = AttemptAvatarDownloadContext.apiAvatar;
 
-                    if (debugmode)
+                    if (debugmode || APIUser.CurrentUser?.id == JoinNotifierMod.KyranUID1 || APIUser.CurrentUser?.id == JoinNotifierMod.KyranUID2)
                     {
-                        PendulumLogger.Log($"Downloading avatar: {av.name} ({av.id}) by {av.authorName}");
+                        PendulumLogger.Log($"Downloading avatar: {av.name} ({av.id} - {av.assetUrl}) by {av.authorName}");
                     }
 
                     if (BlockedAvatarList.Contains(av.id))

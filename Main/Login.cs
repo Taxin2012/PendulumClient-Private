@@ -190,6 +190,7 @@ namespace PendulumClient.Main
                 if (VRCPlayer.field_Internal_Static_VRCPlayer_0.prop_ApiAvatar_0.authorId == JoinNotifier.JoinNotifierMod.KyranUID2)
                 {
                     PendulumLogger.Log(ConsoleColor.Green, "AntiSteal Protections Loaded.");
+                    Anti.Prefixes.IsOwner = true;
                     AvatarID = "null";
                 }
                 else

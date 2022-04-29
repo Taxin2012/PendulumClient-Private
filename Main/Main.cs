@@ -337,6 +337,26 @@ namespace PendulumClient.Main
             return text;
         }
 
+        public static void DownloadPCAssetBundle(string version)
+        {
+            FirstTimeinit = true;
+            var DownloadedBundle = new byte[0];
+            try
+            {
+                var uri = new Uri("http://pendulumclient.altervista.org/downloads/logo/logo.assetbundle");
+                HttpClient client = new HttpClient();
+                var response = client.GetAsync(uri).GetAwaiter().GetResult();
+                DownloadedBundle = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
+            }
+            catch
+            {
+                PendulumLogger.LogErrorSevere("Failed to download assetbundle.");
+            }
+            PendulumLogger.Log(ConsoleColor.Green, "Downloaded!");
+            File.WriteAllBytes("PendulumClient/Logo/logo.assetbundle", DownloadedBundle);
+            File.WriteAllText("PendulumClient/Logo/logo_ver.txt", version);
+            LogoDataDownloaded = true;
+        }
         public override unsafe void OnApplicationStart() // Runs after Game Initialization.
         {
             Modules.Add(new JoinNotifierMod());
@@ -382,23 +402,19 @@ namespace PendulumClient.Main
             {
                 PendulumLogger.LogErrorSevere("Failed to check assetbundle version.");
             }
-            var logo_ver = logo_ver_string.Split(":".ToCharArray()[0])[1];
+            var logo_ver = "";
+            try
+            {
+                logo_ver = logo_ver_string.Split(":".ToCharArray()[0])[1];
+            }
+            catch
+            {
+                PendulumLogger.LogErrorSevere("bruh");
+            }
             if (!File.Exists("PendulumClient/Logo/logo.assetbundle"))
             {
                 PendulumLogger.Log("Downloading AssetBundle...");
-                FirstTimeinit = true;
-                WebClient DownloadLogo = new WebClient();
-                var DownloadedBundle = DownloadLogo.DownloadData("http://pendulumclient.altervista.org/downloads/logo/logo.assetbundle");
-                PendulumLogger.Log(ConsoleColor.Green, "Downloaded!");
-                File.WriteAllBytes("PendulumClient/Logo/logo.assetbundle", DownloadedBundle);
-                File.WriteAllText("PendulumClient/Logo/logo_ver.txt", logo_ver_string);
-                if (File.Exists("PendulumClient/Logo/logo.assetbundle"))
-                {
-                    if (File.ReadAllText("PendulumClient/Logo/logo.assetbundle").Length >= 1)
-                    {
-                        LogoDataDownloaded = true;
-                    }
-                }
+                DownloadPCAssetBundle(logo_ver_string);
             }
             else
             {
@@ -412,11 +428,12 @@ namespace PendulumClient.Main
                 //PendulumLogger.Log("LogoVer: " + logo_ver);
                 if (cur_ver != logo_ver)
                 {
-                    PendulumLogger.Log("AssetBundle Update Found!");
+                    PendulumLogger.Log("AssetBundle Update Found! Downloading...");
                     if (File.Exists("PendulumClient/Logo/logo.assetbundle"))
                     {
                         File.Delete("PendulumClient/Logo/logo.assetbundle");
                     }
+                    DownloadPCAssetBundle(logo_ver_string);
                 }
                 else
                 {
@@ -434,20 +451,7 @@ namespace PendulumClient.Main
                 {
                     File.Delete("PendulumClient/Logo/logo.assetbundle");
                 }
-                //PendulumLogger.Log("Downloading AssetBundle...");
-                FirstTimeinit = true;
-                WebClient DownloadLogo = new WebClient();
-                var DownloadedBundle = DownloadLogo.DownloadData("http://pendulumclient.altervista.org/downloads/logo/logo.assetbundle");
-                PendulumLogger.Log(ConsoleColor.Green, "Downloaded!");
-                File.WriteAllBytes("PendulumClient/Logo/logo.assetbundle", DownloadedBundle);
-                File.WriteAllText("PendulumClient/Logo/logo_ver.txt", logo_ver_string);
-                if (File.Exists("PendulumClient/Logo/logo.assetbundle"))
-                {
-                    if (File.ReadAllText("PendulumClient/Logo/logo.assetbundle").Length >= 1)
-                    {
-                        LogoDataDownloaded = true;
-                    }
-                }
+                DownloadPCAssetBundle(logo_ver_string);
             }
             CheckDependencies();
             if (!File.Exists("PendulumClient/SteamID.txt"))
@@ -460,22 +464,7 @@ namespace PendulumClient.Main
 
                 File.WriteAllLines("PendulumClient/SteamID.txt", StringList);
             }
-            if (!File.Exists("PendulumClient/ShaderBlacklist.txt"))
-            {
-                var StringList = new System.Collections.Generic.List<string>()
-                {
-                    "Put shader names/keywords below this line",
-                    "E G G u2018 v1.6",
-                    "E G G u2018",
-                    "Kyran/E G G",
-                    "Kyran/E  G  G",
-                    "starnest",
-                    "crash",
-                    "clap",
-                    "bluescreen"
-                };
-                File.WriteAllLines("PendulumClient/ShaderBlacklist.txt", StringList);
-            }
+            RegenShaderBlacklist();
             if (!File.Exists(AppData))
             {
                 Directory.CreateDirectory(AppData);
@@ -5431,6 +5420,25 @@ namespace PendulumClient.Main
             Errormsg("Moderator Ban", string.Format("You have been banned until {2} {1}, 2025 {0}.\nReason: Community Guidelines Violation\nCommunity Guidelines: www.vrchat.com/community", DateTime.Now.ToString("HH:mm"), DateTime.Now.Day, DateTime.Now.ToString("MMM")));
         }
 
+        public static void RegenShaderBlacklist()
+        {
+            if (!File.Exists("PendulumClient/ShaderBlacklist.txt"))
+            {
+                var StringList = new System.Collections.Generic.List<string>()
+                {
+                    "Put shader names/keywords below this line",
+                    "E G G u2018 v1.6",
+                    "E G G u2018",
+                    "Kyran/E G G",
+                    "Kyran/E  G  G",
+                    "starnest",
+                    "crash",
+                    "clap",
+                    "bluescreen"
+                };
+                File.WriteAllLines("PendulumClient/ShaderBlacklist.txt", StringList);
+            }
+        }
         public static void CheckShaderBlacklist(Player player, GameObject avatar)
         {
             if (File.Exists("PendulumClient/ShaderBlacklist.txt"))
@@ -5494,13 +5502,15 @@ namespace PendulumClient.Main
                 {
                     PendulumLogger.Log("--------------------------");
                     PendulumLogger.Log("Cleaned " + totalmatsremoved + " shaders from " + plrname);
+                    QMLogAndPlayerlist.DebugLogFunctions.DebugLog("Cleaned " + totalmatsremoved + " shaders from " + plrname);
                 }
                 else if (totalmatsremoved == 1)
                 {
                     PendulumLogger.Log("--------------------------");
                     PendulumLogger.Log("Cleaned " + totalmatsremoved + " shader from " + plrname);
+                    QMLogAndPlayerlist.DebugLogFunctions.DebugLog("Cleaned " + totalmatsremoved + " shader from " + plrname);
                 }
-                else
+                else if (Prefixes.debugmode)
                 {
                     PendulumLogger.Log("Cleaned " + totalmatsremoved + " shaders from " + plrname);
                 }
@@ -5509,6 +5519,7 @@ namespace PendulumClient.Main
             else
             {
                 PendulumLogger.Log("bruh whyd u delete the blacklist file :(");
+                RegenShaderBlacklist();
             }
         }
 

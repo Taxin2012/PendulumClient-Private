@@ -1392,7 +1392,10 @@ namespace PendulumClient.Anti
             {
                 return;
             }
-            PendulumLogger.Log("Checking " + player._player.field_Private_APIUser_0.displayName + "\'s avatar for blocked shaders...");
+            if (debugmode)
+            {
+                PendulumLogger.Log("Checking " + player._player.field_Private_APIUser_0.displayName + "\'s avatar for blocked shaders...");
+            }
             PendulumClientMain.CheckShaderBlacklist(player._player, avatar);
         }
 

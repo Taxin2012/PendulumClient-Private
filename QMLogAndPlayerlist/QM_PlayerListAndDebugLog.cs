@@ -240,43 +240,44 @@ namespace PendulumClient.QMLogAndPlayerlist
         }
         public static string GetNameColored(this VRC.Player player)
         {
-            foreach (var tag in player.field_Private_APIUser_0.tags)
+            var apiuser = player.field_Private_APIUser_0;
+            foreach (var tag in apiuser.tags)
             {
                 if (tag == "system_legend")
                 {
-                    return $"<color={LegendaryColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                    return $"<color={LegendaryColor}>{apiuser.displayName}</color>";
                 }
             }
-            foreach (var tag in player.field_Private_APIUser_0.tags)
+            foreach (var tag in apiuser.tags)
             {
                 if (tag == "system_trust_legend")
                 {
-                    return $"<color={VeteranColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                    return $"<color={VeteranColor}>{apiuser.displayName}</color>";
                 }
             }
-            if (player.prop_APIUser_0.hasVeteranTrustLevel)
+            if (apiuser.hasVeteranTrustLevel)
             {
-                return $"<color={TrustedColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                return $"<color={TrustedColor}>{apiuser.displayName}</color>";
             }
-            else if (player.prop_APIUser_0.hasTrustedTrustLevel)
+            else if (apiuser.hasTrustedTrustLevel)
             {
-                return $"<color={KnownColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                return $"<color={KnownColor}>{apiuser.displayName}</color>";
             }
-            else if (player.prop_APIUser_0.hasKnownTrustLevel)
+            else if (apiuser.hasKnownTrustLevel)
             {
-                return $"<color={UserColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                return $"<color={UserColor}>{apiuser.displayName}</color>";
             }
-            else if (player.prop_APIUser_0.hasBasicTrustLevel)
+            else if (apiuser.hasBasicTrustLevel)
             {
-                return $"<color={NewUserColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                return $"<color={NewUserColor}>{apiuser.displayName}</color>";
             }
-            else if (player.prop_APIUser_0.isUntrusted)
+            else if (apiuser.isUntrusted)
             {
-                return $"<color={VisitorColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                return $"<color={VisitorColor}>{apiuser.displayName}</color>";
             }
             else
             {
-                return $"<color={NuisanceColor}>{player.field_Private_APIUser_0.displayName}</color>";
+                return $"<color={NuisanceColor}>{apiuser.displayName}</color>";
             }
         }
         public static string GetPlayerListName(VRC.Player player)

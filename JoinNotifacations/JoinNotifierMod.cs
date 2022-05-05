@@ -655,7 +655,7 @@ namespace JoinNotifier
                 }
             }
 
-            if (player.prop_APIUser_0.id == MooniUID)
+            /*if (player.prop_APIUser_0.id == MooniUID)
             {
                 var TagColor = MooniColor;
                 var Parent = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents");
@@ -686,7 +686,7 @@ namespace JoinNotifier
                     threesliceQS._sprite = DevOutline;
                     threesliceQS.color = TagColor;
                 }
-            }
+            }*/
 
             if (!DevUserIDs.Contains(player.field_Private_APIUser_0.id))
             {
@@ -697,7 +697,7 @@ namespace JoinNotifier
                     var newname = GameObject.Instantiate(orgname, textcont.transform);
                     newname.name = "GeneratedName";
                     newname.SetActive(true);
-                    newname.GetComponent<TMPro.TextMeshProUGUI>().color = PendulumClientMain.GetTrustColor(player.prop_APIUser_0);
+                    newname.GetComponent<TMPro.TextMeshProUGUI>().color = PendulumClientMain.GetTrustColor(player.field_Private_APIUser_0);
                     newname.GetComponent<TMPro.TextMeshProUGUI>().text = player.prop_APIUser_0.displayName;
                     GameObject.Destroy(orgname);//orgname.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
                     if (APIUser.IsFriendsWith(player.prop_APIUser_0.id))

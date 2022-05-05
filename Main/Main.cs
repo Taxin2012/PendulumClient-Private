@@ -423,7 +423,15 @@ namespace PendulumClient.Main
 
             if (File.Exists("PendulumClient/Logo/logo_ver.txt"))
             {
-                var cur_ver = File.ReadAllLines("PendulumClient/Logo/logo_ver.txt")[0].Split(":".ToCharArray()[0])[1];
+                var cur_ver = "";
+                try
+                {
+                    cur_ver = File.ReadAllLines("PendulumClient/Logo/logo_ver.txt")[0].Split(":".ToCharArray()[0])[1];
+                }
+                catch
+                {
+                    PendulumLogger.LogErrorSevere("bruh");
+                }
                 //PendulumLogger.Log("CurVer: " + cur_ver);
                 //PendulumLogger.Log("LogoVer: " + logo_ver);
                 if (cur_ver != logo_ver)

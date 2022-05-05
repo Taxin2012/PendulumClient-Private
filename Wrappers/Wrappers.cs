@@ -51,12 +51,9 @@ namespace PendulumClient.Wrapper
                         return TrustRank.Legendary;
                     }
                 }
-                foreach (var tag in user.tags)
+                if (user.hasLegendTrustLevel) // veteran user
                 {
-                    if (tag == "system_trust_legend")
-                    {
-                        return TrustRank.Veteran;
-                    }
+                    return TrustRank.Veteran;
                 }
                 if (user.hasVeteranTrustLevel) // trusted user
                 {

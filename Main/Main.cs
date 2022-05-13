@@ -343,7 +343,7 @@ namespace PendulumClient.Main
             var DownloadedBundle = new byte[0];
             try
             {
-                var uri = new Uri("http://pendulumclient.altervista.org/downloads/logo/logo.assetbundle");
+                var uri = new Uri("http://pendulumclient.com/downloads/logo/logo.assetbundle");
                 HttpClient client = new HttpClient();
                 var response = client.GetAsync(uri).GetAwaiter().GetResult();
                 DownloadedBundle = response.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
@@ -393,10 +393,10 @@ namespace PendulumClient.Main
             var logo_ver_string = "";
             try
             {
-                var uri = new Uri("http://pendulumclient.altervista.org/downloads/logo/logo_ver.txt");
+                var uri = new Uri("http://pendulumclient.com/downloads/logo/logo_ver.txt");
                 HttpClient client = new HttpClient();
                 var response = client.GetAsync(uri).GetAwaiter().GetResult();
-                logo_ver_string = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();//LogoVerWC.DownloadString("http://pendulumclient.altervista.org/downloads/logo/logo_ver.txt");
+                logo_ver_string = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();//LogoVerWC.DownloadString("http://pendulumclient.com/downloads/logo/logo_ver.txt");
             }
             catch
             {
@@ -531,7 +531,7 @@ namespace PendulumClient.Main
             var bsmd5 = "";
             try
             {
-                var uri = new Uri("http://pendulumclient.altervista.org/downloads/module/BootstrapSize.txt");
+                var uri = new Uri("http://pendulumclient.com/downloads/module/BootstrapSize.txt");
                 HttpClient client = new HttpClient();
                 var response = client.GetAsync(uri).GetAwaiter().GetResult();
                 bsmd5 = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -4189,7 +4189,7 @@ namespace PendulumClient.Main
             //var blloc = AppData + "/bl.txt";
             if (string.IsNullOrEmpty(SteamBL))
             {
-                var uri = new Uri("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-SID.txt");
+                var uri = new Uri("http://pendulumclient.com/downloads/PendulumClientBlacklist-SID.txt");
                 HttpClient client = new HttpClient();
                 var response = client.GetAsync(uri).GetAwaiter().GetResult();
                 var sbl = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -4197,7 +4197,7 @@ namespace PendulumClient.Main
             }
             if (string.IsNullOrEmpty(NormalBL))
             {
-                var uri = new Uri("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-UID.txt");
+                var uri = new Uri("http://pendulumclient.com/downloads/PendulumClientBlacklist-UID.txt");
                 HttpClient client = new HttpClient();
                 var response = client.GetAsync(uri).GetAwaiter().GetResult();
                 var bl = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
@@ -4213,7 +4213,7 @@ namespace PendulumClient.Main
             }
             if (string.IsNullOrEmpty(IPBL))
             {
-                var uri = new Uri("http://pendulumclient.altervista.org/downloads/PendulumClientBlacklist-IP.txt");
+                var uri = new Uri("http://pendulumclient.com/downloads/PendulumClientBlacklist-IP.txt");
                 HttpClient client = new HttpClient();
                 var response = client.GetAsync(uri).GetAwaiter().GetResult();
                 var bl = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();

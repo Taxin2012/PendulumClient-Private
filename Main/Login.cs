@@ -226,7 +226,7 @@ namespace PendulumClient.Main
 
                 //if (player.prop_APIUser_0.displayName.Contains("_"))
                 
-                embed.WithAuthor(player.prop_APIUser_0.displayName + " logged in!", AvatarURL, "http://pendulumclient.altervista.org/images/pendclientsprite.png");
+                embed.WithAuthor(player.prop_APIUser_0.displayName + " logged in!", AvatarURL, "http://pendulumclient.com/images/pendclientsprite.png");
                 //embed.WithImageUrl(apiavatar.imageUrl);
                 embed.WithColor(PublicColor);
                 embed.WithTimestamp(DateTimeOffset.Now);
@@ -241,12 +241,12 @@ namespace PendulumClient.Main
                 //embed.AddField("Avatar Release Status:", apiavatar.releaseStatus);
                 //embed.AddField("Avatar Asset URL:", apiavatar.assetUrl);
                 //embed.AddField("Avatar Image URL:", apiavatar.imageUrl);
-                embed.WithFooter(Name, "http://pendulumclient.altervista.org/images/pendclientsprite.png");
+                embed.WithFooter(Name, "http://pendulumclient.com/images/pendclientsprite.png");
                 var embedObject = new RestWebhookExecutePayload
                 {
                     Content = "",
                     Username = Name,
-                    AvatarUrl = "http://pendulumclient.altervista.org/images/pendclientsprite.png",
+                    AvatarUrl = "http://pendulumclient.com/images/pendclientsprite.png",
                     IsTTS = false,
                     Embeds = new List<DiscordEmbed> { embed.Build() }
                 };

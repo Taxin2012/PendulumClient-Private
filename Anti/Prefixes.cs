@@ -779,127 +779,134 @@ namespace PendulumClient.Anti
                 }
             }
 
-            if (__0.Code == 33)
+            try
             {
-                object Data = Serialization.FromIL2CPPToManaged<object>(__0.CustomData);
-                //PendulumLogger.Log(Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented));
-
-                /*
-
-                for every:
-
-                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{...} ...");
-
-                copy it and add a new line under being:
-
-                QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {...} ...");
-
-                ,,, is the text dont actually make it dots retard
-
-                \n becomes a space (dont use \n in debug logs worst mistake of my life)
-
-                 */
-
-                if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"10\": false,"))
+                if (__0.Code == 33)
                 {
-                    JObject jObject = JObject.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented));
-                    var jo = JObject.Parse(jObject.ToString());
-                    var id = jo["245"]["1"].ToString();
+                    object Data = Serialization.FromIL2CPPToManaged<object>(__0.CustomData);
+                    //PendulumLogger.Log(Newtonsoft.Json.JsonConvert.SerializeObject(Data));
 
-                    var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
-                    string ParsedName = "?";
-                    string ParsedUserID = "";
-                    if (ParsedAPIuser != null)
-                    {
-                        ParsedName = ParsedAPIuser.displayName;
-                        ParsedUserID = ParsedAPIuser.id;
-                    }
+                    /*
 
-                    if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
+                    for every:
+
+                    AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{...} ...");
+
+                    copy it and add a new line under being:
+
+                    QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {...} ...");
+
+                    ,,, is the text dont actually make it dots retard
+
+                    \n becomes a space (dont use \n in debug logs worst mistake of my life)
+
+                     */
+
+                    if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"10\": false,"))
                     {
-                        PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
-                        AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unblocked you");
-                        PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
-                    }
-                    if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": false"))
-                    {
-                        if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                        JObject jObject = JObject.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(Data));
+                        var jo = JObject.Parse(jObject.ToString());
+                        var id = jo["245"]["1"].ToString();
+
+                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        string ParsedName = "?";
+                        string ParsedUserID = "";
+                        if (ParsedAPIuser != null)
                         {
-                            PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
-                            PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
+                            ParsedName = ParsedAPIuser.displayName;
+                            ParsedUserID = ParsedAPIuser.id;
+                        }
+
+                        if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
+                        {
+                            PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
+                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unblocked you");
+                            PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
+                        }
+                        if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"11\": false"))
+                        {
+                            if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
+                            }
+                        }
+                        else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"11\": true"))
+                        {
+                            if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
+                            }
                         }
                     }
-                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": true"))
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"10\": true,"))
                     {
-                        if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
-                        {
-                            PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
-                            PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
-                        }
-                    }
-                }
-                else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"10\": true,"))
-                {
-                    JObject jObject = JObject.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented));
-                    var jo = JObject.Parse(jObject.ToString());
-                    var id = jo["245"]["1"].ToString();
+                        JObject jObject = JObject.Parse(Newtonsoft.Json.JsonConvert.SerializeObject(Data));
+                        var jo = JObject.Parse(jObject.ToString());
+                        var id = jo["245"]["1"].ToString();
 
-                    var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
-                    string ParsedName = "?";
-                    string ParsedUserID = "";
-                    if (ParsedAPIuser != null)
-                    {
-                        ParsedName = ParsedAPIuser.displayName;
-                        ParsedUserID = ParsedAPIuser.id;
-                    }
+                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        string ParsedName = "?";
+                        string ParsedUserID = "";
+                        if (ParsedAPIuser != null)
+                        {
+                            ParsedName = ParsedAPIuser.displayName;
+                            ParsedUserID = ParsedAPIuser.id;
+                        }
 
-                    if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
-                    {
-                        PendulumLogger.ModerationLog($"{ParsedName} blocked you");
-                        AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} blocked you");
-                        if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
-                    }
-                    if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": false"))
-                    {
-                        if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                        if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
-                            PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
-                            PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
+                            PendulumLogger.ModerationLog($"{ParsedName} blocked you");
+                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} blocked you");
+                            if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
                         }
-                    }
-                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"11\": true"))
-                    {
-                        if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                        if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"11\": false"))
                         {
-                            PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
-                            PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
+                            if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
+                            }
                         }
+                        else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"11\": true"))
+                        {
+                            if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
+                            {
+                                PendulumLogger.ModerationLog($"{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
+                            }
+                        }
+                        return !AntiBlock;
                     }
-                    return !AntiBlock;
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("You have been warned"))
+                    {
+                        PendulumLogger.ModerationLog($"Instance owner tried to warn you");
+                        AlertPopup.SendAlertPopupNOPC($"[Moderation]\nInstance owner tried to warn you");
+                        return false;
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("A vote kick has been"))
+                    {
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("Unable to start a vote to kick"))
+                    {
+                        return false;
+                    }
+                    else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"0\": 8"))
+                    {
+                        PendulumLogger.ModerationLog("Instance owner tried force muting you");
+                        AlertPopup.SendAlertPopupNOPC("[Moderation]\nInstance owner tried force muting you");
+                        return false;
+                    }
                 }
-                else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("You have been warned"))
-                {
-                    PendulumLogger.ModerationLog($"Instance owner tried to warn you");
-                    AlertPopup.SendAlertPopupNOPC($"[Moderation]\nInstance owner tried to warn you");
-                    return false;
-                }
-                else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("A vote kick has been"))
-                {
-                }
-                else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("Unable to start a vote to kick"))
-                {
-                    return false;
-                }
-                else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data, Newtonsoft.Json.Formatting.Indented).Contains("\"0\": 8"))
-                {
-                    PendulumLogger.ModerationLog("Instance owner tried force muting you");
-                    AlertPopup.SendAlertPopupNOPC("[Moderation]\nInstance owner tried force muting you");
-                    return false;
-                }
+            }
+            catch (Exception e)
+            {
+                PendulumLogger.Log("Error with anti-block: " + e.ToString());
             }
 
             return true;

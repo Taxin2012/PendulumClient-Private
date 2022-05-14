@@ -794,7 +794,7 @@ namespace PendulumClient.Anti
 
                     copy it and add a new line under being:
 
-                    QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {...} ...");
+                    QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {...} ..."); 
 
                     ,,, is the text dont actually make it dots retard
 
@@ -821,6 +821,7 @@ namespace PendulumClient.Anti
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
                             AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unblocked you");
+                            QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {ParsedName} unblocked you");
                             PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
                         }
                         if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"11\": false"))
@@ -829,6 +830,7 @@ namespace PendulumClient.Anti
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
                                 AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
                         }
@@ -838,6 +840,7 @@ namespace PendulumClient.Anti
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
                                 AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
                         }
@@ -861,6 +864,7 @@ namespace PendulumClient.Anti
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} blocked you");
                             AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} blocked you");
+                            QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {ParsedName} blocked you");
                             if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
                         }
                         if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("\"11\": false"))
@@ -869,6 +873,7 @@ namespace PendulumClient.Anti
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
                                 AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
                         }
@@ -878,6 +883,7 @@ namespace PendulumClient.Anti
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
                                 AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] {ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
                         }
@@ -887,6 +893,7 @@ namespace PendulumClient.Anti
                     {
                         PendulumLogger.ModerationLog($"Instance owner tried to warn you");
                         AlertPopup.SendAlertPopupNOPC($"[Moderation]\nInstance owner tried to warn you");
+                        QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"[Moderation] Instance owner tried to warn you");
                         return false;
                     }
                     else if (Newtonsoft.Json.JsonConvert.SerializeObject(Data).Contains("A vote kick has been"))

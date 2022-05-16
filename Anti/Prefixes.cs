@@ -761,6 +761,24 @@ namespace PendulumClient.Anti
         public static bool AntiBlock = true;
         public static bool LBPhotonEvents(ExitGames.Client.Photon.EventData __0)
         {
+            if (__0.Code == 9 && Anti9)
+            {
+                var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);
+                PendulumLogger.Log("Blocked Event9 From [" + __0.Sender + "] " + plr.field_Private_APIUser_0.displayName + " (" + plr.field_Private_APIUser_0.id + ")", ConsoleColor.Red);
+                return false;
+            }
+
+            if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0 && ButtonAPIV2.MenuFunctions.IsCopyingVoice)
+            {
+                if (__0.Code == 1)
+                {
+                    if (__0.Sender == ButtonAPIV2.MenuFunctions.copyVoice_photonId)
+                    {
+                        PhotonExtensions.OpRaiseEvent(1, __0.CustomData, PhotonExtensions.UnreliableEventOptions, PhotonExtensions.UnreliableOptions);
+                    }
+                }
+            }
+
             try
             {
                 if (__0.Code == 33)

@@ -235,7 +235,6 @@ namespace PendulumClient.Main
 
         //public static bool MenuMusic = File.Exists("PendulumClient/MenuMusic/menumusic.assetbundle");
 
-        public static float BlockNameLoop = 0f;
         public static float LoadingWorldTimer = 0f;
         public static float PortalLoopTimer = 0f;
         public static float NameESPTimer = 0f;
@@ -377,7 +376,7 @@ namespace PendulumClient.Main
             Directory.CreateDirectory("PendulumClient/VRCW");
             ColorSettings.RegisterSettings();
             CheckMLVersion();
-            if (Harmony == null) _harmonyInstance = HarmonyInstance;
+            if (_harmonyInstance == null) _harmonyInstance = HarmonyInstance;
             /*try
             {
                 if (Il2CppClassPointerStore<ApiFileHelper>.NativeClassPtr == IntPtr.Zero)
@@ -756,8 +755,6 @@ namespace PendulumClient.Main
 
         public override void OnUpdate() // Runs once per frame.
         {
-            //PendulumLogger.Log("OnUpdate");
-            BlockNameLoop += Time.deltaTime;
             PortalLoopTimer += Time.deltaTime;
             NameESPTimer += Time.deltaTime;
             PlayerlistUpdateTimer += Time.deltaTime;
@@ -1303,11 +1300,6 @@ namespace PendulumClient.Main
                     JoinNotifierMod.JoiningPlayerList.Clear();
                     JoinNotifierMod.OneTimeLoop = 0f;
                 }
-            }
-            if (BlockNameLoop >= 2f && JoinNotifierMod.PlayerManagerSetup == true && IsLoading == false)
-            {
-                //UpdateBlockedNameplates();
-                BlockNameLoop = 0f;
             }
 
             if (DisconnectOn == true)
@@ -2402,6 +2394,7 @@ namespace PendulumClient.Main
             //var Hook7V4 = typeof(VRC_EventLog.MonoBehaviour1NPublicObPrPrPrUnique).GetMethod("OnEvent");
             //var Hook7V3List = typeof(VRC_EventLog.MonoBehaviour1NPublicObPrPrPrUnique).GetMethods().Where(mi => mi.GetParameters().Length == 1 && mi.GetParameters().First().ParameterType == typeof(EventData) && mi.Name.StartsWith("Method_Public_Virtual_Final_New_Void_EventData_"));
             var Hook7Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.PhotonEvents));
+            var Hook7PatchV2 = typeof(Prefixes).GetMethod(nameof(Prefixes.LBPhotonEvents));
 
             var Hook8 = typeof(VRC.UI.Core.Styles.StyleEngine).GetMethod("Method_Public_Void_ElementStyle_String_0");
             var Hook8Patch = typeof(Prefixes).GetMethod("ElementStyle__Hook");
@@ -2536,7 +2529,7 @@ namespace PendulumClient.Main
             //instance.Patch(Hook2, new HarmonyMethod(Hook2Patch));
             instance.Patch(Hook6, new HarmonyMethod(Hook6Patch));
             instance.Patch(Hook7, new HarmonyMethod(Hook7Patch));
-            instance.Patch(Hook7V2, new HarmonyMethod(Hook7Patch));
+            //instance.Patch(Hook7V2, new HarmonyMethod(Hook7PatchV2));
             //instance.Patch(Hook7V3, new HarmonyMethod(Hook7Patch));
             /*foreach (var method in Hook7V3List)
             {

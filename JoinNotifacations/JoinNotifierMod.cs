@@ -562,6 +562,9 @@ namespace JoinNotifier
                 {
                     HasLocalPlayerLoaded = true;
                     PLUpdate = MelonCoroutines.Start(PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate());
+
+                    var harmony = PendulumClientMain._harmonyInstance;
+                    harmony.Patch(typeof(Photon.Realtime.LoadBalancingClient).GetMethod(nameof(Photon.Realtime.LoadBalancingClient.OnEvent)), new HarmonyLib.HarmonyMethod(typeof(PendulumClient.Anti.Prefixes).GetMethod(nameof(PendulumClient.Anti.Prefixes.LBPhotonEvents))));
                 }
             }
 

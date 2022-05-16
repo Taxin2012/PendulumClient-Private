@@ -207,7 +207,15 @@ namespace PendulumClient.QMLogAndPlayerlist
                 return $"<color={ClientUserColor}>[C]</color>";
             }
             float fps = (player._playerNet.prop_Byte_0 != 0) ? Mathf.Floor(1000f / (float)player._playerNet.prop_Byte_0) : -1f;
-            if ((fps > 90 || fps < 1 || player._playerNet.field_Private_Int16_0 < 0) && fps != -1f)
+            if (!player.field_Private_VRCPlayerApi_0.IsUserInVR())
+            {
+                if ((fps > 90 || fps < 1) && fps != -1f)
+                {
+                    ClientUsers.Add(player.field_Private_APIUser_0.id);
+                    return $"<color={ClientUserColor}>[C]</color>";
+                }
+            }
+            else if ((fps > 144 || fps < 1 || player._playerNet.field_Private_Int16_0 < 0) && fps != -1f)
             {
                 ClientUsers.Add(player.field_Private_APIUser_0.id);
                 return $"<color={ClientUserColor}>[C]</color>";

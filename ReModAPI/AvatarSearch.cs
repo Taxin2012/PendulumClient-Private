@@ -59,7 +59,7 @@ namespace PendulumClient.ReModAPI
             _searchedAvatarList = new ReAvatarList("Avatar Search", this);
 
             _favoriteAvatarList = new ReAvatarList("PendulumClient Favorites", this, false);
-            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_3_String_GameObject_AvatarPerformanceStats_0 = new Action<string, GameObject, AvatarPerformanceStats>(OnAvatarInstantiated);
+            _favoriteAvatarList.AvatarPedestal.field_Internal_Action_4_String_GameObject_AvatarPerformanceStats_ObjectPublicBoBoBoBoBoBoBoBoBoBoUnique_0 = new Action<string, GameObject, AvatarPerformanceStats, ObjectPublicBoBoBoBoBoBoBoBoBoBoUnique>(OnAvatarInstantiated);
             _favoriteAvatarList.OnEnable += () =>
             {
                 // make sure it stays off if it should be off.
@@ -354,7 +354,7 @@ namespace PendulumClient.ReModAPI
             PendulumLogger.Log($"Found {_searchedAvatars.Count} avatars");
             _searchedAvatarList.RefreshAvatars();
         }
-        private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats)
+        private void OnAvatarInstantiated(string url, GameObject avatar, AvatarPerformanceStats avatarPerformanceStats, ObjectPublicBoBoBoBoBoBoBoBoBoBoUnique nullobj)
         {
             if (_favoriteAvatarList.AvatarPedestal.field_Internal_ApiAvatar_0.authorId == APIUser.CurrentUser.id)
             {

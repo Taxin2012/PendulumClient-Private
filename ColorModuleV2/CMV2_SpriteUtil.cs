@@ -28,12 +28,41 @@ namespace PendulumClient.ColorModuleV2
             Object.Destroy(newTexture);
         }*/
 
+        private static Rect GetTextureRect(Sprite sprite)
+        {
+            if (!sprite.packed || sprite.packingMode != SpritePackingMode.Tight)
+                return sprite.textureRect;
+
+            var xMin = 1f;
+            var yMin = 1f;
+            var xMax = 0f;
+            var yMax = 0f;
+
+            foreach (var v in sprite.uv)
+            {
+                if (xMax < v.x) xMax = v.x;
+                if (xMin > v.x) xMin = v.x;
+                if (yMax < v.y) yMax = v.y;
+                if (yMin > v.y) yMin = v.y;
+            }
+
+            var texSize = (sprite.texture.width, sprite.texture.height);
+            return new Rect
+            {
+                m_XMin = xMin * texSize.width,
+                m_YMin = yMin * texSize.height,
+                m_Width = (xMax - xMin) * texSize.width,
+                m_Height = (yMax - yMin) * texSize.height
+            };
+
+        }
+
         public static Sprite GetGrayscaledSprite(Sprite original, bool normalizeWhite)
         {
             if (ourGrayscaledSpritesMap.ContainsKey(original))
                 return ourGrayscaledSpritesMap[original];
 
-            var newTexture = Copy(EnsureReadable(original.texture), original.textureRect, pixels =>
+            var newTexture = Copy(EnsureReadable(original.texture), GetTextureRect(original), pixels =>
             {
                 var scaleFactor = 1f;
                 if (normalizeWhite)
@@ -72,6 +101,37 @@ namespace PendulumClient.ColorModuleV2
             return ourGrayscaledSpritesMap[original] = newSprite;
         }
 
+        public static Texture2D GetGrayscaledTexture(Texture2D original, bool normalizeWhite)
+        {
+            var newTexture = CopySafe(EnsureReadable(original), new Rect(original.width, original.height, 1f, 1f), pixels =>
+            {
+                var scaleFactor = 1f;
+                if (normalizeWhite)
+                {
+                    scaleFactor = 0;
+                    for (var i = 0; i < pixels.Count; i++)
+                    {
+                        var pixel = pixels[i];
+                        if (pixel.a == 0) continue;
+
+                        var g = pixel.Grayscale();
+                        if (g > scaleFactor)
+                            scaleFactor = g;
+                    }
+                }
+
+                for (var i = 0; i < pixels.Count; i++)
+                {
+                    var pixel = pixels[i];
+                    var g = pixel.Grayscale() / scaleFactor;
+                    pixels[i] = new Color { r = g, g = g, b = g, a = pixel.a };
+                }
+            });
+
+            newTexture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+
+            return newTexture;
+        }
         private static Texture2D EnsureReadable(Texture2D source)
         {
             if (source.isReadable) return source;
@@ -96,7 +156,18 @@ namespace PendulumClient.ColorModuleV2
             newTex.Apply();
             return newTex;
         }
+        public static Texture2D CopySafe(Texture2D orig, Rect rect, Action<Il2CppStructArray<Color>> processPixels = null)
+        {
+            if (!orig.isReadable)
+                orig = ForceReadTexture(orig);
 
+            var pixels = orig.GetPixels();
+            var newTex = new Texture2D((int)rect.width, (int)rect.height);
+            processPixels?.Invoke(pixels);
+            newTex.SetPixels(pixels);
+            newTex.Apply();
+            return newTex;
+        }
         public static Texture2D ForceReadTexture(Texture2D tex)
         {
             var origFilter = tex.filterMode;

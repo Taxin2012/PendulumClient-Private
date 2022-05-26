@@ -259,7 +259,7 @@ namespace PendulumClient.ButtonAPIV2
 
         public static VRC.Player GetSelectedPlayer()
         {
-            var selectedUser = NewQuickMenu.Instance.field_Private_UIPage_1.Cast<MonoBehaviour1PublicBoRaGaObGaBuObToGaBuUnique>().field_Private_IUser_0; //VRC.UI.Elements.Menus.SelectedUserMenuQM
+            var selectedUser = NewQuickMenu.Instance.field_Private_UIPage_1.Cast<VRC.UI.Elements.Menus.SelectedUserMenuQM>().field_Private_IUser_0; //VRC.UI.Elements.Menus.SelectedUserMenuQM
             if (selectedUser == null)
                 return null;
 

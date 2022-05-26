@@ -16,11 +16,12 @@ namespace PendulumClient.ButtonAPIV2
             {
                 if (cached_quickmenuinstance == null)
                 {
-                    cached_quickmenuinstance = Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>();
+                    cached_quickmenuinstance = GameObject.Find("UserInterface").GetComponentInChildren<VRC.UI.Elements.QuickMenu>(true);
                 }
                 return cached_quickmenuinstance;
             }
         }
+
         private static Sprite cached_oniconsprite;
         public static Sprite OnIconSprite
         {
@@ -28,12 +29,14 @@ namespace PendulumClient.ButtonAPIV2
             {
                 if (cached_oniconsprite == null)
                 {
-                    cached_oniconsprite = Instance.field_Public_Transform_0
-                        .Find("Window/QMParent/Menu_Notifications/Panel_NoNotifications_Message/Icon").GetComponent<Image>().sprite;
+                    /*cached_oniconsprite = Instance.field_Public_Transform_0
+                        .Find("Window/QMParent/Menu_Notifications/Panel_NoNotifications_Message/Icon").GetComponent<Image>().sprite;*/
+                    cached_oniconsprite = GameObject.Find("UserInterface/MenuContent/Screens/Settings/OtherOptionsPanel/TooltipsToggle/Background/Checkmark").GetComponent<Image>().sprite; 
                 }
                 return cached_oniconsprite;
             }
         }
+
         private static GameObject cached_toggleprefab;
         public static GameObject TogglePrefab
         {

@@ -23,8 +23,6 @@ using System.Reflection;
 using UnhollowerRuntimeLib;
 using Newtonsoft.Json.Linq;
 
-using UiUserList = MonoBehaviour1PublicObFaBoTeSiInSiBoHaObUnique;
-using PlayerNameplate = MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique;
 using Player = VRC.Player;
 
 namespace PendulumClient.Anti
@@ -58,9 +56,9 @@ namespace PendulumClient.Anti
             ColorModuleV2.CMV2_ColorModule.ChangeHudReticle();
         }
 
-        public static bool prepatch__QMOnOpen()
+        public static void prepatch__QMOnOpen()
         {
-            return true;
+            //return true;
         }
 
         public static void postpatch__QMOnOpen()
@@ -1557,7 +1555,7 @@ namespace PendulumClient.Anti
             PendulumClientMain.CheckShaderBlacklist(player._player, avatar);
         }
 
-        public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.EnumNPublicSealedvaNoInFrOnOfSeInFa9vUnique __2)
+        public static void UserInfo__Hook(APIUser __0, PageUserInfo.InfoType __1, UiUserList.ListType __2)
         {
             //PendulumLogger.Log("Selected User: " + __0.displayName);
             var NameText = GameObject.Find("UserInterface/MenuContent/Screens/UserInfo/User Panel/NameText");

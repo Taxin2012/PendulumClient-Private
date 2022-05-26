@@ -866,7 +866,7 @@ namespace PendulumClient.AssetUploading.unused
             }
             if ((apiFile_0?.IsInitialized ?? false) && bool_2)
             {
-                Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Object> dictionary = apiFile_0.ExtractApiFields();
+                Il2CppSystem.Collections.Generic.Dictionary<string, Json.Token> dictionary = apiFile_0.ExtractApiFields();
                 if (dictionary != null)
                 {
                     VRC.Core.Logger.Log("<color=yellow>{0}</color>" + Tools.JsonEncode(dictionary), DebugLevel.All);
@@ -1286,7 +1286,7 @@ namespace PendulumClient.AssetUploading.unused
                 bool bool_3 = false;
                 apiFile_0.StartSimpleUpload(type_0, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                 {
-                    string_2 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
+                    //string_2 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
                     bool_0 = false;
                 }, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                 {
@@ -1503,7 +1503,7 @@ namespace PendulumClient.AssetUploading.unused
                         flag = false;
                         apiFile_0.StartMultipartUpload(type_0, i, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                         {
-                            string_5 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
+                            //string_5 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
                             bool_2 = false;
                         }, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                         {
@@ -3286,7 +3286,7 @@ namespace PendulumClient.AssetUploading.unused
 
                 System.Action<ApiContainer> SimpUploadSuccess = (ApiContainer c) =>
                 {
-                    uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"] as Il2CppSystem.String;
+                    //uploadUrl = (c as ApiDictContainer).ResponseDictionary.Keys["url"] as Il2CppSystem.String;
                     wait = false;
                 };
 
@@ -3550,7 +3550,7 @@ namespace PendulumClient.AssetUploading.unused
 
                     System.Action<ApiContainer> MultipartUploadSuccess = (ApiContainer c) =>
                     {
-                        uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"].ToString();
+                        //uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"].ToString();
                         wait = false;
                     };
 
@@ -5208,7 +5208,7 @@ namespace PendulumClient.AssetUploading
                 apiFile.StartSimpleUpload(fileDescriptorType,
                     (System.Action<ApiContainer>)delegate (ApiContainer c)
                     {
-                        uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"].ToString();
+                        //uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"].ToString();
                         wait = false;
                     },
                     (System.Action<ApiContainer>)delegate (ApiContainer c)
@@ -5466,7 +5466,7 @@ namespace PendulumClient.AssetUploading
                     apiFile.StartMultipartUpload(fileDescriptorType, partNumber,
                         (System.Action<ApiContainer>)delegate (ApiContainer c)
                         {
-                            uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"] as Il2CppSystem.String;
+                            //uploadUrl = (c as ApiDictContainer).ResponseDictionary["url"] as Il2CppSystem.String;
                             wait = false;
                         },
                         (System.Action<ApiContainer>)delegate (ApiContainer c)

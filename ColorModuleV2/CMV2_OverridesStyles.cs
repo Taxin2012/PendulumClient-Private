@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 
 namespace PendulumClient.ColorModuleV2
 {
-    class CMV2_OverridesStyles
+    public class CMV2_OverridesStyles
     {
         private readonly Dictionary<string, string> myStyleOverrides = new Dictionary<string, string>();
         private readonly Dictionary<string, List<ElementStyle>> myStylesCache = new Dictionary<string, List<ElementStyle>>();
@@ -30,15 +30,15 @@ namespace PendulumClient.ColorModuleV2
 
         public readonly string Name;
 
-        public CMV2_OverridesStyles(string name)
+        public CMV2_OverridesStyles(string name, StyleEngine engine)
         {
             Name = name;
-            myStyleEngine = UnityEngine.Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>().GetComponent<StyleEngine>();
+            myStyleEngine = engine;
         }
 
-        public static CMV2_OverridesStyles ParseFrom(string name, IEnumerable<string> lines)
+        public static CMV2_OverridesStyles ParseFrom(string name, IEnumerable<string> lines, StyleEngine engine)
         {
-            var result = new CMV2_OverridesStyles(name);
+            var result = new CMV2_OverridesStyles(name, engine);
 
             var inComment = false;
             var inBody = false;

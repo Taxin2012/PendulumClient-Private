@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 using System.Linq;
 using UnhollowerRuntimeLib.XrefScans;
 
-using UiAvatarList = MonoBehaviour1PublicObSuStSiHaSi1FaSoObUnique;
+//using UiAvatarList = UiAvatarList;
 
 namespace ReMod.Core.UI
 {
@@ -75,7 +75,7 @@ namespace ReMod.Core.UI
 
             _avatarList = GameObject.GetComponent<UiAvatarList>();
             _avatarList.clearUnseenListOnCollapse = false;
-            _avatarList.field_Public_EnumNPublicSealedvaInPuMiFaSpClPuLi11Unique_0 = UiAvatarList.EnumNPublicSealedvaInPuMiFaSpClPuLi11Unique.SpecificList;
+            _avatarList.field_Public_Category_0 = UiAvatarList.Category.SpecificList;
 
             GameObject.transform.SetSiblingIndex(0);
 

@@ -267,15 +267,15 @@ namespace PendulumClient.ButtonAPIV2
                 //VRCUiPopupManager
             });
             var DownloadsMenu = FunctionMenu.AddMenuPage("VRCA/VRCW Downloads", "Download World and Avatar .VRCAs");
-            DownloadsMenu.AddToggle("Open Folder on Download", "Open File Explorer to your .vrca/.vrcw on download", b => 
+            DownloadsMenu.AddToggle("Open Folder on Download", "Open File Explorer to your .vrca or .vrcw on download", b => 
             {
                 MenuFunctions.OpenFileOnDownload = b;
             });
-            DownloadsMenu.AddButton("Download Current .VRCA", "Download your current avatars .VRCA", () =>
+            DownloadsMenu.AddButton("Download Current .VRCA", "Download your current avatar's .VRCA", () =>
             {
                 PendulumClientMain.DownloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
             });
-            DownloadsMenu.AddButton("Download Current .VRCW", "Download your current worlds .VRCW", () =>
+            DownloadsMenu.AddButton("Download Current .VRCW", "Download your current world's .VRCW", () =>
             {
                 PendulumClientMain.DowloadVRCW(RoomManager.field_Internal_Static_ApiWorld_0);
             });

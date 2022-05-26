@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace PendulumClient.ColorModuleV2
 {
-    class CMV2_ColorManager
+    public class CMV2_ColorManager
     {
         public string MenuColorBase { get; private set; } = "";
         public string MenuColorHighlight { get; private set; } = "";

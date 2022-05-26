@@ -11,7 +11,7 @@ using System.Reflection;
 using HarmonyLib;
 using UnhollowerRuntimeLib.XrefScans;
 
-using ToggleIcon = VRC.UI.Elements.Controls.ToggleIcon;
+using ToggleIcon = MonoBehaviourPublicToStUnique;//VRC.UI.Elements.Controls.ToggleIcon;
 
 namespace PendulumClient.UI
 {
@@ -165,19 +165,19 @@ namespace PendulumClient.UI
         }
 
         private delegate void PushPageDelegate(MenuStateController menuStateCtrl, string pageName, UIContext uiContext,
-    bool clearPageStack);
+            bool clearPageStack, UIPage.TransitionType transitionType);
         private static PushPageDelegate _pushPage;
 
         public static void PushPage(this MenuStateController menuStateCtrl, string pageName, UIContext uiContext = null,
-            bool clearPageStack = false)
+            bool clearPageStack = false, UIPage.TransitionType transitionType = UIPage.TransitionType.Right)
         {
             if (_pushPage == null)
             {
                 _pushPage = (PushPageDelegate)Delegate.CreateDelegate(typeof(PushPageDelegate),
-                    typeof(MenuStateController).GetMethods().FirstOrDefault(m => m.GetParameters().Length == 3 && m.Name.StartsWith("Method_Public_Void_String_UIContext_Boolean_") && XrefUtils.CheckMethod(m, "No page named")));
+                    typeof(MenuStateController).GetMethods().FirstOrDefault(m => m.GetParameters().Length == 4 && m.Name.StartsWith("Method_Public_Void_String_UIContext_Boolean_TransitionType_") && XrefUtils.CheckMethod(m, "No page named")));
             }
 
-            _pushPage(menuStateCtrl, pageName, uiContext, clearPageStack);
+            _pushPage(menuStateCtrl, pageName, uiContext, clearPageStack, transitionType);
         }
 
         private delegate void SwitchToRootPageDelegate(MenuStateController menuStateCtrl, string pageName, UIContext uiContext,
@@ -221,6 +221,13 @@ namespace PendulumClient.UI
                 instance.scrollRect.normalizedPosition = new Vector2(0f, 0f);
             }
             instance.Method_Protected_Void_List_1_T_Int32_Boolean_VRCUiContentButton_0(avatarList, offset, endOfPickers, contentHeaderElement);
+        }
+        public static GameObject FindInactiveObjectInActiveRoot(string path)
+        {
+            var split = path.Split(new char[] { '/' }, 2);
+            var rootObject = GameObject.Find($"/{split[0]}")?.transform;
+            if (rootObject == null) return null;
+            return Transform.FindRelativeTransformWithPath(rootObject, split[1], false)?.gameObject;
         }
     }
 }

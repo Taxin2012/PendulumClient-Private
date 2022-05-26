@@ -444,7 +444,7 @@ namespace PendulumClient.ColorModule
                 //System.Diagnostics.Debugger.IsAttached
 
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/3DElements/LoadingBackground_TealGradient/_Lighting (1)/Point light").GetComponentInChildren<Light>().color = color / 2f;
-                GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/ReticleParent/Reticle").GetComponentInChildren<Image>().color = new Color(color.r, color.g, color.b, color.a * 2f);
+                GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/ReticleParent/Reticle").GetComponentInChildren<Image>().color = new Color(color.r, color.g, color.b, color.a * 2f);
                 GameObject.Find("UserInterface/MenuContent/Screens/Settings/ComfortSafetyPanel/Panel_Header").GetComponentInChildren<Image>().color = new Color(color.r / 1.5f, color.g / 1.5f, color.b / 1.5f, color.a);
                 GameObject.Find("UserInterface/MenuContent/Screens/Settings/AudioDevicePanel/Panel_Header").GetComponentInChildren<Image>().color = new Color(color.r / 1.5f, color.g / 1.5f, color.b / 1.5f, color.a);
                 GameObject.Find("UserInterface/MenuContent/Screens/Settings/MousePanel/Panel_Header").GetComponentInChildren<Image>().color = new Color(color.r / 1.5f, color.g / 1.5f, color.b / 1.5f, color.a);
@@ -616,7 +616,7 @@ namespace PendulumClient.ColorModule
                 GameObject.Find("UserInterface/MenuContent/Screens/Settings/Button_AdvancedOptions").GetComponentInChildren<Button>().colors = colors3;
                 GameObject.Find("UserInterface/MenuContent/Screens/Social/UserProfileAndStatusSection/Status/EditStatusButton/Text").GetComponent<Text>().color = Color.white;
                 GameObject.Find("UserInterface/MenuContent/Screens/Social/UserProfileAndStatusSection/ViewProfileButton/Text").GetComponent<Text>().color = Color.white;
-                var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud").gameObject;
+                var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud").gameObject;
                 var inviteObj = hudRoot.transform.Find("NotificationDotParent/InviteDot").gameObject;
                 //var inviteReqObj = hudRoot.transform.Find("NotificationDotParent/InviteRequestDot").gameObject;
                 var notificationObj = hudRoot.transform.Find("NotificationDotParent/NotificationDot").gameObject;
@@ -646,13 +646,13 @@ namespace PendulumClient.ColorModule
                     if (voiceDotDisabledObj != null && voiceDotDisabledObj.GetComponents<Image>()[0].color != new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f)) voiceDotDisabledObj.GetComponents<Image>()[0].color = new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f);
                     //if (voiceDotDisabledObj != null && voiceDotDisabledObj.GetComponent<CanvasRenderer>().GetColor() != new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f)) voiceDotDisabledObj.GetComponent<CanvasRenderer>().SetColor(new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f)); 
 
-                    GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<FadeCycleEffect>().enabled = false;
+                    GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<FadeCycleEffect>().enabled = false;
 
                     if (Shader.Find("VRChat/GalacticUi") != null)
                     {
                         //PendulumLogger.Log("VRChat/GalacticUi Detected");
                         //PendulumLogger.Log("Hud Icon Shader: {0}", .name);
-                        GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<Image>().material.shader = Shader.Find("VRChat/GalacticUi");
+                        GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<Image>().material.shader = Shader.Find("VRChat/GalacticUi");
                     }
                 }
                 PendulumClientMain.UIColorsSetup = true;

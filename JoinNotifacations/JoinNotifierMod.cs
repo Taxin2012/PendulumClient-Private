@@ -370,7 +370,7 @@ namespace JoinNotifier
 
         private Image CreateNotifierImage(string name, float offset, Color colorTint)
         {
-            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud");
+            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud");
             var requestedParent = hudRoot.transform.Find("NotificationDotParent");
             var indicator = Object.Instantiate(hudRoot.transform.Find("NotificationDotParent/NotificationDot").gameObject, requestedParent, false).Cast<GameObject>();
             indicator.name = "NotifyDot-" + name;
@@ -423,7 +423,7 @@ namespace JoinNotifier
         {
             if (myJoinImage != null) return;
 
-            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud");
+            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud");
             if (hudRoot == null)
             {
                 PendulumLogger.LogErrorSevere("Error Creating JoinNotifier HUD");
@@ -431,7 +431,7 @@ namespace JoinNotifier
             }
             
             PendulumLogger.Log("Creating JoinNotifier HUD");
-//            var pathToThing = "UserInterface/UnscaledUI/HudContent/Hud/NotificationDotParent/NotificationDot";
+//            var pathToThing = "UserInterface/UnscaledUI/HudContent_Old/Hud/NotificationDotParent/NotificationDot";
             myJoinImage = CreateNotifierImage("join", 110f, JoinNotifierSettings.GetJoinIconColor());
             myJoinSource = CreateAudioSource(myJoinClip, myJoinImage.gameObject);
             myJoinText = CreateTextNear(myJoinImage, 110f, TextAnchor.LowerLeft);
@@ -693,7 +693,7 @@ namespace JoinNotifier
 
             if (!DevUserIDs.Contains(player.field_Private_APIUser_0.id))
             {
-                if (player._vrcplayer.field_Public_MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique_0 != null)
+                if (player._vrcplayer.field_Public_PlayerNameplate_0 != null)
                 {
                     var textcont = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container").gameObject;
                     var orgname = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container/Name").gameObject;
@@ -731,7 +731,7 @@ namespace JoinNotifier
             }
             else
             {
-                if (player._vrcplayer.field_Public_MonoBehaviourPublicSiCoSiGaCoTeGrCoGaHoUnique_0 != null)
+                if (player._vrcplayer.field_Public_PlayerNameplate_0 != null)
                 {
                     var textcont = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container").gameObject;
                     var orgname = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container/Name").gameObject;

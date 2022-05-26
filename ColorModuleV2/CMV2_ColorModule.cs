@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace PendulumClient.ColorModuleV2
         public static bool MenuMusicShuffle = false;
         public static List<AudioClip> Musics = new List<AudioClip>();
         public static IntPtr AudioSourcePTR = IntPtr.Zero;
-        public static void SetupColors()
+        public static void SetupColors(CMV2_OverridesStyles ColorStyle)
         {
             PendulumClientMain.UIColorsSetup = true;
 
@@ -39,15 +40,7 @@ namespace PendulumClient.ColorModuleV2
             //var gameObject1 = GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)");
             //var QMStyleEngine = gameObject1.GetComponent<VRC.UI.Core.Styles.StyleEngine>().field_Private_List_1_ElementStyle_0;
 
-            var LoadRequest1 = PendulumClientMain.myAssetBundle.LoadAssetAsync("Button_White.png", Il2CppType.Of<Sprite>());
-            if (LoadRequest1 != null && LoadRequest1.isDone)
-            {
-                NewButton = LoadRequest1.asset.Cast<Sprite>();
-                NewButton.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            }
-
             var ColorManager = new CMV2_ColorManager(color, color2);
-            var ColorStyle = new CMV2_OverridesStyles("MenuColor");
             var OverrideList = new List<CMV2_OverrideObject>();
             OverrideList.Add(new CMV2_OverrideObject(".BackgroundLayer1", "image-color: $BG$;"));
             OverrideList.Add(new CMV2_OverrideObject(".BackgroundLayer2", "image-color: $ACCT$;"));
@@ -94,6 +87,14 @@ namespace PendulumClient.ColorModuleV2
             OverrideList.Add(new CMV2_OverrideObject(".Slider:hover>.SliderFill", "image-color: $HIGH$;"));
             OverrideList.Add(new CMV2_OverrideObject(".Slider:active>.SliderFill", "image-color: $ACCT$;"));
             OverrideList.Add(new CMV2_OverrideObject(".BadgeJump", "image-color: $ACCT$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".NotificationCell", "image-color: $BASE$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".NotificationCell:hover", "image-color: $HIGH$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".BackgroundModal", "image-color: $DARK$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".Background_Header", "image-color: $BASE$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".BackgroundHeader", "image-color: $BASE$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".BackgroundFooter", "image-color: $BG$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".BackgroundPanel", "image-color: $BG$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".BackgroundUserCompact", "image-color: $BASE$;"));
             foreach (CMV2_OverrideObject obj in OverrideList)
             {
                 ColorStyle.ParseOverride(obj.Selector, obj.Body);
@@ -124,9 +125,11 @@ namespace PendulumClient.ColorModuleV2
             GrayscaleSprites.Add("images/safemode");
             //GrayscaleSprites.Add("Images/Icons/JumpToMM".ToLower());
             ColorStyle.ApplySpriteOverrides(GrayscaleSprites);
-            ColorStyle.UpdateStylesForSpriteOverrides();
             ColorStyle.ApplyOverrides(ColorManager);
+            ColorStyle.UpdateStylesForSpriteOverrides();
             foreach (var styleElement in ColorStyle.myStyleEngine.GetComponentsInChildren<StyleElement>(true))
+                styleElement.Method_Protected_Void_0();
+            foreach (var styleElement in GameObject.Find("UserInterface/MenuContent").GetComponentsInChildren<StyleElement>(true))
                 styleElement.Method_Protected_Void_0();
             ExtraStuff();
         }
@@ -342,18 +345,26 @@ namespace PendulumClient.ColorModuleV2
 
         public static void ChangeHudReticle()
         {
-            GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/ReticleParent/Reticle").GetComponentInChildren<Image>().color = CMV2_ColorManager.C_MenuColorHighlight;
+            try
+            {
+                GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/ReticleParent/Reticle").GetComponentInChildren<Image>().color = CMV2_ColorManager.C_MenuColorHighlight;
+            }
+            catch { }
         }
         public static void ChangeDebugPanel()
         {
-            GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/QMNotificationsArea/DebugInfoPanel/Panel/Background").GetComponent<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+            try
+            {
+                GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/QMNotificationsArea/DebugInfoPanel/Panel/Background").GetComponent<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+            }
+            catch { }
         }
         public static void ExtraStuff()
         {
             var CachedColor = ColorModule.ColorModule.CachedColor;
             Color SolidWhite = new Color(1f, 1f, 1f, 1f);
             Color TransparentWhite = new Color(1f, 1f, 1f, 0.33f);
-            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud").gameObject;
+            var hudRoot = GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud").gameObject;
             var inviteObj = hudRoot.transform.Find("NotificationDotParent/InviteDot").gameObject;
             //var inviteReqObj = hudRoot.transform.Find("NotificationDotParent/InviteRequestDot").gameObject;
             var notificationObj = hudRoot.transform.Find("NotificationDotParent/NotificationDot").gameObject;
@@ -386,13 +397,13 @@ namespace PendulumClient.ColorModuleV2
                 if (voiceDotDisabledObj != null && voiceDotDisabledObj.GetComponent<Image>().color != new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f)) voiceDotDisabledObj.GetComponents<Image>()[0].color = new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f);
                 //if (voiceDotDisabledObj != null && voiceDotDisabledObj.GetComponent<CanvasRenderer>().GetColor() != new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f)) voiceDotDisabledObj.GetComponent<CanvasRenderer>().SetColor(new Color(CachedColor.r, CachedColor.g, CachedColor.b, CachedColor.a / 2.5f)); 
 
-                GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<FadeCycleEffect>().enabled = false;
+                GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<FadeCycleEffect>().enabled = false;
 
                 /*if (Shader.Find("VRChat/GalacticUi") != null)
                 {
                     //PendulumLogger.Log("VRChat/GalacticUi Detected");
                     //PendulumLogger.Log("Hud Icon Shader: {0}", .name);
-                    GameObject.Find("UserInterface/UnscaledUI/HudContent/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<Image>().material.shader = Shader.Find("VRChat/GalacticUi");
+                    GameObject.Find("UserInterface/UnscaledUI/HudContent_Old/Hud/VoiceDotParent/VoiceDotDisabled").GetComponent<Image>().material.shader = Shader.Find("VRChat/GalacticUi");
                 }*/
             }
             try
@@ -426,6 +437,15 @@ namespace PendulumClient.ColorModuleV2
                 colorBlock3.selectedColor = color;
                 colorBlock3.fadeDuration = 0.1f;
                 ColorBlock colorsdarknormal = colorBlock3;
+                ColorBlock colorBlock4 = default(ColorBlock);
+                colorBlock4.colorMultiplier = 1f;
+                colorBlock4.disabledColor = Color.grey;
+                colorBlock4.highlightedColor = color * 0.7f;
+                colorBlock4.normalColor = color * 0.4f;
+                colorBlock4.pressedColor = color2 * 1.5f;
+                colorBlock4.selectedColor = color2 * 1.5f;
+                colorBlock4.fadeDuration = 0.1f;
+                ColorBlock colorsxtradark = colorBlock4;
                 ChangeHudReticle();
                 GameObject.Find("UserInterface/MenuContent/Screens/Settings/ComfortSafetyPanel/Panel_Header").GetComponentInChildren<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
                 GameObject.Find("UserInterface/MenuContent/Screens/Settings/AudioDevicePanel/Panel_Header").GetComponentInChildren<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
@@ -491,6 +511,29 @@ namespace PendulumClient.ColorModuleV2
 
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/TitlePanel (1)").GetComponentInChildren<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
                 GameObject.Find("UserInterface/MenuContent/Screens/Avatar/TitlePanel (1)").GetComponentInChildren<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+
+                GameObject.DestroyImmediate(ButtonAPIV2.NewQuickMenu.Instance.gameObject.transform.Find("Container/Window/QMParent/Menu_Camera/Panel_Info").gameObject);
+                GameObject.Find("UserInterface/MenuContent/Screens/Settings/ComfortSafetyPanel/StreamerModeToggle/InfoButton").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(GameObject.Find("UserInterface/MenuContent/Screens/Settings/ComfortSafetyPanel/StreamerModeToggle/InfoButton").GetComponent<Image>().sprite, true);
+                GameObject.Find("UserInterface/MenuContent/Screens/Settings/ComfortSafetyPanel/StreamerModeToggle/InfoButton").GetComponent<Image>().color = color;
+                /*ButtonAPIV2.NewQuickMenu.Instance.gameObject.transform.Find("Container/Window/QMParent/Menu_Camera/Panel_Info").GetComponent<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+                var IconTexture = GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/QMParent/Menu_Camera/Panel_Info/Icon_Info").GetComponent<RawImage>().texture;
+                var newtex = IconTexture.TryCast<Texture2D>();
+                if (newtex != null)
+                {
+                    //var greyicon = CMV2_SpriteUtil.GetGrayscaledTexture(newtex, true);
+                    var readabletex = CMV2_SpriteUtil.ForceReadTexture(newtex);
+                    var greyicon = CMV2_SpriteUtil.GetGrayscaledTexture(readabletex, true);
+                    PendulumLogger.Log("Color: " + greyicon.GetPixel(128, 128).ToString());
+                    //GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/QMParent/Menu_Camera/Panel_Info/Icon_Info").GetComponent<RawImage>().texture = greyicon;
+                }
+                else
+                {
+                    PendulumLogger.Log($"Cant Cast '{newtex.name}' to Texture2D");
+                }
+                
+                lmao i tried and i failed
+                 
+                 */
 
                 var MenuContentHeader = GameObject.Find("UserInterface/MenuContent/Backdrop/Header");
                 if (MenuContentHeader != null)
@@ -680,9 +723,18 @@ namespace PendulumClient.ColorModuleV2
                 gameObject.transform.Find("Popups/SearchOptionsPopup/Popup/Panel (1)").GetComponent<Image>().color = color;
                 //gameObject.transform.Find("Popups/SearchOptionsPopup/Popup/BorderImage").GetComponent<Image>().color = color2;
 
-                var newList = gameObject.transform.Find("Popups").GetComponentsInChildren<Image>(true);
-
                 Color borderimagecolor = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
+                gameObject.transform.Find("Popups/InformationPopup/TitleText").GetComponent<Text>().color = color;
+                gameObject.transform.Find("Popups/InformationPopup/TitleText").GetComponent<Outline>().effectColor = borderimagecolor;
+
+                var newList = gameObject.transform.Find("Popups").GetComponentsInChildren<Image>(true);
+                var ButtonList = gameObject.transform.Find("Popups").GetComponentsInChildren<Button>(true);
+
+                foreach (Button btn in ButtonList)
+                {
+                    btn.colors = colors;
+                }
+
                 foreach (Image image in newList)
                 {
                     if (image != null && image.gameObject != null && image.sprite != null)
@@ -691,7 +743,30 @@ namespace PendulumClient.ColorModuleV2
                         {
                             var bordersprite = CMV2_SpriteUtil.GetGrayscaledSprite(image.sprite, true);
                             image.sprite = bordersprite;
-                            image.color = borderimagecolor;
+                            image.color = color;
+                            if (image.transform.parent.transform.Find("Panel") != null)
+                            {
+                                image.transform.parent.transform.Find("Panel").gameObject.GetComponent<Image>().color = color;
+                            }
+                            if (image.transform.parent.transform.Find("ExitButton") != null)
+                            {
+                                image.transform.parent.transform.Find("ExitButton").gameObject.GetComponent<Image>().color = color;
+                                var exitsprite = CMV2_SpriteUtil.GetGrayscaledSprite(image.transform.parent.transform.Find("ExitButton").gameObject.GetComponent<Image>().sprite, true);
+                                image.transform.parent.transform.Find("ExitButton").gameObject.GetComponent<Image>().sprite = exitsprite;
+                                image.transform.parent.transform.Find("ExitButton").gameObject.GetComponent<Button>().colors = colorsxtradark;
+                            }
+                        }
+                        if (image.gameObject.name.Contains("Lighter"))
+                        {
+                            var bordersprite = CMV2_SpriteUtil.GetGrayscaledSprite(image.sprite, true);
+                            image.sprite = bordersprite;
+                            image.color = color;
+                        }
+                        if (image.gameObject.name == "ExitButton")
+                        {
+                            var bordersprite = CMV2_SpriteUtil.GetGrayscaledSprite(image.sprite, true);
+                            image.sprite = bordersprite;
+                            image.gameObject.GetComponent<Button>().colors = colorsdarknormal;
                         }
                         if (image.transform.parent != null)
                         {
@@ -709,6 +784,26 @@ namespace PendulumClient.ColorModuleV2
             {
                 PendulumLogger.LogError("ColorSetup Error 1: " + e);
             }
+        }
+
+        public static IEnumerator WaitForStyleInit()
+        {
+            while (PendulumClientMain.styleEngine == null)
+            {
+                yield return null;
+                var qmHolder = PendulumClient.UI.NewUIExtensions.FindInactiveObjectInActiveRoot("UserInterface/Canvas_QuickMenu(Clone)");
+                if (qmHolder == null) continue;
+                var styleEngine = qmHolder.GetComponent<VRC.UI.Core.Styles.StyleEngine>();
+                if (styleEngine != null)
+                    PendulumClientMain.styleEngine = new PendulumClient.ColorModuleV2.CMV2_OverridesStyles("MenuColor", styleEngine);
+            }
+
+            while (PendulumClientMain.styleEngine.myStyleEngine.field_Private_List_1_ElementStyle_0.Count == 0) 
+                yield return null;
+
+            //PendulumClientMain.styleEngine.BackupDefaultStyle();
+
+            PendulumClientMain.Need2UIColorsSetup = true;
         }
     }
 }

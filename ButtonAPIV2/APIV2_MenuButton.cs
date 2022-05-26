@@ -54,6 +54,7 @@ namespace PendulumClient.ButtonAPIV2
                 _text.color = ColorModule.ColorModule.CachedTextColor;
                 _text.m_fontColor = ColorModule.ColorModule.CachedTextColor;
                 _text.m_htmlColor = ColorModule.ColorModule.CachedTextColor;
+                _text.margin = new Vector4(20f, 0f, 20f, 0f);
                 //_text.color = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
                 //_text.m_fontColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
                 //_text.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);

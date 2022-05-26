@@ -764,7 +764,7 @@ namespace Evolve.Yoink
             //else PendulumLogger.Log("ApiFile not initialized");
             if ((ApiFile?.IsInitialized ?? false) && Log)
             {
-                Il2CppSystem.Collections.Generic.Dictionary<string, Il2CppSystem.Object> dictionary = ApiFile.ExtractApiFields();
+                Il2CppSystem.Collections.Generic.Dictionary<string, BestHTTP.JSON.Json.Token> dictionary = ApiFile.ExtractApiFields();
                 //if (dictionary != null) PendulumLogger.Log(Tools.JsonEncode(dictionary));
             }
         }
@@ -1174,7 +1174,7 @@ namespace Evolve.Yoink
                 bool bool_3 = false;
                 apiFile_0.StartSimpleUpload(type_0, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                 {
-                    string_2 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
+                    //string_2 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
                     bool_0 = false;
                 }, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                 {
@@ -1380,7 +1380,7 @@ namespace Evolve.Yoink
                         flag = false;
                         apiFile_0.StartMultipartUpload(type_0, i, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                         {
-                            string_5 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
+                            //string_5 = IL2CPP.Il2CppStringToManaged(apiContainer_0.Cast<ApiDictContainer>().ResponseDictionary["url"].Pointer);
                             bool_2 = false;
                         }, (Action<ApiContainer>)delegate (ApiContainer apiContainer_0)
                         {

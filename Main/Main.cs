@@ -2374,7 +2374,7 @@ namespace PendulumClient.Main
             //var original8 = typeof(PhotonNetwork).GetMethod(PingMethod);
             var original9 = typeof(VRCPlayer).GetMethod(AvatarChangeMethod);
 
-            var Hook1 = typeof(UiUserList).GetMethod(nameof(UiUserList.Method_Protected_Virtual_Void_VRCUiContentButton_Object_1));
+            var Hook1 = typeof(UiUserList).GetMethod(nameof(UiUserList.Method_Protected_Virtual_Void_VRCUiContentButton_Object_0));
             var Hook1Patch = typeof(Prefixes).GetMethod(UiListPatch);
             var Hook2 = typeof(AssetBundleDownloadManager).GetMethods().Where(mi => mi.GetParameters().Length == 1 && mi.GetParameters().First().ParameterType == typeof(ApiAvatar) && mi.ReturnType == typeof(void));
             var Hook2Patch = typeof(Prefixes).GetMethod(AvatarChangePatch);

@@ -81,9 +81,22 @@ namespace PendulumClient.ButtonAPIV2
             Object.DestroyImmediate(RectTransform.Find("Badge_Close").gameObject);
             Object.DestroyImmediate(RectTransform.Find("Badge_MMJump").gameObject);
 
-            var uiTooltip = GameObject.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>();
-            uiTooltip.field_Public_String_0 = tooltip;
-            uiTooltip.field_Public_String_1 = tooltip;
+            var uiTooltips = GameObject.GetComponents<VRC.UI.Elements.Tooltips.UiTooltip>();
+            VRC.UI.Elements.Tooltips.UiTooltip uiTooltip = null;
+            if (uiTooltips.Length > 0)
+            {
+                uiTooltip = uiTooltips[0];
+
+                for (int i = 1; i < uiTooltips.Length; i++)
+                    Object.DestroyImmediate(uiTooltips[i]);
+            }
+
+            if (uiTooltip != null)
+            {
+                uiTooltip.field_Public_String_0 = tooltip;
+                uiTooltip.field_Public_String_1 = tooltip;
+            }
+
 
             _button = GameObject.GetComponent<Button>();
             _button.onClick = new Button.ButtonClickedEvent();

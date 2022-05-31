@@ -184,6 +184,9 @@ namespace PendulumClient.ButtonAPIV2
             ProtectionMenu.AddToggle("Anti VideoPlayer", "Block all events from VideoPlayers", b => {
                 Anti.Prefixes.AntiVideoPlayer = b;
             });
+            ProtectionMenu.AddToggle("Anti Emojis", "Blocks emojis from being recieved", b => {
+                Anti.Prefixes.AntiEmojis = b;
+            });
             ProtectionMenu.AddButton("Delete Portals", "Delete all Portals", () =>
             {
                 var intg = PendulumClientMain.delete_portals();

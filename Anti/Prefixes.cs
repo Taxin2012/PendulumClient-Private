@@ -40,6 +40,7 @@ namespace PendulumClient.Anti
         public static bool BlockPortalCreation = false;
         public static bool FriendOnlyPortal = false;
         public static bool IsOwner = false;
+        public static bool AntiEmojis = false;
 
         public static bool patch__false()
         {
@@ -535,6 +536,8 @@ namespace PendulumClient.Anti
                             break;
 
                         case "SpawnEmojiRPC":
+                            if (AntiEmojis) return false;
+
                             if (__0.field_Private_APIUser_0.id != APIUser.CurrentUser.id && (Convert.ToInt32(text4clean) < 0 || Convert.ToInt32(text4clean) > 57))
                             {
                                 PendulumLogger.Log($"{text} spawned an invalid emoji {Convert.ToInt32(text4clean)}");
@@ -890,13 +893,14 @@ namespace PendulumClient.Anti
                     {
                         PendulumLogger.ModerationLog("Instance owner tried force muting you");
                         AlertPopup.SendAlertPopupNOPC("[Moderation]\nInstance owner tried force muting you");
+                        QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"Instance owner tried to force mute you");
                         return false;
                     }
                 }
             }
             catch (Exception e)
             {
-                PendulumLogger.Log("Error with anti-block: " + e.ToString());
+                if (debugmode) PendulumLogger.Log("Error with anti-block: " + e.ToString());
             }
             return true;
         }

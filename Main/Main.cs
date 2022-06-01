@@ -1010,7 +1010,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(16);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(16);
                 }
                 catch { }
             }
@@ -1018,7 +1018,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(40);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(40);
                 }
                 catch { }
             }
@@ -1026,7 +1026,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(3);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
                 }
                 catch { }
             }
@@ -1034,7 +1034,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(3);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_1(3);
                 }
                 catch { }
             }
@@ -1485,7 +1485,7 @@ namespace PendulumClient.Main
                     }
                     if (NoClip == true)
                     {
-                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_2();
+                        Vector3 vector = currentPlayer.gameObject.transform.position - VRCTrackingManager.Method_Public_Static_Vector3_0();
                         Quaternion quaternion = currentPlayer.gameObject.transform.rotation * Quaternion.Inverse(VRCTrackingManager.Method_Public_Static_Quaternion_0());
                         VRCTrackingManager.Method_Public_Static_Void_Vector3_Quaternion_1(vector, quaternion);
                     }

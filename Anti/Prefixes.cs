@@ -32,7 +32,7 @@ namespace PendulumClient.Anti
         public static bool Moderation = true;
         public static short Ping = -420;
         public static string newhwid = null;
-        public static bool debugmode = true;
+        public static bool debugmode = false;
         public static bool Anti9 = false;
         public static bool Anti209 = false;
         public static bool IsOnLoadingScreen = false;

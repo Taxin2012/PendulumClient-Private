@@ -107,6 +107,7 @@ namespace PendulumClient.ButtonAPIV2
                 Anti.Prefixes.showHead = b;
             });
             FunctionMenu.AddToggle("Serialize", "Move around while others see you standing still", b => {
+                Anti.Prefixes.showHead = b;
                 PendulumClientMain.SerializePlayer(b);
             });
             FunctionMenu.AddButton("IPGrabber", "Its what it says", () => {

@@ -86,6 +86,7 @@ namespace PendulumClient.Anti
             {
                 ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
             }
+            PendulumClientMain.ColliderList.Clear();
         }
 
         public static void patch__AudioSourceOnEnd(AudioSource __instance)

@@ -1675,19 +1675,39 @@ namespace PendulumClient.Main
             }
             catch (Exception) { return false; }
         }
+
+        public static System.Collections.Generic.List<Collider> ColliderList = new System.Collections.Generic.List<Collider>();
         public static void ToggleColliders(bool toggle)
         {
-            Collider[] array = UnityEngine.Object.FindObjectsOfType<Collider>();
-            Component component = PlayerWrappers.GetCurrentPlayer().GetComponents(Il2CppType.Of<Collider>()).FirstOrDefault<Component>();
-            foreach (Collider collider in array)
+            if (toggle && ColliderList.Count == 0)
+                return;
+
+            if (toggle)
             {
-                if (CheckValidCollider(collider, component))
+                foreach (Collider collider in ColliderList)
                 {
                     try
                     {
-                        collider.enabled = toggle;
+                        collider.enabled = true;
                     }
-                    catch (Exception) { }
+                    catch { }
+                }
+            }
+            else
+            {
+                Collider[] array = UnityEngine.Object.FindObjectsOfType<Collider>();
+                Component component = PlayerWrappers.GetCurrentPlayer().GetComponents(Il2CppType.Of<Collider>()).FirstOrDefault<Component>();
+                foreach (Collider collider in array)
+                {
+                    if (CheckValidCollider(collider, component))
+                    {
+                        try
+                        {
+                            collider.enabled = false;
+                            ColliderList.Add(collider);
+                        }
+                        catch { }
+                    }
                 }
             }
         }

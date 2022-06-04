@@ -763,6 +763,8 @@ namespace PendulumClient.Anti
         public static bool AntiBlock = true;
         public static bool LBPhotonEvents(ExitGames.Client.Photon.EventData __0)
         {
+            if (__0 == null) return true;
+
             if (__0.Code == 9 && Anti9)
             {
                 var plr = PlayerWrappers.GetPlayerByPhotonID(__0.Sender);

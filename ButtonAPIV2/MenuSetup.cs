@@ -106,9 +106,21 @@ namespace PendulumClient.ButtonAPIV2
             {
                 Anti.Prefixes.showHead = b;
             });
+            funstuff.AddToggle("T-Pose", "Makes your avatar tpose", b =>
+            {
+                if (b)
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject.transform.Find("ForwardDirection/Avatar").gameObject.GetComponent<Animator>().enabled = false;
+                }
+                else
+                {
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.gameObject.transform.Find("ForwardDirection/Avatar").gameObject.GetComponent<Animator>().enabled = true;
+                }
+            });
             FunctionMenu.AddToggle("Serialize", "Move around while others see you standing still", b => {
                 Anti.Prefixes.showHead = b;
                 PendulumClientMain.SerializePlayer(b);
+                Anti.Prefixes.showHead = !b;
             });
             FunctionMenu.AddButton("IPGrabber", "Its what it says", () => {
                 PendulumClientMain.VRC_UIManager.QueueHudMessage("UwU you cawnt do thawt siwy");

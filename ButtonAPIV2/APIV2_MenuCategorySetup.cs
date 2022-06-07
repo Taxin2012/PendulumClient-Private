@@ -32,32 +32,17 @@ namespace PendulumClient.ButtonAPIV2
             set => _text.text = value;
         }
 
-        public APIV2_MenuHeader(string title, Transform parent, bool centered = false, Sprite icon = null) : base(HeaderPrefab, (parent == null ? HeaderPrefab.transform.parent : parent), $"Header_{title}")
+        public APIV2_MenuHeader(string title, Transform parent) : base(HeaderPrefab, (parent == null ? HeaderPrefab.transform.parent : parent), $"Header_{title}")
         {
             _text = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _text.text = title;
             _text.richText = true;
-            _text.color = ColorModule.ColorModule.CachedTextColor;
-            _text.m_fontColor = ColorModule.ColorModule.CachedTextColor;
-            _text.m_htmlColor = ColorModule.ColorModule.CachedTextColor;
 
             _text.transform.parent.GetComponent<HorizontalLayoutGroup>().childControlWidth = true;
-
-            if (centered)
-            {
-                _text.transform.parent.GetComponent<HorizontalLayoutGroup>().childAlignment = TextAnchor.MiddleCenter;
-                _text.text = "<space=0.65em>" + title;// + "</space>";
-            }
-
-            if (icon != null)
-            {
-                var itemcontainer = _text.transform.parent;
-                itemcontainer.GetComponent<HorizontalLayoutGroup>().childControlWidth = true;
-                var newicon = GameObject.Instantiate(GameObject.GetComponentsInChildren<Image>(true)[0].gameObject, itemcontainer);
-                newicon.name = "PendIcon";
-                newicon.GetComponent<Image>().sprite = icon;
-            }
         }
+
+        protected APIV2_MenuHeader(GameObject original, Transform parent, Vector3 pos, string name, bool defaultState = true) : base(original, parent, pos, name, defaultState) { }
+        protected APIV2_MenuHeader(GameObject original, Transform parent, string name, bool defaultState = true) : base(original, parent, name, defaultState) { }
     }
     public class APIV2_MenuButtonContainer : APIV2_MenuElement
     {
@@ -76,24 +61,19 @@ namespace PendulumClient.ButtonAPIV2
             }
         }
 
-        public APIV2_MenuButtonContainer(string name, Transform parent = null, bool centered = false) : base(ContainerPrefab, (parent == null ? ContainerPrefab.transform.parent : parent), $"Buttons_{name}")
+        public APIV2_MenuButtonContainer(string name, Transform parent = null) : base(ContainerPrefab, (parent == null ? ContainerPrefab.transform.parent : parent), $"Buttons_{name}")
         {
             foreach (var obj in RectTransform)
             {
                 var control = obj.Cast<Transform>();
+
                 if (control == null)
-                {
                     continue;
-                }
+
                 Object.Destroy(control.gameObject);
             }
-
             var gridLayout = GameObject.GetComponent<GridLayoutGroup>();
             gridLayout.childAlignment = TextAnchor.UpperLeft;
-
-            if (centered)
-                gridLayout.childAlignment = TextAnchor.MiddleCenter;
-
             gridLayout.padding.top = 8;
             gridLayout.padding.left = 64;
         }
@@ -125,13 +105,20 @@ namespace PendulumClient.ButtonAPIV2
             }
         }
 
-        public APIV2_MenuCategory(string title, Transform parent = null, bool centered = false, Sprite icon = null)
+        public APIV2_MenuCategory(string title, Transform parent = null)
         {
             Name = APIV2_MenuElement.CleanName(title);
-            Header = new APIV2_MenuHeader(title, parent, centered, icon);
-            _buttonContainer = new APIV2_MenuButtonContainer(Name, parent, centered);
+            Header = new APIV2_MenuHeader(title, parent);
+            _buttonContainer = new APIV2_MenuButtonContainer(Name, parent);
         }
 
+        public APIV2_MenuButton AddSpacer(Sprite sprite = null)
+        {
+            var spacer = AddButton(string.Empty, string.Empty, null, sprite);
+            spacer.GameObject.name = "Button_Spacer";
+            spacer.Background.gameObject.SetActive(false);
+            return spacer;
+        }
         public APIV2_MenuButton AddButton(string text, string tooltip, Action onClick, Sprite sprite = null)
         {
             var button = new APIV2_MenuButton(text, tooltip, onClick, _buttonContainer.RectTransform, sprite);
@@ -150,7 +137,7 @@ namespace PendulumClient.ButtonAPIV2
             return toggle;
         }*/
 
-        public APIV2_MenuPage AddMenuPage(string text, string tooltip = "", Sprite sprite = null)
+        public APIV2_MenuPage AddMenuPage(string text, string tooltip = "", Sprite sprite = null, bool isgrid = false)
         {
             var existingPage = GetMenuPage(text);
             if (existingPage != null)
@@ -158,7 +145,7 @@ namespace PendulumClient.ButtonAPIV2
                 return existingPage;
             }
 
-            var menu = new APIV2_MenuPage(text);
+            var menu = new APIV2_MenuPage(text, false, isgrid);
             AddButton(text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open, sprite);
             _subMenuPages.Add(menu);
             return menu;

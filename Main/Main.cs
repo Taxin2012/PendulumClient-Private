@@ -822,7 +822,6 @@ namespace PendulumClient.Main
 
             if (!APIUser.IsLoggedIn && (LoggedIn == true || BlacklistFinalLoad == true))
             {
-                Prefixes.Quest_HasBeenUnpatched = false;
                 LoggedIn = false;
                 BlacklistFinalLoad = false;
                 BlacklistLoadOnce = false;
@@ -2471,6 +2470,9 @@ namespace PendulumClient.Main
             //var Hook22v2 = typeof(AssetBundleDownloadManager).GetMethod(nameof(AssetBundleDownloadManager.Method_Internal_Void_ApiAvatar_1));
             //var Hook22Patch = typeof(Prefixes).GetMethod(nameof(Prefixes.DownloadAvatarPatch));
 
+            var Hook23 = typeof(API).GetMethod(nameof(API.SendGetRequest));
+            var Hook23Patch = typeof(Anti.Patches.APIPatches).GetMethod(nameof(Anti.Patches.APIPatches.SendGetRequestPatch));
+
             //var AudioOnEndHook = typeof(AudioSource).GetMethod("get_" + nameof(AudioSource.isPlaying));
             var AudioOnEndHook = typeof(AudioSource).GetMethods().Where(mi => mi.GetParameters().Length == 0 && mi.Name == "Stop").First();
             var AudioOnEndPatch = typeof(Prefixes).GetMethod("patch__AudioSourceOnEnd");
@@ -2577,11 +2579,11 @@ namespace PendulumClient.Main
             {
                 instance.Patch(hook, new HarmonyMethod(Hook19Patch));
             }*/
-            instance.Patch(Hook20, null, new HarmonyMethod(Hook20Patch));
+            instance.Patch(Hook20, new HarmonyMethod(Hook20Patch));
             instance.Patch(Hook21, null, new HarmonyMethod(Hook21Patch));
 
             //instance.Patch(Hook22, new HarmonyMethod(Hook22Patch));
-
+            instance.Patch(Hook23, new HarmonyMethod(Hook23Patch));
             //instance.Patch(Hook22v2, new HarmonyMethod(Hook22Patch));
             instance.Patch(typeof(CameraUtil._TakeScreenShot_d__5).GetMethod("MoveNext"), new HarmonyMethod(AccessTools.Method(typeof(Prefixes), nameof(Prefixes.patch__camera))));
             //instance.Patch(original9, new HarmonyMethod(AvatarChangePrefix), null, null);
@@ -2870,6 +2872,18 @@ namespace PendulumClient.Main
             var RightWing = newqm.transform.Find("Container/Window/Wing_Right/Button").gameObject;
             var LeftWing = newqm.transform.Find("Container/Window/Wing_Left/Button").gameObject;
 
+            if (e)
+            {
+                var Eventdata = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
+                Eventdata.position = new Vector2(373f, 373f);
+                Eventdata.pressPosition = new Vector2(373f, 373f);
+                Eventdata.eligibleForClick = false;
+                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(Eventdata);
+                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(Eventdata);
+                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
+                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
+            }
+
             RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Private_Void_Boolean_Boolean_0(!e);
             RightWing.GetComponent<Button>().interactable = !e;
             RightWing.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>().enabled = !e;
@@ -2877,17 +2891,6 @@ namespace PendulumClient.Main
             LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Private_Void_Boolean_Boolean_0(!e);
             LeftWing.GetComponent<Button>().interactable = !e;
             LeftWing.GetComponent<VRC.UI.Elements.Tooltips.UiTooltip>().enabled = !e;
-
-            if (e)
-            {
-                var Eventdata = new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current);
-                Eventdata.position = new Vector2(0f, 0f);
-                Eventdata.eligibleForClick = false;
-                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(Eventdata);
-                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().OnPointerExit(Eventdata);
-                RightWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
-                LeftWing.GetComponent<VRC.UI.Core.Styles.StyleElement>().Method_Protected_Void_0();
-            }
         }
         private static VRC_EventHandler bruhhandler1;
         public static void PendulumClientUserModeration(string userid, string moderationtype)
@@ -3449,6 +3452,35 @@ namespace PendulumClient.Main
             yield break;
         }
         public static bool ItemSpamEnabled = false;
+
+        public static IEnumerator CameraAnnoyEnum()
+        {
+            EnableDesktopCamera(true, true, false);
+            for (; ; )
+            {
+                if (!CameraAnnoyEnabled)
+                {
+                    yield break;
+                }
+                if (PlayerWrappers.GetPlayer(StoredUserID) != null)
+                {
+                    var player = PlayerWrappers.GetPlayer(StoredUserID);
+                    try
+                    {
+                        var obj = GameObject.Find("_Application/TrackingVolume/PlayerObjects/UserCamera");
+                        var pos = player.gameObject.transform.Find("AnimationController/HeadAndHandIK/HeadEffector");
+                        obj.transform.position = pos.position + (pos.forward * 0.05f);
+                        var rotation = new Quaternion(pos.transform.rotation.x, pos.transform.rotation.y, pos.transform.rotation.z, pos.transform.rotation.w);
+                        rotation *= Quaternion.Euler(90f, 0f, 0f);
+                        obj.transform.rotation = rotation;
+                    }
+                    catch { }
+                }
+                yield return new WaitForSeconds(0.015f);
+            }
+            yield break;
+        }
+        public static bool CameraAnnoyEnabled = false;
         public static string GetRegion(ApiWorldInstance instance)
         {
             var region = "";
@@ -3821,7 +3853,7 @@ namespace PendulumClient.Main
         }
 
         public static bool DesktopCameraEnabled = false;
-        public static void EnableDesktopCamera(bool enabled = true)
+        public static void EnableDesktopCamera(bool enabled = true, bool resetpos = false, bool takepics = true)
         {
             if (enabled)
             {
@@ -3830,9 +3862,14 @@ namespace PendulumClient.Main
                     var CameraBase = GameObject.Find("_Application/TrackingVolume/PlayerObjects/UserCamera");
                     var Camera = CameraBase.transform.Find("PhotoCamera").gameObject;
                     var Name = CameraBase.transform.Find("ViewFinder").gameObject;
+                    if (resetpos)
+                    {
+                        Camera.transform.localPosition = new Vector3();
+                        Name.transform.localPosition = new Vector3();
+                    }
                     Camera.SetActive(true);
                     Name.SetActive(true);
-                    DesktopCameraEnabled = true;
+                    if (takepics) DesktopCameraEnabled = true;
                 }
             }
             else

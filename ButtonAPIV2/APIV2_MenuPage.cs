@@ -39,7 +39,7 @@ namespace PendulumClient.ButtonAPIV2
 
         public UIPage UiPage { get; }
 
-        public APIV2_MenuPage(string text, bool isRoot = false) : base(MenuPrefab, MenuPrefab.transform.parent, $"Menu_PendulumClient_{text}", false)
+        public APIV2_MenuPage(string text, bool isRoot = false, bool isgrid = false, string displaytext = "") : base(MenuPrefab, MenuPrefab.transform.parent, $"Menu_PendulumClient_{text}", false)
         {
             Object.DestroyImmediate(GameObject.GetComponent<DevMenu>());
 
@@ -49,7 +49,10 @@ namespace PendulumClient.ButtonAPIV2
             _isRoot = isRoot;
             var headerTransform = RectTransform.GetChild(0);
             var titleText = headerTransform.GetComponentInChildren<TextMeshProUGUI>();
-            titleText.text = text;
+            if (string.IsNullOrEmpty(displaytext))
+                titleText.text = text;
+            else
+                titleText.text = displaytext;
             titleText.richText = true;
 
             if (!_isRoot)
@@ -83,21 +86,32 @@ namespace PendulumClient.ButtonAPIV2
             var scrollRect = RectTransform.Find("Scrollrect").GetComponent<ScrollRect>();
             _container = scrollRect.content;
 
-            // copy properties of old grid layout
-            var gridLayoutGroup = _container.Find("Buttons").GetComponent<GridLayoutGroup>();
+            if (isgrid)
+            {
+                // copy properties of old grid layout
+                var gridLayoutGroup = _container.Find("Buttons").GetComponent<GridLayoutGroup>();
 
-            Object.DestroyImmediate(_container.GetComponent<VerticalLayoutGroup>());
-            var glp = _container.gameObject.AddComponent<GridLayoutGroup>();
-            glp.spacing = gridLayoutGroup.spacing;
-            glp.cellSize = gridLayoutGroup.cellSize;
-            glp.constraint = gridLayoutGroup.constraint;
-            glp.constraintCount = gridLayoutGroup.constraintCount;
-            glp.startAxis = gridLayoutGroup.startAxis;
-            glp.startCorner = gridLayoutGroup.startCorner;
-            glp.childAlignment = TextAnchor.UpperLeft;
-            glp.padding = gridLayoutGroup.padding;
-            glp.padding.top = 8;
-            glp.padding.left = 64;
+                Object.DestroyImmediate(_container.GetComponent<VerticalLayoutGroup>());
+                var glp = _container.gameObject.AddComponent<GridLayoutGroup>();
+                glp.spacing = gridLayoutGroup.spacing;
+                glp.cellSize = gridLayoutGroup.cellSize;
+                glp.constraint = gridLayoutGroup.constraint;
+                glp.constraintCount = gridLayoutGroup.constraintCount;
+                glp.startAxis = gridLayoutGroup.startAxis;
+                glp.startCorner = gridLayoutGroup.startCorner;
+                glp.childAlignment = TextAnchor.UpperLeft;
+                glp.padding = gridLayoutGroup.padding;
+                glp.padding.top = 8;
+                glp.padding.left = 64;
+            }
+            else
+            {
+                _container.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
+                _container.GetComponent<VerticalLayoutGroup>().childForceExpandHeight = true;
+                _container.GetComponent<VerticalLayoutGroup>().childScaleHeight = true;
+                _container.GetComponent<VerticalLayoutGroup>().padding.bottom = 10;
+                _container.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            }
 
             // delete components we're not using
             Object.DestroyImmediate(_container.Find("Buttons").gameObject);
@@ -151,7 +165,7 @@ namespace PendulumClient.ButtonAPIV2
             return new APIV2_ToggleButton(text, tooltip, configValue, _container, configValue);
         }*/
 
-        public APIV2_MenuPage AddMenuPage(string text, string tooltip = "", Sprite sprite = null)
+        public APIV2_MenuPage AddMenuPage(string text, string tooltip = "", Sprite sprite = null, bool isgrid = false)
         {
             var existingPage = GetMenuPage(text);
             if (existingPage != null)
@@ -159,7 +173,7 @@ namespace PendulumClient.ButtonAPIV2
                 return existingPage;
             }
 
-            var menu = new APIV2_MenuPage(text);
+            var menu = new APIV2_MenuPage(text, false, isgrid);
             AddButton(text, string.IsNullOrEmpty(tooltip) ? $"Open the {text} menu" : tooltip, menu.Open, sprite);
             _subMenuPages.Add(menu);
             return menu;

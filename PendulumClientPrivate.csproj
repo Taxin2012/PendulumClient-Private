@@ -450,6 +450,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anti\Patches\APIPatches.cs" />
     <Compile Include="Anti\PhotonExtensions.cs" />
     <Compile Include="Anti\Prefixes.cs" />
     <Compile Include="Anti\ret.cs" />

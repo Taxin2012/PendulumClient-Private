@@ -41,12 +41,15 @@ namespace PendulumClient.ButtonAPIV2
             set => _button.interactable = value;
         }
 
+        public Image Background { get; }
+
         public APIV2_MenuButton(string text, string tooltip, Action onClick, Transform parent, Sprite sprite = null) : base(ButtonPrefab, parent,
             $"Button_{text}")
         {
             _text = GameObject.GetComponentInChildren<TextMeshProUGUI>();
             _text.text = text;
             _text.richText = true;
+            Background = RectTransform.Find("Background").GetComponent<Image>();
             if (sprite == null)
             {
                 _text.fontSize = 35;
@@ -60,7 +63,7 @@ namespace PendulumClient.ButtonAPIV2
                 //_text.m_htmlColor = new Color(0.4157f, 0.8902f, 0.9765f, 1f);
                 _text.transform.localPosition = new Vector3(_text.transform.localPosition.x, -30f);
 
-                var layoutElement = RectTransform.Find("Background").gameObject.AddComponent<LayoutElement>();
+                var layoutElement = Background.gameObject.AddComponent<LayoutElement>();
                 layoutElement.ignoreLayout = true;
 
                 var horizontalLayout = GameObject.AddComponent<HorizontalLayoutGroup>();

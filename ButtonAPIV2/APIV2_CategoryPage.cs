@@ -105,7 +105,7 @@ namespace PendulumClient.ButtonAPIV2
             OnOpen?.Invoke();
         }
 
-        public APIV2_MenuCategory AddCategory(string title, bool centered = false)
+        public APIV2_MenuCategory AddCategory(string title)
         {
             var existingCategory = GetCategory(title);
             if (existingCategory != null)
@@ -113,7 +113,7 @@ namespace PendulumClient.ButtonAPIV2
                 return existingCategory;
             }
 
-            var category = new APIV2_MenuCategory(title, _container, centered);
+            var category = new APIV2_MenuCategory(title, _container);
             _categories.Add(category);
             return category;
         }

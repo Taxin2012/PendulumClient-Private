@@ -620,6 +620,16 @@ namespace PendulumClient.ColorModuleV2
                 Component.Destroy(OldGalleryButton.transform.parent.gameObject.GetComponent<LayoutElement>());
                 Component.Destroy(OldGalleryButton.transform.parent.gameObject.GetComponent<Image>());
 
+                foreach (Slider slidetotheleft in ButtonAPIV2.NewQuickMenu.Instance.gameObject.transform.Find("Container/Window/Wing_Left").gameObject.GetComponentsInChildren<Slider>())
+                {
+                    slidetotheleft.image.sprite = CMV2_SpriteUtil.GetGrayscaledSprite(slidetotheleft.image.sprite, true);
+                    slidetotheleft.colors = colors;
+                }
+                foreach (Slider slidetotheright in ButtonAPIV2.NewQuickMenu.Instance.gameObject.transform.Find("Container/Window/Wing_Right").gameObject.GetComponentsInChildren<Slider>())
+                {
+                    slidetotheright.image.sprite = CMV2_SpriteUtil.GetGrayscaledSprite(slidetotheright.image.sprite, true);
+                    slidetotheright.colors = colors;
+                }
                 foreach (Button btn in GameObject.Find("UserInterface/MenuContent/Backdrop/Header/Tabs/ViewPort/Content").GetComponentsInChildren<Button>(true))
                 {
                     btn.colors = colors;
@@ -685,16 +695,32 @@ namespace PendulumClient.ColorModuleV2
                 {
                     text.color = color;
                 }
-                foreach (Text text2 in gameObject.transform.Find("Popups/InputKeypadPopup/Keyboard/Keys").GetComponentsInChildren<Text>(true))
+                foreach (Text text in gameObject.transform.Find("Popups/InputKeypadPopup/Keyboard/Keys").GetComponentsInChildren<Text>(true))
                 {
-                    text2.color = color;
+                    text.color = color;
                 }
-                gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
-                gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle/Panel").GetComponent<Image>().color = color;
+                foreach (Text text in gameObject.transform.Find("Popups/InputCaptchaPopup/Keyboard/Keys").GetComponentsInChildren<Text>(true))
+                {
+                    text.color = color;
+                }
+
                 gameObject.transform.Find("Popups/InputKeypadPopup/InputField").GetComponent<Image>().color = color;
+                gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle").GetComponent<Image>().sprite, true);
+                gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle").GetComponent<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+                gameObject.transform.Find("Popups/InputKeypadPopup/Rectangle/Panel").GetComponent<Image>().color = color;
+
+                gameObject.transform.Find("Popups/InputPopup/InputField").GetComponent<Image>().color = color;
+                gameObject.transform.Find("Popups/InputPopup/Rectangle").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(gameObject.transform.Find("Popups/InputPopup/Rectangle").GetComponent<Image>().sprite, true);
+                gameObject.transform.Find("Popups/InputPopup/Rectangle").GetComponent<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+                gameObject.transform.Find("Popups/InputPopup/Rectangle/Panel").GetComponent<Image>().color = color;
+
+                gameObject.transform.Find("Popups/InputCaptchaPopup/InputField").GetComponent<Image>().color = color;
+                gameObject.transform.Find("Popups/InputCaptchaPopup/Rectangle").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(gameObject.transform.Find("Popups/InputCaptchaPopup/Rectangle").GetComponent<Image>().sprite, true);
+                gameObject.transform.Find("Popups/InputCaptchaPopup/Rectangle").GetComponent<Image>().color = CMV2_ColorManager.C_MenuColorDarklight;
+                gameObject.transform.Find("Popups/InputCaptchaPopup/Rectangle/Panel").GetComponent<Image>().color = color;
+
                 gameObject.transform.Find("Popups/StandardPopupV2/Popup/Panel").GetComponent<Image>().color = color;
                 //gameObject.transform.Find("Popups/StandardPopupV2/Popup/BorderImage").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
-                gameObject.transform.Find("Popups/InputPopup/InputField").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/StandardPopup/Rectangle").GetComponent<Image>().color = new Color(color.r / 2.5f, color.g / 2.5f, color.b / 2.5f);
                 gameObject.transform.Find("Popups/StandardPopup/MidRing").GetComponent<Image>().color = color;
                 gameObject.transform.Find("Popups/StandardPopup/InnerDashRing").GetComponent<Image>().color = color;

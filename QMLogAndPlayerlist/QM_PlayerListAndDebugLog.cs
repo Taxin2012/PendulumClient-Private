@@ -288,6 +288,57 @@ namespace PendulumClient.QMLogAndPlayerlist
                 return $"<color={NuisanceColor}>{apiuser.displayName}</color>";
             }
         }
+        public static string GetNameColoredQuest(this VRC.Player player)
+        {
+            var apiuser = player.field_Private_APIUser_0;
+            var name = player.field_Private_APIUser_0.displayName;
+            if (apiuser.last_platform == "android")
+            {
+                name = "<color=#404040>[Q]</color> " + name;
+            }
+            if (VRC.Core.APIUser.IsFriendsWith(apiuser.id))
+            {
+                name = "<color=#FFCC00>[F]</color> " + name;
+            }
+            foreach (var tag in apiuser.tags)
+            {
+                if (tag == "system_legend")
+                {
+                    return $"<color={LegendaryColor}>{name}</color>";
+                }
+            }
+            foreach (var tag in apiuser.tags)
+            {
+                if (tag == "system_trust_legend")
+                {
+                    return $"<color={VeteranColor}>{name}</color>";
+                }
+            }
+            if (apiuser.hasVeteranTrustLevel)
+            {
+                return $"<color={TrustedColor}>{name}</color>";
+            }
+            else if (apiuser.hasTrustedTrustLevel)
+            {
+                return $"<color={KnownColor}>{name}</color>";
+            }
+            else if (apiuser.hasKnownTrustLevel)
+            {
+                return $"<color={UserColor}>{name}</color>";
+            }
+            else if (apiuser.hasBasicTrustLevel)
+            {
+                return $"<color={NewUserColor}>{name}</color>";
+            }
+            else if (apiuser.isUntrusted)
+            {
+                return $"<color={VisitorColor}>{name}</color>";
+            }
+            else
+            {
+                return $"<color={NuisanceColor}>{name}</color>";
+            }
+        }
         public static string GetPlayerListName(VRC.Player player)
         {
             var output = "";

@@ -1263,19 +1263,22 @@ namespace JoinNotifier
             if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
             var playerName = JoinedPlayer.displayName ?? "!null!";
             MelonCoroutines.Start(BlinkIconCoroutine(myJoinImage));
-               myJoinSource.Play();
-                if (player.prop_APIUser_0.last_platform == "android")
-                {
-                    myJoinText.color = new Color(0.25f, 0.25f, 0.25f);
-                }
-                else if (!string.IsNullOrEmpty(player.prop_APIUser_0.friendKey) || APIUser.IsFriendsWith(player.prop_APIUser_0.id) || player.prop_APIUser_0.isFriend)
-                {
-                    myJoinText.color = new Color(1f, 0.8f, 0f);
-                }
-                else
-                {
-                    myJoinText.color = JoinNotifierSettings.GetJoinIconColor();
-                }
+            myJoinSource.Play();
+            /*if (player.prop_APIUser_0.last_platform == "android")
+            {
+                //myJoinText.color = new Color(0.25f, 0.25f, 0.25f);
+                playerName = "<color=#404040>" + playerName + "</color>";
+            }
+            else if (!string.IsNullOrEmpty(player.prop_APIUser_0.friendKey) || APIUser.IsFriendsWith(player.prop_APIUser_0.id) || player.prop_APIUser_0.isFriend)
+            {
+                //myJoinText.color = new Color(1f, 0.8f, 0f);
+                playerName = "<color=#FFCC00>" + playerName + "</color>";
+            }
+            else
+            {
+                myJoinText.color = JoinNotifierSettings.GetJoinIconColor();
+            }*/
+            playerName = PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.GetNameColoredQuest(player);
             MelonCoroutines.Start(ShowName(myJoinText, playerName));
         }
         
@@ -1302,6 +1305,7 @@ namespace JoinNotifier
             if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
             if (Environment.TickCount - myLastLevelLoad < 5_000) return;
             var playerName = player.prop_APIUser_0.displayName ?? "!null!";
+            playerName = PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.GetNameColoredQuest(player);
             MelonCoroutines.Start(BlinkIconCoroutine(myLeaveImage));
             myLeaveSource.Play();
             MelonCoroutines.Start(ShowName(myLeaveText, playerName));

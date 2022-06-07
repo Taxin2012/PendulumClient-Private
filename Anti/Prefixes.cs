@@ -1577,30 +1577,25 @@ namespace PendulumClient.Anti
             return true;
         }
 
-        public static bool QuestMode = false; //QuestSpoofToggle
-        public static bool Quest_HasBeenUnpatched = false;
-        public static void QuestPatch(ref string __result)
+        public static bool QuestSpoofBool = false;
+        public static bool QuestSpoofPatch = false;
+        public static bool QuestPatch(ref string __result)
         {
-            if (QuestMode && !Quest_HasBeenUnpatched)
+            if (QuestSpoofBool == false)
             {
-                try
-                {
-                    __result = "android";
-                    MelonCoroutines.Start(UnpatchQuest());
-                }
-                catch { }
-            }
-        }
+                QuestSpoofPatch = true;
 
-        public static System.Collections.IEnumerator UnpatchQuest()
-        {
-            yield return new WaitForSeconds(3f);
-            if (!Quest_HasBeenUnpatched)
-            {
-                //PendulumClientMain._harmonyInstance.Unpatch(HarmonyLib.AccessTools.Property(typeof(Tools), "Platform").GetMethod, PendulumClientMain.QuestSpoofPatch);
-                Quest_HasBeenUnpatched = true;
+                return true;
             }
-            yield break;
+
+            if (QuestSpoofPatch == true)
+            {
+                return true;
+            }
+
+            __result = "android";
+
+            return false;
         }
 
         public static bool BlockWingInteraction = false;

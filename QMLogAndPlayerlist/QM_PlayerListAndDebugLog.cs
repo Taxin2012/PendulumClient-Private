@@ -302,14 +302,15 @@ namespace PendulumClient.QMLogAndPlayerlist
             }
             foreach (var tag in apiuser.tags)
             {
-                if (tag == "system_legend")
+                if (tag.Contains("admin_"))
+                {
+                    return $"<color={DevColor}>{name}</color>";
+                }
+                else if (tag == "system_legend")
                 {
                     return $"<color={LegendaryColor}>{name}</color>";
                 }
-            }
-            foreach (var tag in apiuser.tags)
-            {
-                if (tag == "system_trust_legend")
+                else if (tag == "system_trust_legend")
                 {
                     return $"<color={VeteranColor}>{name}</color>";
                 }

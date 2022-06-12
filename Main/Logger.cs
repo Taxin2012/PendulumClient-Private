@@ -198,6 +198,9 @@ namespace PendulumClient
         }
         public static void Log(string Log)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -215,6 +218,9 @@ namespace PendulumClient
         }
         public static void Log(string Log, ConsoleColor color)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -232,6 +238,9 @@ namespace PendulumClient
         }
         public static void Log(ConsoleColor color, string Log)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -249,6 +258,9 @@ namespace PendulumClient
         }
         public static void Log(ConsoleColor color, string Log, params object[] args)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -267,6 +279,9 @@ namespace PendulumClient
         }
         public static void Log(string Log, params object[] args)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -283,9 +298,31 @@ namespace PendulumClient
             Log = string.Format(Log, args);
             Console.Write(Log + "\n");
         }
+        public static void LogHarmony(string Log)
+        {
+            if (ColorsSetup == false)
+                SetupColors();
 
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("] [");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("PendulumClient");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("] ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("[HARMONY] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(Log + "\n");
+        }
         public static void DebugLog(string Log)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -303,6 +340,9 @@ namespace PendulumClient
         }
         public static void DebugLog(string Log, params object[] args)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -342,6 +382,9 @@ namespace PendulumClient
         }
         public static void EventLog(string Log, params object[] args)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -412,6 +455,9 @@ namespace PendulumClient
 
         public static void LogWarning(string Warning)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -427,6 +473,9 @@ namespace PendulumClient
         }
         public static void LogError(string Error)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -442,6 +491,9 @@ namespace PendulumClient
         }
         public static void LogErrorSevere(string Error)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -471,6 +523,9 @@ namespace PendulumClient
         }
         public static void Error(string Error)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;

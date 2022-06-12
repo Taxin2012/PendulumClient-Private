@@ -451,6 +451,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Anti\Patches\APIPatches.cs" />
+    <Compile Include="Anti\Patches\HarmomyPatches.cs" />
     <Compile Include="Anti\PhotonExtensions.cs" />
     <Compile Include="Anti\Prefixes.cs" />
     <Compile Include="Anti\ret.cs" />
@@ -479,6 +480,7 @@
     <Compile Include="ColorModuleV2\CMV2_SpriteUtil.cs" />
     <Compile Include="ColorModuleV2\CMV2_StyleMetadata.cs" />
     <Compile Include="ColorModuleV2\CMV2_Utils.cs" />
+    <Compile Include="ConfigV2\PendulumClientConfig.cs" />
     <Compile Include="ConfigV2\ToggleConfig.cs" />
     <Compile Include="ConfigV2\WingConfig.cs" />
     <Compile Include="CustomNameplateDetails\NameplateDetails.cs" />
@@ -522,6 +524,7 @@
     <Compile Include="UI\DevToolsMenu.cs" />
     <Compile Include="UI\GUIHelper.cs" />
     <Compile Include="UI\NewUIExtensions.cs" />
+    <Compile Include="UI\AvatarPreviewScroller.cs" />
     <Compile Include="UI\UnityExtensions.cs" />
     <Compile Include="Wrappers\Wrappers.cs" />
   </ItemGroup>

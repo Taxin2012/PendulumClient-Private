@@ -750,13 +750,13 @@ namespace PendulumClient.Anti
                         av.assetUrl = null;
                     }
 
-                    return PendulumClientMain.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
+                    return Patches.HarmomyPatches.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
                 }
             }
             catch (Exception e)
             {
                 PendulumLogger.Error("avatar download error: " + e.ToString());
-                return PendulumClientMain.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
+                return Patches.HarmomyPatches.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
             }
         }
 

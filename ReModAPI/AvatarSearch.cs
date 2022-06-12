@@ -21,6 +21,7 @@ namespace PendulumClient.ReModAPI
     {
         private static ReAvatarList _searchedAvatarList;
         private static ReAvatarList _favoriteAvatarList;
+        private static ReAvatarList _seenAvatarList;
         private static ReUiButton _favoriteButton;
         private static Button.ButtonClickedEvent _changeButtonEvent;
         private const bool AvatarFavoritesEnabled = true;

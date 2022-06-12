@@ -535,6 +535,8 @@ namespace PendulumClient.ColorModuleV2
                  
                  */
 
+                UI.AvatarPreviewScroller.SetupPreviewScroller();
+
                 var MenuContentHeader = GameObject.Find("UserInterface/MenuContent/Backdrop/Header");
                 if (MenuContentHeader != null)
                 {

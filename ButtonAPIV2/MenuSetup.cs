@@ -260,6 +260,10 @@ namespace PendulumClient.ButtonAPIV2
             ExploitsMenu.AddButton("Drop Pickups", "Drop all pickups in the world", () => {
                 MenuFunctions.DropItems();
             });
+            ExploitsMenu.AddToggle("Quest Lagger", "Spams Emotes and Emojis", b => 
+            {
+                PendulumClientMain.RPC_Crash = b;
+            });
         }
 
         private static void SetupSelectedUserMenu(APIV2_ButtonPageInterface MainMenu)
@@ -338,6 +342,7 @@ namespace PendulumClient.ButtonAPIV2
                 if (plr == null)
                 {
                     PendulumClientMain.VRC_UIManager.QueueHudMessage("No Selected User Found!");
+                    PendulumClientMain.EnableDesktopCamera(false);
                     return;
                 }
 

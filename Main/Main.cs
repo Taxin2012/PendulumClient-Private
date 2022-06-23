@@ -360,6 +360,7 @@ namespace PendulumClient.Main
         {
             Modules.Add(new JoinNotifierMod());
             if (Prefixes.debugmode) PendulumLogger.EventLog("OnApplicationStart");
+            PendulumLogger.Log(Environment.CommandLine);
             //PendulumLogger.Log(AppData);
             Console.Title = "Pendulum Client";
             PendulumClientMain.Modules.ForEach(delegate (VRCMod y)
@@ -1378,7 +1379,10 @@ namespace PendulumClient.Main
 
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.R))
             {
-                ForceRestart();
+                if (RoomManager.field_Internal_Static_ApiWorldInstance_0 != null && RoomManager.field_Internal_Static_ApiWorld_0 != null)
+                    ForceRestart(RoomManager.field_Internal_Static_ApiWorldInstance_0.worldId + ":" + RoomManager.field_Internal_Static_ApiWorldInstance_0.instanceId);
+                else
+                    ForceRestart();
             }
 
             if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.H))
@@ -2708,7 +2712,7 @@ namespace PendulumClient.Main
         }
 
         public static bool GoHomeOnRestart = true;
-        public static void ForceRestart()
+        public static void ForceRestart(string instanceid = "")
         {
             if (GoHomeOnRestart)
             {
@@ -2717,13 +2721,37 @@ namespace PendulumClient.Main
                     GoHome();
                 }
                 catch { }
-                MelonCoroutines.Start(ForceRestartEnum());
+                MelonCoroutines.Start(ForceRestartEnum(instanceid));
             }
             else
             {
                 try
                 {
-                    Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", Environment.CommandLine.ToString());
+                    if (string.IsNullOrEmpty(instanceid) || !instanceid.StartsWith("wrld_") || !instanceid.Contains(":"))
+                    {
+                        Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", Environment.CommandLine.ToString());
+                    }
+                    else
+                    {
+                        var cmdline = Environment.CommandLine.ToString();
+
+                        var WorldID = GetWorldIDFromCMDL(cmdline);
+                        if (!string.IsNullOrEmpty(WorldID))
+                        {
+                            cmdline = cmdline.Replace($"\"{WorldID}\"", "");
+                        }
+                        var VRCLoc = GetVRCFromCMDL(cmdline);
+                        if (!string.IsNullOrEmpty(VRCLoc))
+                        {
+                            cmdline = cmdline.Replace($"\"{VRCLoc}\"", "");
+                        }
+
+                        if (!cmdline.Contains("vrchat://launch?id="))
+                        {
+                            cmdline += $" \"vrchat://launch?id={instanceid}\"";
+                        }
+                        Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", cmdline);
+                    }
                 }
                 catch (Exception)
                 {
@@ -2733,12 +2761,36 @@ namespace PendulumClient.Main
             }
         }
 
-        public static IEnumerator ForceRestartEnum()
+        public static IEnumerator ForceRestartEnum(string instanceid)
         {
             yield return new WaitForSecondsRealtime(0.5f);
             try
             {
-                Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", Environment.CommandLine.ToString());
+                if (string.IsNullOrEmpty(instanceid) || !instanceid.StartsWith("wrld_") || !instanceid.Contains(":"))
+                {
+                    Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", Environment.CommandLine.ToString());
+                }
+                else
+                {
+                    var cmdline = Environment.CommandLine.ToString();
+
+                    var WorldID = GetWorldIDFromCMDL(cmdline);
+                    if (!string.IsNullOrEmpty(WorldID))
+                    {
+                        cmdline = cmdline.Replace($"\"{WorldID}\"", "");
+                    }
+                    var VRCLoc = GetVRCFromCMDL(cmdline);
+                    if (!string.IsNullOrEmpty(VRCLoc))
+                    {
+                        cmdline = cmdline.Replace($"\"{VRCLoc}\"", "");
+                    }
+
+                    if (!cmdline.Contains("vrchat://launch?id="))
+                    {
+                        cmdline += $" \"vrchat://launch?id={instanceid}\"";
+                    }
+                    Process.Start(Environment.CurrentDirectory + "\\VRChat.exe", cmdline);
+                }
             }
             catch (Exception)
             {
@@ -2748,6 +2800,32 @@ namespace PendulumClient.Main
             yield break;
         }
 
+        public static string GetWorldIDFromCMDL(string cmdl)
+        {
+            var list1 = cmdl.Split('\"');
+            foreach (string str in list1)
+            {
+                if (str.StartsWith("vrchat://launch?id="))
+                {
+                    return str;
+                }
+            }
+            return "";
+        }
+
+        public static string GetVRCFromCMDL(string cmdl)
+        {
+            var list1 = cmdl.Split('\"');
+            foreach (string str in list1)
+            {
+                if (str.Contains(@"VRChat\VRChat.exe"))
+                {
+                    return str;
+                }
+            }
+            return "";
+
+        }
         private static VRC_EventHandler bruhhandler;
         public static void SendBruhEvent()
         {

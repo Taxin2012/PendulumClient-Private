@@ -21,7 +21,7 @@ namespace PendulumClient.Anti
         }
         public IEnumerator Desync()
         {
-            byte[] VoiceData = Convert.FromBase64String("AgAAAKWkyYm7hjsA+H3owFygUv4w5B67lcSx14zff9FCPADiNbSwYWgE+O7DrSy5tkRecs21ljjofvebe6xsYlA4cVmgrd0=");
+            byte[] VoiceData = Convert.FromBase64String("AAAAAAAAAAC7hjsA+H3owFygUv4w5B67lcSx14zff9FCPADiNbSwYWgE+O7Dhiy5tkRecs21ljjofvebe6xsYlA4cVmght0=");
             byte[] nulldata = new byte[4];
             byte[] ServerTime = BitConverter.GetBytes(VRC.SDKBase.Networking.GetServerTimeInMilliseconds());
             Buffer.BlockCopy(nulldata, 0, VoiceData, 0, 4);

@@ -481,12 +481,12 @@ namespace PendulumClient.Anti
                     }
                 }
 
-                if ((__1.ParameterObject.name == "VRCVideoSync" || __1.ParameterObject.GetComponent<VideoPlayer>() != null) && AntiVideoPlayer)
+                /*if ((__1.ParameterObject.name == "VRCVideoSync" || __1.ParameterObject.GetComponent<VideoPlayer>() != null) && AntiVideoPlayer)
                 {
                     PendulumLogger.Log("Blocked VideoPlayer event");
                     QMLogAndPlayerlist.DebugLogFunctions.DebugLog("Blocked VideoPlayer event from: " + __1.ParameterObject.name);
                     return false;
-                }
+                }*/ //redoing this whole thing eww
 
                 Il2CppSystem.Object[] array = Networking.DecodeParameters(__1.ParameterBytes);
                 if (array == null)
@@ -750,13 +750,13 @@ namespace PendulumClient.Anti
                         av.assetUrl = null;
                     }
 
-                    return Patches.HarmomyPatches.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
+                    return HarmomyPatchManager.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
                 }
             }
             catch (Exception e)
             {
                 PendulumLogger.Error("avatar download error: " + e.ToString());
-                return Patches.HarmomyPatches.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
+                return HarmomyPatchManager.dgAttemptAvatarDownload(hiddenStructReturn, thisPtr, pApiAvatar, pMulticastDelegate, param_3, nativeMethodInfo);
             }
         }
 

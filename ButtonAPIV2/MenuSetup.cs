@@ -228,17 +228,17 @@ namespace PendulumClient.ButtonAPIV2
         private static void SetupExploitsMenu(APIV2_ButtonPageInterface MainMenu)
         {
             var ExploitsMenu = MainMenu.AddMenuPage("Exploits", "boo corbin", null, true);
-            ExploitsMenu.AddToggle("Event9", "we do a slight amount of trolling", b => {
+            /*ExploitsMenu.AddToggle("Event9", "we do a slight amount of trolling", b => {
                 //MenuFunctions.EnableEvent9(b);
             });
             ExploitsMenu.AddToggle("Event209", "we do a slight amount of trolling", b => {
                // MenuFunctions.EnableEvent209(b);
             });
-            ExploitsMenu.AddToggle("Big Uspeak Spammer", "we do a massive amount of trolling", b => {
-                MenuFunctions.EnableEventBigUspeak(b);
-            });
             ExploitsMenu.AddButton("Small Event9", "we do a small amount of trolling", () => {
                 //MenuFunctions.SmallEvent9();
+            });*/ // vaulted these cause uhh obvious reasons
+            ExploitsMenu.AddToggle("Big Uspeak Spammer", "we do a massive amount of trolling", b => {
+                MenuFunctions.EnableEventBigUspeak(b);
             });
             ExploitsMenu.AddButton("big uspeak", "deez", () =>
             {

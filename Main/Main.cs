@@ -360,7 +360,7 @@ namespace PendulumClient.Main
         {
             Modules.Add(new JoinNotifierMod());
             if (Prefixes.debugmode) PendulumLogger.EventLog("OnApplicationStart");
-            PendulumLogger.Log(Environment.CommandLine);
+            //PendulumLogger.Log(Environment.CommandLine);
             //PendulumLogger.Log(AppData);
             Console.Title = "Pendulum Client";
             PendulumClientMain.Modules.ForEach(delegate (VRCMod y)
@@ -479,7 +479,9 @@ namespace PendulumClient.Main
             }
             Login.IsInVR = !Environment.GetCommandLineArgs().Any(args => args.Equals("--no-vr", StringComparison.OrdinalIgnoreCase));
             IsLoading = true;
-            Anti.Patches.HarmomyPatches.PatchHarmony(this.HarmonyInstance);
+            PendulumPatchManager.SetupPatchManager(this.HarmonyInstance);
+            PendulumPatchManager.PatchMethods();
+            HarmomyPatchManager.PatchHarmony(this.HarmonyInstance);
             //AvatarYoinking.OnStart();
             IntPtr newptr3 = *(IntPtr*)value;
             HookMethod((IntPtr)(&newptr3), Marshal.GetFunctionPointerForDelegate<Action<IntPtr>>(new Action<IntPtr>(PortalCreator)));
@@ -2714,7 +2716,7 @@ namespace PendulumClient.Main
         public static bool GoHomeOnRestart = true;
         public static void ForceRestart(string instanceid = "")
         {
-            if (GoHomeOnRestart)
+            if (GoHomeOnRestart && !IsLoading)
             {
                 try
                 {

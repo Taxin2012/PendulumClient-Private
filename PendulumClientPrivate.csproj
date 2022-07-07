@@ -450,8 +450,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anti\BlockedStrings.cs" />
     <Compile Include="Anti\Patches\APIPatches.cs" />
-    <Compile Include="Anti\Patches\HarmomyPatches.cs" />
+    <Compile Include="Anti\HarmomyPatchManager.cs" />
+    <Compile Include="Anti\Patches\ImageDownloadPatch.cs" />
+    <Compile Include="Anti\Patches\VideoSyncPatch.cs" />
+    <Compile Include="Anti\PendulumPatch.cs" />
+    <Compile Include="Anti\PendulumPatchManager.cs" />
     <Compile Include="Anti\PhotonExtensions.cs" />
     <Compile Include="Anti\Prefixes.cs" />
     <Compile Include="Anti\ret.cs" />

@@ -401,7 +401,26 @@ namespace PendulumClient
             Log = string.Format(Log, args);
             Console.Write(Log + "\n");
         }
+        public static void SocialLog(string Log)
+        {
+            if (ColorsSetup == false)
+                SetupColors();
 
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("] [");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("PendulumClient");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("] ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("[SOCIAL] ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(Log + "\n");
+        }
         public static void JoinLog(string Log)
         {
             Console.ForegroundColor = ConsoleColor.Gray;

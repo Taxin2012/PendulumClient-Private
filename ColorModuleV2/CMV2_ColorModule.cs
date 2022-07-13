@@ -14,14 +14,12 @@ using UiSafetyFeatureToggle = MonoBehaviourPublicIPointerEnterHandlerIEventSyste
 
 namespace PendulumClient.ColorModuleV2
 {
-    public static class CMV2_ColorModule
+    internal static class CMV2_ColorModule
     {
         private static Sprite NewButton = null;
         private static List<string> GrayscaleSprites = new List<string>();
-        public static bool MenuMusicShuffle = false;
-        public static List<AudioClip> Musics = new List<AudioClip>();
-        public static IntPtr AudioSourcePTR = IntPtr.Zero;
-        public static void SetupColors(CMV2_OverridesStyles ColorStyle)
+        internal static IntPtr AudioSourcePTR = IntPtr.Zero;
+        internal static void SetupColors(CMV2_OverridesStyles ColorStyle)
         {
             PendulumClientMain.UIColorsSetup = true;
 
@@ -133,169 +131,11 @@ namespace PendulumClient.ColorModuleV2
                 styleElement.Method_Protected_Void_0();
             ExtraStuff();
         }
-        public static void ShuffleMenuMusic()
-        {
-            if (Musics.Count > 0)
-            {
-                var i = new System.Random().Next(0, Musics.Count - 1);
-                var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
-                //audioSource.loop = false;
-                //AudioSourcePTR = audioSource.GetCachedPtr();
-                if (audioSource.isPlaying)
-                {
-                    audioSource.Stop();
-                    audioSource.clip = Musics[i];
-                    audioSource.Play();
-                }
-                else
-                {
-                    audioSource.clip = Musics[i];
-                }
-            }
-        }
-        public static void LoadingScreenStuff()
+        internal static void LoadingScreenStuff()
         {
             try
             {
-                if (File.Exists("PendulumClient/MenuMusic/LoginMusic.wav"))
-                {
-                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoginMusic.wav")}");
-                    uwr.SendWebRequest();
-                    if (!uwr.isDone)
-                    {
-                        while (true)
-                        {
-                            System.Threading.Thread.Sleep(1);
-                            if (uwr.isDone)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
-
-                    var audioSource = GameObject.Find("UserInterface/LoadingBackground_TealGradient_Music/LoadingSound").GetComponent<AudioSource>();
-                    audioSource.Stop();
-                    audioSource.clip = audioClip;
-                    audioSource.Play();
-                }
-                else if (File.Exists("PendulumClient/MenuMusic/LoginMusic.ogg"))
-                {
-                    var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoginMusic.ogg")}");
-                    uwr.SendWebRequest();
-                    if (!uwr.isDone)
-                    {
-                        while (true)
-                        {
-                            System.Threading.Thread.Sleep(1);
-                            if (uwr.isDone)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
-
-                    var audioSource = GameObject.Find("UserInterface/LoadingBackground_TealGradient_Music/LoadingSound").GetComponent<AudioSource>();
-                    audioSource.Stop();
-                    audioSource.clip = audioClip;
-                    audioSource.Play();
-                }
-                if (Directory.Exists(Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/ShuffleMusic")))
-                {
-                    try
-                    {
-                        foreach (var file in Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/ShuffleMusic")))
-                        {
-                            var extension = Path.GetExtension(file);
-                            if (extension == ".wav" || extension == ".ogg")
-                            {
-                                var uwr = UnityWebRequest.Get($"file://{file}");
-                                uwr.SendWebRequest();
-                                if (!uwr.isDone)
-                                {
-                                    while (true)
-                                    {
-                                        System.Threading.Thread.Sleep(1);
-                                        if (uwr.isDone)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-                                var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
-                                audioClip.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-                                Musics.Add(audioClip);
-                            }
-                        }
-                        MenuMusicShuffle = true;
-                    }
-                    catch(Exception e)
-                    {
-                        PendulumLogger.LogErrorSevere("Failed to load ShuffleMenuMusic: " + e.ToString());
-                    }
-                }
-                else
-                {
-                    if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.wav"))
-                    {
-                        var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.wav")}");
-                        uwr.SendWebRequest();
-                        if (!uwr.isDone)
-                        {
-                            while (true)
-                            {
-                                System.Threading.Thread.Sleep(1);
-                                if (uwr.isDone)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
-
-                        var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
-                        if (audioSource.isPlaying)
-                        {
-                            audioSource.Stop();
-                            audioSource.clip = audioClip;
-                            audioSource.Play();
-                        }
-                        else
-                        {
-                            audioSource.clip = audioClip;
-                        }
-                    }
-                    else if (File.Exists("PendulumClient/MenuMusic/LoadingMusic.ogg"))
-                    {
-                        var uwr = UnityWebRequest.Get($"file://{Path.Combine(Environment.CurrentDirectory, "PendulumClient/MenuMusic/LoadingMusic.ogg")}");
-                        uwr.SendWebRequest();
-                        if (!uwr.isDone)
-                        {
-                            while (true)
-                            {
-                                System.Threading.Thread.Sleep(1);
-                                if (uwr.isDone)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                        var audioClip = WebRequestWWW.InternalCreateAudioClipUsingDH(uwr.downloadHandler, uwr.url, false, false, AudioType.UNKNOWN);
-
-                        var audioSource = GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/LoadingSound").GetComponent<AudioSource>();
-                        if (audioSource.isPlaying)
-                        {
-                            audioSource.Stop();
-                            audioSource.clip = audioClip;
-                            audioSource.Play();
-                        }
-                        else
-                        {
-                            audioSource.clip = audioClip;
-                        }
-                    }
-                }
+                UI.MenuMusicStuff.SetupMenuMusic();
             }
             catch (Exception e)
             {
@@ -321,15 +161,15 @@ namespace PendulumClient.ColorModuleV2
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Loading Elements/txt_Percent").GetComponentInChildren<Text>().color = color;
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Loading Elements/txt_LOADING_Size").GetComponentInChildren<Text>().color = color;
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/MirroredElements").gameObject.SetActive(false);
-                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Panel_Backdrop").GetComponent<Image>().sprite = new Sprite();
-                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Panel_Backdrop").GetComponent<Image>().color = color / 2f;
+                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Panel_Backdrop").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Panel_Backdrop").GetComponent<Image>().sprite, true);//new Sprite();
+                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Panel_Backdrop").GetComponent<Image>().color = color; // 2f;
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/3DElements/LoadingBackground_TealGradient/SkyCube_Baked").GetComponentInChildren<MeshRenderer>().material.SetTexture("_Tex", new Texture2D(32, 32));
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/3DElements/LoadingBackground_TealGradient/SkyCube_Baked").GetComponentInChildren<MeshRenderer>().material.SetColor("_Tint", new Color(0f, 0f, 0f));
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/3DElements/LoadingBackground_TealGradient/_FX_ParticleBubbles/FX_snow").GetComponentInChildren<ParticleSystem>().startColor = new Color(1f, 1f, 1f, 0.5f);
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/3DElements/LoadingBackground_TealGradient/_FX_ParticleBubbles/FX_snow").GetComponentInChildren<ParticleSystem>().startSize = 0.1f;
-                var newdecosprite = CMV2_SpriteUtil.GetGrayscaledSprite(GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Left").GetComponent<Image>().sprite, true);
-                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Left").GetComponent<Image>().sprite = newdecosprite;
-                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Right").GetComponent<Image>().sprite = newdecosprite;
+                //var newdecosprite = CMV2_SpriteUtil.GetGrayscaledSprite(GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Left").GetComponent<Image>().sprite, true);
+                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Left").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Left").GetComponent<Image>().sprite, true);//newdecosprite;
+                GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Right").GetComponent<Image>().sprite = CMV2_SpriteUtil.GetGrayscaledSprite(GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Right").GetComponent<Image>().sprite, true);//newdecosprite;
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Left").GetComponent<Image>().color = color;
                 GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/ProgressPanel/Parent_Loading_Progress/Decoration_Right").GetComponent<Image>().color = color;
                 foreach(Button btn in GameObject.Find("UserInterface/MenuContent/Popups/LoadingPopup/").GetComponentsInChildren<Button>())
@@ -343,7 +183,7 @@ namespace PendulumClient.ColorModuleV2
             }
         }
 
-        public static void ChangeHudReticle()
+        internal static void ChangeHudReticle()
         {
             try
             {
@@ -351,7 +191,7 @@ namespace PendulumClient.ColorModuleV2
             }
             catch { }
         }
-        public static void ChangeDebugPanel()
+        internal static void ChangeDebugPanel()
         {
             try
             {
@@ -359,7 +199,7 @@ namespace PendulumClient.ColorModuleV2
             }
             catch { }
         }
-        public static void ExtraStuff()
+        internal static void ExtraStuff()
         {
             var CachedColor = ColorModule.ColorModule.CachedColor;
             Color SolidWhite = new Color(1f, 1f, 1f, 1f);
@@ -755,6 +595,21 @@ namespace PendulumClient.ColorModuleV2
                 gameObject.transform.Find("Popups/InformationPopup/TitleText").GetComponent<Text>().color = color;
                 gameObject.transform.Find("Popups/InformationPopup/TitleText").GetComponent<Outline>().effectColor = borderimagecolor;
 
+                /*var newrt = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+                newrt.antiAliasing = 1;
+                newrt.autoGenerateMips = true;
+                newrt.bindTextureMS = false;
+                newrt.dimension = UnityEngine.Rendering.TextureDimension.Tex2D;
+                newrt.enableRandomWrite = false;
+                //newrt.format = RenderTextureFormat.ARGB32;
+                newrt.graphicsFormat = UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_UNorm;
+                newrt.isCubemap = false;
+                newrt.isPowerOfTwo = true;
+                newrt.isVolume = false;
+
+                GameObject.Find("UserInterface/PlayerDisplay/WorldHudDisplay/MenuMesh").GetComponent<MeshFilter>().mesh = makeHudMesh(60);
+                GameObject.Find("UserInterface/PlayerDisplay/WorldHudDisplay/MenuMesh").GetComponent<UiShapeGenerator>().Method_Public_Void_0();*/
+
                 var newList = gameObject.transform.Find("Popups").GetComponentsInChildren<Image>(true);
                 var ButtonList = gameObject.transform.Find("Popups").GetComponentsInChildren<Button>(true);
 
@@ -814,7 +669,41 @@ namespace PendulumClient.ColorModuleV2
             }
         }
 
-        public static IEnumerator WaitForStyleInit()
+        internal static Mesh makeHudMesh(int xDivs = 30, int yDivs = 5, float angleCoverage = 180f, float radius = 1f)
+        {
+            List<Vector3> list = new List<Vector3>();
+            List<Vector2> list2 = new List<Vector2>();
+            List<int> list3 = new List<int>();
+            for (int i = 0; i <= xDivs; i++)
+            {
+                float num = (float)i / (float)xDivs;
+                float num2 = num * angleCoverage - angleCoverage / 2f;
+                float num3 = radius * Mathf.Sin(num2);
+                float num4 = radius * Mathf.Cos(num2);
+                for (int j = 0; j <= yDivs; j++)
+                {
+                    float num5 = (float)j / (float)yDivs;
+                    float num6 = num5 - 1f;
+                    list.Add(new Vector3(num3, num6, num4));
+                    list2.Add(new Vector2(num, num5));
+                    if (i != 0 && j != 0)
+                    {
+                        list3.Add(j + (yDivs + 1) * i);
+                        list3.Add(j - 1 + (yDivs + 1) * i);
+                        list3.Add(j + (yDivs + 1) * (i - 1));
+                        list3.Add(j - 1 + (yDivs + 1) * i);
+                        list3.Add(j - 1 + (yDivs + 1) * (i - 1));
+                        list3.Add(j + (yDivs + 1) * (i - 1));
+                    }
+                }
+            }
+            Mesh mesh = new Mesh();
+            mesh.vertices = list.ToArray();
+            mesh.uv = list2.ToArray();
+            mesh.triangles = list3.ToArray();
+            return mesh;
+        }
+        internal static IEnumerator WaitForStyleInit()
         {
             while (PendulumClientMain.styleEngine == null)
             {

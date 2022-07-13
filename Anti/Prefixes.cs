@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace PendulumClient.Anti
 
         public static void postpatch__QMOnOpen()
         {
-            try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { if (debugmode) { PendulumLogger.LogError("DebugPanel ColorChange Failed! Retrying in 5 threads..."); } }
+            try { ColorModuleV2.CMV2_ColorModule.ChangeDebugPanel(); } catch { if (debugmode) { PendulumLogger.LogError("DebugPanel ColorChange Failed!"); } }
             PendulumClientMain.SetupDebugPanelNextThread = true;
         }
 
@@ -82,11 +83,28 @@ namespace PendulumClient.Anti
         public static void postpatch__OnLoading()
         {
             IsOnLoadingScreen = true;
-            if (ColorModuleV2.CMV2_ColorModule.MenuMusicShuffle)
+            if (MenuMusicStuff.MenuMusicShuffle)
             {
-                ColorModuleV2.CMV2_ColorModule.ShuffleMenuMusic();
+                MenuMusicStuff.ShuffleMenuMusic();
             }
             PendulumClientMain.ColliderList.Clear();
+            MelonCoroutines.Start(ButtonColliderFix());
+        }
+
+        internal static IEnumerator ButtonColliderFix()
+        {
+            yield return new WaitForSecondsRealtime(0.373f);
+            if (PendulumClientMain.restartButton != null && PendulumClientMain.exitButton != null)
+            {
+                while (!PendulumClientMain.restartButton.gameObject.activeInHierarchy)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+                PendulumClientMain.restartButton.gameObject.SetActive(false);
+                PendulumClientMain.restartButton.gameObject.SetActive(true);
+                PendulumClientMain.exitButton.gameObject.SetActive(false);
+                PendulumClientMain.exitButton.gameObject.SetActive(true);
+            }
         }
 
         public static void patch__AudioSourceOnEnd(AudioSource __instance)

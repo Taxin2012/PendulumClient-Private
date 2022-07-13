@@ -10,12 +10,12 @@ namespace PendulumClient.QMLogAndPlayerlist
 {
     class QM_PlayerListAndDebugLog
     {
-        public static VRC_PLScrollRect PlayerList;
-        public static VRC_DebugScrollRect DebugLog;
+        internal static VRC_PLScrollRect PlayerList;
+        internal static VRC_DebugScrollRect DebugLogRect;
         public static void OnUI()
         {
             PlayerList = new VRC_PLScrollRect("Right_PL_Closed", "PC_RightWingPlayerList", 2222, 0/*609.902f, 457.9203f*/, GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/Wing_Right/Button").transform);
-            DebugLog = new VRC_DebugScrollRect("Left_DL_Closed", "PC_LeftWingDebugLog", -2222, 0/*609.902f, 457.9203f*/, GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/Wing_Left/Button").transform);
+            DebugLogRect = new VRC_DebugScrollRect("Left_DL_Closed", "PC_LeftWingDebugLog", -2222, 0/*609.902f, 457.9203f*/, GameObject.Find("UserInterface/Canvas_QuickMenu(Clone)/Container/Window/Wing_Left/Button").transform);
             DebugLogFunctions.DebugLogStartup();
         }
     }
@@ -29,7 +29,7 @@ namespace PendulumClient.QMLogAndPlayerlist
         public static List<GameObject> TextObjects = new List<GameObject>(); //logs are TextObjects[#] 0-99
         public static void DebugLogStartup()
         {
-            if (QM_PlayerListAndDebugLog.DebugLog != null)
+            if (QM_PlayerListAndDebugLog.DebugLogRect != null)
             {
                 if (VRC_DebugScrollRect.TempText != null)
                 {
@@ -49,6 +49,16 @@ namespace PendulumClient.QMLogAndPlayerlist
 
         public static void DebugLogUpdate(string Input)
         {
+            if (!QM_PlayerListAndDebugLog.DebugLogRect.enabled)
+            {
+                QM_PlayerListAndDebugLog.DebugLogRect.Scroll.SetActive(false);
+                return;
+            }
+            else if (!QM_PlayerListAndDebugLog.DebugLogRect.Scroll.activeSelf)
+            {
+                QM_PlayerListAndDebugLog.DebugLogRect.Scroll.SetActive(true);
+            }
+
             if (TextObjects.Count >= MaxLogs)
             {
                 if (TextObjects.ElementAt(0) != null)
@@ -304,7 +314,7 @@ namespace PendulumClient.QMLogAndPlayerlist
             {
                 if (tag.Contains("admin_"))
                 {
-                    return $"<color={DevColor}>{name}</color>";
+                    return $"<color=#FF0000>[DEV]</color> <color={DevColor}>{name}</color>";
                 }
                 else if (tag == "system_legend")
                 {
@@ -332,6 +342,42 @@ namespace PendulumClient.QMLogAndPlayerlist
                 return $"<color={NewUserColor}>{name}</color>";
             }
             else if (apiuser.isUntrusted)
+            {
+                return $"<color={VisitorColor}>{name}</color>";
+            }
+            else
+            {
+                return $"<color={NuisanceColor}>{name}</color>";
+            }
+        }
+
+        public static string GetNameColoredQuestFromTrust(Wrapper.PlayerWrappers.TrustRank trustRank, string name, string userid)
+        {
+            if (VRC.Core.APIUser.IsFriendsWith(userid))
+            {
+                name = "<color=#FFCC00>[F]</color> " + name;
+            }
+            if (trustRank == Wrapper.PlayerWrappers.TrustRank.Admin)
+            {
+                return $"<color=#FF0000>[DEV]</color> <color={DevColor}>{name}</color>";
+            }
+            if (trustRank == Wrapper.PlayerWrappers.TrustRank.Trusted)
+            {
+                return $"<color={TrustedColor}>{name}</color>";
+            }
+            else if (trustRank == Wrapper.PlayerWrappers.TrustRank.Known)
+            {
+                return $"<color={KnownColor}>{name}</color>";
+            }
+            else if (trustRank == Wrapper.PlayerWrappers.TrustRank.User)
+            {
+                return $"<color={UserColor}>{name}</color>";
+            }
+            else if (trustRank == Wrapper.PlayerWrappers.TrustRank.New)
+            {
+                return $"<color={NewUserColor}>{name}</color>";
+            }
+            else if (trustRank == Wrapper.PlayerWrappers.TrustRank.Visitor)
             {
                 return $"<color={VisitorColor}>{name}</color>";
             }
@@ -393,13 +439,21 @@ namespace PendulumClient.QMLogAndPlayerlist
         {
             for (; ; )
             {
-                if (VRC_PLScrollRect.CloneableText != null && VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0 != null && VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count > 0)
+                if (!QM_PlayerListAndDebugLog.PlayerList.enabled)
+                {
+                    ClearPlayerList(false);
+                    QM_PlayerListAndDebugLog.PlayerList.Scroll.SetActive(false);
+                }
+                else if (VRC_PLScrollRect.CloneableText != null && VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0 != null && VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count > 0)
                 {
                     if (VRC_PLScrollRect.TempText != null)
                     {
                         GameObject.DestroyImmediate(VRC_PLScrollRect.TempText);
                     }
-
+                    if (!QM_PlayerListAndDebugLog.PlayerList.Scroll.activeSelf)
+                    {
+                        QM_PlayerListAndDebugLog.PlayerList.Scroll.SetActive(true);
+                    }
                     try
                     {
                         UpdatePlayerCount();

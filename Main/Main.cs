@@ -261,8 +261,8 @@ namespace PendulumClient.Main
         public static string AppData = ReturnUserPath() + "/Temp/PendulumClient";
         public static string PortalDropperName = string.Empty;
 
-        public const string PendulumClientBuildVersion = "4.0.4.4";
-        public const string PendulumClientBranchVersion = "dev_";
+        public const string PendulumClientBuildVersion = "4.0.4.5";
+        public const string PendulumClientBranchVersion = "b-dev";
 
         public byte[] LogoBytes;
 
@@ -297,6 +297,7 @@ namespace PendulumClient.Main
         public static AssetBundle m373;
         public static bool is373 = false;
         public static Sprite DevCircleIcon = null;
+        internal static string MenuColorHex = "";
 
         public static AvatarSearch _avatarSearchInstance = null;
 
@@ -362,7 +363,7 @@ namespace PendulumClient.Main
             if (Prefixes.debugmode) PendulumLogger.EventLog("OnApplicationStart");
             //PendulumLogger.Log(Environment.CommandLine);
             //PendulumLogger.Log(AppData);
-            Console.Title = "Pendulum Client";
+            Console.Title = $"Pendulum Client v{PendulumClientBuildVersion} ({PendulumClientBranchVersion})";
             PendulumClientMain.Modules.ForEach(delegate (VRCMod y)
             {
                 y.OnStart();
@@ -371,6 +372,7 @@ namespace PendulumClient.Main
             Directory.CreateDirectory("PendulumClient");
             Directory.CreateDirectory("PendulumClient/Logo");
             Directory.CreateDirectory("PendulumClient/MenuMusic");
+            Directory.CreateDirectory("PendulumClient/MenuMusic/ShuffleMusic");
             Directory.CreateDirectory("PendulumClient/PlayerLogs");
             Directory.CreateDirectory("PendulumClient/WorldLogs");
             Directory.CreateDirectory("PendulumClient/VRCA");
@@ -479,6 +481,16 @@ namespace PendulumClient.Main
             }
             Login.IsInVR = !Environment.GetCommandLineArgs().Any(args => args.Equals("--no-vr", StringComparison.OrdinalIgnoreCase));
             IsLoading = true;
+            if (File.Exists(Environment.CurrentDirectory + "/PendulumClient/373"))
+            {
+                ColorModule.ColorModule.CachedColor = new Color(1f, 0f, 0f, 2f);
+                is373 = true;
+            }
+            else
+            {
+                ColorModule.ColorModule.CachedColor = new Color(ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorR), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorG), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorB), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorA));
+            }
+            MenuColorHex = ColorModuleV2.CMV2_ColorManager.ColorToHex(ColorModule.ColorModule.CachedColor);
             PendulumPatchManager.SetupPatchManager(this.HarmonyInstance);
             PendulumPatchManager.PatchMethods();
             HarmomyPatchManager.PatchHarmony(this.HarmonyInstance);
@@ -490,15 +502,6 @@ namespace PendulumClient.Main
             if (Prefixes.debugmode == true)
             {
                 LogBootMD5();
-            }
-            if (File.Exists(Environment.CurrentDirectory + "/PendulumClient/373"))
-            {
-                ColorModule.ColorModule.CachedColor = new Color(1f, 0f, 0f, 2f);
-                is373 = true;
-            }
-            else
-            {
-                ColorModule.ColorModule.CachedColor = new Color(ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorR), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorG), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorB), ModPrefs.GetFloat(ColorSettings.SettingsCategory, ColorSettings.ColorA));
             }
             _avatarSearchInstance = new AvatarSearch();
             MelonCoroutines.Start(ColorModuleV2.CMV2_ColorModule.WaitForStyleInit());
@@ -760,13 +763,15 @@ namespace PendulumClient.Main
         public override void OnUpdate() // Runs once per frame.
         {
             PortalLoopTimer += Time.deltaTime;
-            NameESPTimer += Time.deltaTime;
-            PlayerlistUpdateTimer += Time.deltaTime;
+            //NameESPTimer += Time.deltaTime;
+            //PlayerlistUpdateTimer += Time.deltaTime;
             PendulumClientMain.Modules.ForEach(delegate (VRCMod y)
             {
                 y.OnUpdate();
             });
             _avatarSearchInstance.OnUpdate();
+            NotificationsV2.OnUpdate();
+            PendulumPatchManager.OnUpdate();
             if (UiManagerInit1 == false)
             {
                 if (UiManagerInit3 == false)
@@ -1412,6 +1417,8 @@ namespace PendulumClient.Main
                 {
                     Physics.gravity = (FlightEnabled ? Grav : Vector3.zero);
                     PendulumLogger.Log("Flight has been " + (FlightEnabled ? "Disabled" : "Enabled") + ".");
+                    if (Prefixes.debugmode) NotificationsV2.AddNotification("Test <color=#FF00FF>Notification</color> 1");
+                    //NotificationsV2.AddNotification("Test <color=#FF00FF>Longer Notification</color> Test 1");
                     FlightEnabled = !FlightEnabled;
 
                     if (Physics.gravity == Grav)
@@ -1789,7 +1796,8 @@ namespace PendulumClient.Main
             ForceRestartButton();
             _avatarSearchInstance.OnUiEarly();
             //ColorModuleV2.CMV2_ColorModule.ExtraStuff();
-
+            NotificationsV2.OnUI();
+            PendulumPatchManager.OnUI_Early();
             UiManagerInitEarly = true;
         }
         public void VRChat_OnUiManagerInit()
@@ -2650,7 +2658,9 @@ namespace PendulumClient.Main
             }
         }
 
-        public static void ForceRestartButton()
+        internal static Button restartButton;
+        internal static Button exitButton;
+        internal static void ForceRestartButton()
         {
             ColorBlock colorBlock = default(ColorBlock);
             colorBlock.colorMultiplier = 1f;
@@ -2663,9 +2673,9 @@ namespace PendulumClient.Main
 
             var MidButton = GameObject.Find("MenuContent/Popups/LoadingPopup/ButtonMiddle").gameObject;
             var ButtonParent = GameObject.Find("MenuContent/Popups/LoadingPopup").gameObject;
-            MidButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(0f, 0f);//new Vector2(0f, 62f);
+            MidButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(0f, 62f);//new Vector2(0f, 0f);//
             var RestartButton = UnityEngine.Object.Instantiate(MidButton, ButtonParent.transform, true).GetComponentInChildren<Button>();
-            RestartButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(400f, 0f);//new Vector2(0f, -248f);
+            RestartButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(0f, -248f);//new Vector2(400f, 0f);//new Vector2(0f, -248f);
             RestartButton.gameObject.SetActive(true);
             RestartButton.name = "RestartButton";
             RestartButton.GetComponentInChildren<Text>().text = "Restart";
@@ -2675,9 +2685,10 @@ namespace PendulumClient.Main
             {
                 ForceRestart();
             })));
+            restartButton = RestartButton;
 
             var ExitButton = UnityEngine.Object.Instantiate(MidButton, ButtonParent.transform, true).GetComponentInChildren<Button>();
-            ExitButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(-400f, 0f);//new Vector2(0f, -124f);
+            ExitButton.GetComponent<RectTransform>().anchoredPosition += new Vector2(0f, -124f);//new Vector2(-400f, 0f);//new Vector2(0f, -124f);
             ExitButton.gameObject.SetActive(true);
             ExitButton.name = "ExitButton";
             ExitButton.GetComponentInChildren<Text>().text = "Exit";
@@ -2687,6 +2698,7 @@ namespace PendulumClient.Main
             {
                 Process.GetCurrentProcess().Kill();
             })));
+            exitButton = ExitButton;
 
             //MidButton.GetComponent<BoxCollider>().size = new Vector3(300f, 300f, 1);
             ColorModuleV2.CMV2_ColorModule.LoadingScreenStuff();

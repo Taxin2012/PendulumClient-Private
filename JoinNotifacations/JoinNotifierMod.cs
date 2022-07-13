@@ -33,8 +33,8 @@ namespace JoinNotifier
 
         private Image myJoinImage;
         private Image myLeaveImage;
-        private AudioSource myJoinSource;
-        private AudioSource myLeaveSource;
+        private static AudioSource myJoinSource;
+        private static AudioSource myLeaveSource;
         private Text myJoinText;
         private Text myLeaveText;
 
@@ -59,6 +59,7 @@ namespace JoinNotifier
         public static List<string> PreUIPlayers = new List<string>();
 
         private static int myLastLevelLoad;
+        private static int myLastLevelLeave;
         private static bool myObservedLocalPlayerJoin;
 
         private Sprite myJoinSprite;
@@ -70,9 +71,9 @@ namespace JoinNotifier
         public static Sprite DevOutline = null;
         public static Sprite DevIconOutline = null;
 
-        private Sprite KyranPFP;
-        private Sprite CorbinPFP;
-        private Sprite MooniPFP;
+        private static Sprite KyranPFP;
+        private static Sprite CorbinPFP;
+        private static Sprite MooniPFP;
 
         private Player DevPlayer;
 
@@ -185,14 +186,14 @@ namespace JoinNotifier
             PendulumLogger.EventLog("VRCUiManager init");
             PendulumLogger.Log("Start JoinNotifier init.");
             
-            try
+            /*try
             {
                 NetworkManagerHooks.Initialize();
             }
             catch (Exception e)
             {
                 PendulumLogger.LogErrorSevere("NetworkManagerHook init failed: " + e.ToString());
-            }
+            }*/
 
             if (PendulumClientMain.myAssetBundle == null)
             {
@@ -291,8 +292,8 @@ namespace JoinNotifier
 
             PlayerManagerSetup = true;
             
-            NetworkManagerHooks.OnJoin += OnPlayerJoined;
-            NetworkManagerHooks.OnLeave += OnPlayerLeft;
+            //NetworkManagerHooks.OnJoin += OnPlayerJoined;
+            //NetworkManagerHooks.OnLeave += OnPlayerLeft;
         }
 
         public static void ApplyNameTextColors()
@@ -493,7 +494,7 @@ namespace JoinNotifier
             }
         }
 
-        public void OnPlayerJoined(Player player)
+        internal static void OnPlayerJoined(Player player)
         {
             var JoinedPlayer = player.prop_APIUser_0;
             bool IsCEO = JoinedPlayer.id == GrubbieUID;
@@ -506,6 +507,7 @@ namespace JoinNotifier
             {
                 myObservedLocalPlayerJoin = true;
                 myLastLevelLoad = Environment.TickCount;
+                myLastLevelLeave = 0;
                 //ApplyTextColors = true;
                 /*player.gameObject.transform.Find("Canvas - Profile (1)").gameObject.SetActiveRecursively(true);
                 player.gameObject.transform.Find("Canvas - Profile (1)/Text/Text - Debug Drop").gameObject.SetActive(false);
@@ -1259,10 +1261,10 @@ namespace JoinNotifier
                 }
             }
 
-            if (!myObservedLocalPlayerJoin || Environment.TickCount - myLastLevelLoad < 5_000) return;
+            if (!myObservedLocalPlayerJoin || Environment.TickCount - myLastLevelLoad < 5000) return;
             if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
             var playerName = JoinedPlayer.displayName ?? "!null!";
-            MelonCoroutines.Start(BlinkIconCoroutine(myJoinImage));
+            //MelonCoroutines.Start(BlinkIconCoroutine(myJoinImage));
             myJoinSource.Play();
             /*if (player.prop_APIUser_0.last_platform == "android")
             {
@@ -1279,16 +1281,29 @@ namespace JoinNotifier
                 myJoinText.color = JoinNotifierSettings.GetJoinIconColor();
             }*/
             playerName = PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.GetNameColoredQuest(player);
-            MelonCoroutines.Start(ShowName(myJoinText, playerName));
+            if (JoinedPlayer.GetUserTrustRank() == PlayerWrappers.TrustRank.Admin)
+            {
+                PendulumClient.UI.NotificationsV2.AddNotification($"{playerName} <color=#66FF66>Joined</color>", Color.red);
+            }
+            else
+            {
+                PendulumClient.UI.NotificationsV2.AddNotification($"{playerName} <color=#66FF66>Joined</color>", JoinNotifierSettings.GetJoinIconColor());
+            }
+            //MelonCoroutines.Start(ShowName(myJoinText, playerName));
         }
         
-        public void OnPlayerLeft(Player player)
+        internal static void OnPlayerLeft(Player player)
         {
             var LeftPlayer = player.prop_APIUser_0;
 
-            if (LeftPlayer.id != APIUser.CurrentUser.id)
+            if (LeftPlayer.id == APIUser.CurrentUser.id)
             {
-                PendulumLogger.LeaveLog(LeftPlayer.displayName);
+                myLastLevelLeave = Environment.TickCount;
+            }
+            PendulumLogger.LeaveLog(LeftPlayer.displayName);
+            if (notificationTracker.ContainsKey(player.prop_APIUser_0.displayName))
+            {
+                notificationTracker.Remove(player.prop_APIUser_0.displayName);
             }
             /*if (LeftPlayer.id == PendulumClientMain.StoredUserID)
             {
@@ -1300,15 +1315,17 @@ namespace JoinNotifier
             }*/
             PendulumClient.QMLogAndPlayerlist.DebugLogFunctions.DebugLogPlayerLeave(LeftPlayer.displayName);
             if (LeftPlayer.id == APIUser.CurrentUser.id) { if (PLUpdate != null) { MelonCoroutines.Stop(PLUpdate); } HasLocalPlayerLoaded = false; return; }
+            if (Environment.TickCount - myLastLevelLeave < 5000) return;
             //PendulumClientMain.UpdatePlayerList();
             PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.PlayerListUpdate1Time();
-            if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
-            if (Environment.TickCount - myLastLevelLoad < 5_000) return;
-            var playerName = player.prop_APIUser_0.displayName ?? "!null!";
-            playerName = PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.GetNameColoredQuest(player);
-            MelonCoroutines.Start(BlinkIconCoroutine(myLeaveImage));
+            //if (!JoinNotifierSettings.ShouldNotifyInCurrentInstance()) return;
+            //if (Environment.TickCount - myLastLevelLoad < 5_000) return;
+            //var playerName = player.prop_APIUser_0.displayName ?? "!null!";
+            var playerName = PendulumClient.QMLogAndPlayerlist.PlayerListFunctions.GetNameColoredQuest(player);
+            //MelonCoroutines.Start(BlinkIconCoroutine(myLeaveImage));
             myLeaveSource.Play();
-            MelonCoroutines.Start(ShowName(myLeaveText, playerName));
+            //MelonCoroutines.Start(ShowName(myLeaveText, playerName));
+            PendulumClient.UI.NotificationsV2.AddNotification($"{playerName} <color=#FF6666>Left</color>", JoinNotifierSettings.GetLeaveIconColor());
         }
 
         public IEnumerator ShowName(Text text, string name)
@@ -1348,6 +1365,31 @@ namespace JoinNotifier
         public static bool KyranICI2 = false;
 
         public static string foldername = "PendulumClient";
+
+
+
+        internal static readonly System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, bool>> notificationTracker = new System.Collections.Generic.Dictionary<string, System.Collections.Generic.Dictionary<string, bool>>();
+        internal static bool CheckNotification(string playerName, string notification)
+        {
+            if (!notificationTracker.ContainsKey(playerName))
+            {
+                return false;
+            }
+            if (!notificationTracker[playerName].ContainsKey(notification))
+            {
+                return false;
+            }
+            return notificationTracker[playerName][notification];
+        }
+
+        internal static void ToggleNotification(string playerName, string notification, bool state)
+        {
+            if (!notificationTracker.ContainsKey(playerName))
+            {
+                notificationTracker.Add(playerName, new System.Collections.Generic.Dictionary<string, bool>());
+            }
+            notificationTracker[playerName][notification] = state;
+        }
 
         //public static AssetBundle myAssetBundle2 = AssetBundle.LoadFromFile(foldername + "/MenuMusic/menumusic.assetbundle");
 

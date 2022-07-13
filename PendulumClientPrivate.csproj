@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PendulumClient</RootNamespace>
     <AssemblyName>PendulumClientPrivate</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <LangVersion>preview</LangVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -454,6 +455,9 @@
     <Compile Include="Anti\Patches\APIPatches.cs" />
     <Compile Include="Anti\HarmomyPatchManager.cs" />
     <Compile Include="Anti\Patches\ImageDownloadPatch.cs" />
+    <Compile Include="Anti\Patches\InvisibleDetection.cs" />
+    <Compile Include="Anti\Patches\NotificationManagerPatch.cs" />
+    <Compile Include="Anti\Patches\TransmtnWebsocketPatch.cs" />
     <Compile Include="Anti\Patches\VideoSyncPatch.cs" />
     <Compile Include="Anti\PendulumPatch.cs" />
     <Compile Include="Anti\PendulumPatchManager.cs" />
@@ -528,8 +532,10 @@
     <Compile Include="UI\ColorSettings.cs" />
     <Compile Include="UI\DevToolsMenu.cs" />
     <Compile Include="UI\GUIHelper.cs" />
+    <Compile Include="UI\MenuMusicStuff.cs" />
     <Compile Include="UI\NewUIExtensions.cs" />
     <Compile Include="UI\AvatarPreviewScroller.cs" />
+    <Compile Include="UI\NotificationsV2.cs" />
     <Compile Include="UI\UnityExtensions.cs" />
     <Compile Include="Wrappers\Wrappers.cs" />
   </ItemGroup>

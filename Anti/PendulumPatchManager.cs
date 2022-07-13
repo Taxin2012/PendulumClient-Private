@@ -22,6 +22,9 @@ namespace PendulumClient.Anti
                 //add all patch classes here
                 pendulumPatches.Add(new Patches.ImageDownloadPatch());
                 pendulumPatches.Add(new Patches.VideoSyncPatch());
+                pendulumPatches.Add(new Patches.InvisibleDetection());
+                pendulumPatches.Add(new Patches.TransmtnWebsocketPatch());
+                pendulumPatches.Add(new Patches.NotificationManagerPatch());
             }
         }
 
@@ -36,6 +39,36 @@ namespace PendulumClient.Anti
                 catch (Exception e)
                 {
                     PendulumLogger.LogError("Error setting up patches: " + e.ToString());
+                }
+            }
+        }
+
+        internal static void OnUI_Early()
+        {
+            for (int i = 0; i < pendulumPatches.Count; i++)
+            {
+                try
+                {
+                    pendulumPatches[i].OnUI_Early();
+                }
+                catch (Exception e)
+                {
+                    PendulumLogger.LogError("Error with OnUI patches: " + e.ToString());
+                }
+            }
+        }
+
+        internal static void OnUpdate()
+        {
+            for (int i = 0; i < pendulumPatches.Count; i++)
+            {
+                try
+                {
+                    pendulumPatches[i].OnUpdate();
+                }
+                catch (Exception e)
+                {
+                    PendulumLogger.LogError("Error updating patches: " + e.ToString());
                 }
             }
         }

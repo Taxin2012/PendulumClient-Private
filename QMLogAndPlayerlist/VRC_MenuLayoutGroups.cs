@@ -23,7 +23,8 @@ namespace PendulumClient.QMLogAndPlayerlist
         public static GameObject QuestCount;
         public static TextMeshProUGUI PlayerCount_T;
         public static TextMeshProUGUI QuestCount_T;
-        public string name { get; private set; }
+        internal string name { get; private set; }
+        internal bool enabled { get; private set; }
         public VRC_PLScrollRect(string filtername, string internalname, float x, float y, Transform parent)
         {
             Scroll = UnityEngine.Object.Instantiate<GameObject>(ButtonAPIV2.NewQuickMenu.Instance.transform.Find("Container/Window/QMParent/Menu_Dashboard/ScrollRect").gameObject, parent);
@@ -75,6 +76,8 @@ namespace PendulumClient.QMLogAndPlayerlist
 
             Scroll.gameObject.SetActive(true);
 
+            enabled = true;
+
             SetupPlayerCount(CloneableText, parent);
         }
 
@@ -97,6 +100,11 @@ namespace PendulumClient.QMLogAndPlayerlist
             QuestCount = QuestCountText;
             QuestCount_T = QuestCountText.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
         }
+
+        internal void SetEnableState(bool state)
+        {
+            enabled = state;
+        }
     }
 
     public class VRC_DebugScrollRect
@@ -109,7 +117,8 @@ namespace PendulumClient.QMLogAndPlayerlist
         public static GameObject TempText;
         public static TextMeshProUGUI CloneableText_T;
         public static TextMeshProUGUI TempText_T;
-        public string name { get; private set; }
+        internal string name { get; private set; }
+        internal bool enabled { get; private set; }
         public VRC_DebugScrollRect(string filtername, string internalname, float x, float y, Transform parent)
         {
             Scroll = UnityEngine.Object.Instantiate<GameObject>(ButtonAPIV2.NewQuickMenu.Instance.transform.Find("Container/Window/QMParent/Menu_Dashboard/ScrollRect").gameObject, parent);
@@ -160,7 +169,13 @@ namespace PendulumClient.QMLogAndPlayerlist
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
 
+            enabled = true;
+
             Scroll.gameObject.SetActive(true);
+        }
+        internal void SetEnableState(bool state)
+        {
+            enabled = state;
         }
     }
 }

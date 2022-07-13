@@ -114,6 +114,6 @@ namespace PendulumClient.ColorModuleV2
         }
 
         private static string PartToHex(float f) => ((int)(f * 255)).ToString("x2");
-        private static string ColorToHex(Color c) => $"#{PartToHex(c.r)}{PartToHex(c.g)}{PartToHex(c.b)}";
+        internal static string ColorToHex(Color c) => $"#{PartToHex(c.r)}{PartToHex(c.g)}{PartToHex(c.b)}";
     }
 }

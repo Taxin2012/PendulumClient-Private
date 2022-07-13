@@ -33,7 +33,7 @@ namespace PendulumClient.Wrapper
         {
             if (user != null)
             {
-                if (user.developerType != APIUser.DeveloperType.None || user.id.Length == 10) // admin user
+                if (user.developerType != APIUser.DeveloperType.None) // admin user
                 {
                     return TrustRank.Admin;
                 }
@@ -79,6 +79,60 @@ namespace PendulumClient.Wrapper
             return TrustRank.Visitor;
         }
 
+        public static TrustRank GetUserTrustFromTags(List<string> tags)
+        {
+            if (tags != null && tags.Count > 0)
+            {
+                foreach (var tag in tags)
+                {
+                    if (tag.Contains("admin_"))
+                    {
+                        return TrustRank.Admin;
+                    }
+                }
+                foreach (var tag in tags)
+                {
+                    if (tag == "system_legend")
+                    {
+                        return TrustRank.Legendary;
+                    }
+                }
+                /*if (user.hasLegendTrustLevel) // veteran user
+                {
+                    return TrustRank.Veteran;
+                }*/
+                foreach (var tag in tags)
+                {
+                    if (tag == "system_trust_veteran") //trusted user
+                    {
+                        return TrustRank.Trusted;
+                    }
+                }
+                foreach (var tag in tags)
+                {
+                    if (tag == "system_trust_trusted") //known user
+                    {
+                        return TrustRank.Known;
+                    }
+                }
+                foreach (var tag in tags)
+                {
+                    if (tag == "system_trust_known" || tag == "system_feedback_access") //user user
+                    {
+                        return TrustRank.User;
+                    }
+                }
+                foreach (var tag in tags)
+                {
+                    if (tag == "system_avatar_access" || tag == "system_world_access") //new user
+                    {
+                        return TrustRank.New;
+                    }
+                }
+                return TrustRank.Visitor;
+            }
+            return TrustRank.Visitor;
+        }
         public static VRCUiManager VrcuimInstance { get; private set; }
         public static VRCPlayer GetCurrentPlayer()
         {
@@ -106,6 +160,10 @@ namespace PendulumClient.Wrapper
                 }
             }
             return QuestUsers;
+        }
+        internal static bool IsLocalPlayer(Player player)
+        {
+            return player.prop_APIUser_0.id == APIUser.CurrentUser.id;
         }
         public static APIUser GetAPIUser(this Player player)
         {

@@ -92,6 +92,11 @@ namespace PendulumClient.Anti.Patches
 				CachePlayer(VRCWebSocketContent.user.id, VRCWebSocketContent.user, userLocation);
 			}
 
+			if (string.IsNullOrEmpty(VRCWebSocketContent.user.displayName))
+			{
+				return;
+			}
+
 			if (vRCWebSocketObject.type == "friend-location")
 			{
 				try
@@ -100,7 +105,7 @@ namespace PendulumClient.Anti.Patches
 					if (text3 != cachedPlayerStates[VRCWebSocketContent.user.id].location)
 					{
 						cachedPlayerStates[VRCWebSocketContent.user.id].location = text3;
-						string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor +">" + VRCWebSocketContent.user.displayName + "</color> went to <color=" + Main.PendulumClientMain.MenuColorHex + ">" + text3 + "</color>";
+						string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + VRCWebSocketContent.user.displayName + "</color> went to <color=" + Main.PendulumClientMain.MenuColorHex + ">" + text3 + "</color>";
 						string textnorm = VRCWebSocketContent.user.displayName + " went to " + text3;
 						PendulumLogger.SocialLog(textnorm);
 						UI.NotificationsV2.SendHudNotificationThreaded(Convert.ToString(text.Clone()));

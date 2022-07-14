@@ -20,6 +20,7 @@ using MelonLoader;
 using UnhollowerBaseLib;
 using System.Runtime.InteropServices;
 using VRC.UserCamera;
+using UnhollowerRuntimeLib.XrefScans;
 
 namespace PendulumClient.Anti
 {
@@ -70,9 +71,25 @@ namespace PendulumClient.Anti
             var HWIDMethod = "GetDeviceUniqueIdentifier";
             var HWIDPatch = "HWID__Hook";*/
 
+            List<MethodInfo> portalMethods = new List<MethodInfo>();
+            foreach(var method in typeof(PortalInternal).GetMethods())
+            {
+                if (method.Name.StartsWith("Method_Private_Void_") && !method.Name.Contains("PDM"))
+                {
+                    if (CheckMethod(method, "Destroying static portal"))
+                    {
+                        portalMethods.Add(method);
+                    }
+                }
+            }
+
+            /*CheckMethod(typeof(PortalInternal).GetMethod(nameof(PortalInternal.Method_Private_Void_2)));
+            PendulumLogger.DebugLog("---3---");
+            CheckMethod(typeof(PortalInternal).GetMethod(nameof(PortalInternal.Method_Private_Void_3)), "Destroying static portal");
             //TODO xref scan these niggers
-            var original2 = typeof(PortalInternal).GetMethod(nameof(PortalInternal.Method_Private_Void_1)); //DestroyPortal
-            var original3 = typeof(PortalInternal).GetMethod(nameof(PortalInternal.Method_Private_Void_0)); //DestroyPortalNearSpawn
+            var original2 = typeof(PortalInternal).GetMethod(nameof(PortalInternal.Method_Private_Void_2)); //DestroyPortal
+            var original3 = typeof(PortalInternal).GetMethod(nameof(PortalInternal.Method_Private_Void_3)); //DestroyPortalNearSpawn&*/
+
 
             var original28 = typeof(VRC_EventDispatcherRFC).GetMethod(nameof(VRC_EventDispatcherRFC.Method_Public_Void_Player_VrcEvent_VrcBroadcastType_Int32_Single_0));//GetMethods().Where(m => m.Name.Contains(EventMethod1));
             var original4 = typeof(RoomManager).GetMethod(nameof(RoomManager.Method_Public_Static_Boolean_ApiWorld_ApiWorldInstance_String_Int32_0));
@@ -209,8 +226,12 @@ namespace PendulumClient.Anti
 
             PendulumLogger.LogHarmony("Patching methods...");
 
-            instance.Patch(original2, new HarmonyMethod(falseprefix), null, null);
-            instance.Patch(original3, new HarmonyMethod(falseprefix), null, null);
+            foreach(var method in portalMethods)
+            {
+                instance.Patch(method, new HarmonyMethod(falseprefix), null, null);
+            }
+            //nstance.Patch(original2, new HarmonyMethod(falseprefix), null, null);
+            //instance.Patch(original3, new HarmonyMethod(falseprefix), null, null);
             //foreach (var method in original28)
             //{
             instance.Patch(original28, new HarmonyMethod(CustomRPCPrefix), null, null);
@@ -332,12 +353,32 @@ namespace PendulumClient.Anti
             //Setupnameof(Prefixes.patch__3)es();
         }
 
-        private static MethodInfo GetPropertyMethod(Type inClass, string method)
+        internal static MethodInfo GetPropertyMethod(Type inClass, string method)
         {
             return AccessTools.Property(inClass, method).GetMethod;
         }
 
-        public unsafe delegate IntPtr AttemptAvatarDownloadDelegate(IntPtr hiddenValueTypeReturn, IntPtr thisPtr, IntPtr apiAvatarPtr, IntPtr multicastDelegatePtr, bool idfk, IntPtr nativeMethodInfo);
-        public static AttemptAvatarDownloadDelegate dgAttemptAvatarDownload;
+        internal static bool CheckMethod(MethodBase methodBase, string match)
+        {
+            foreach (XrefInstance item in XrefScanner.XrefScan(methodBase))
+            {
+                try
+                {
+                    //PendulumLogger.DebugLog(item.ReadAsObject().ToString());
+                    if (item.Type != 0 || !item.ReadAsObject().ToString().Contains(match))
+                    {
+                        continue;
+                    }
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    //PendulumLogger.LogError("Error Xref scanning: " + e.ToString());
+                }
+            }
+            return false;
+        }
+        internal unsafe delegate IntPtr AttemptAvatarDownloadDelegate(IntPtr hiddenValueTypeReturn, IntPtr thisPtr, IntPtr apiAvatarPtr, IntPtr multicastDelegatePtr, bool idfk, IntPtr nativeMethodInfo);
+        internal static AttemptAvatarDownloadDelegate dgAttemptAvatarDownload;
     }
 }

@@ -91,9 +91,16 @@ namespace PendulumClient.Anti.Patches
 				string userLocation = ((!string.IsNullOrEmpty(VRCWebSocketContent.travelingToLocation)) ? VRCWebSocketContent.travelingToLocation : ((VRCWebSocketContent.world != null) ? VRCWebSocketContent.world.name : string.Empty));
 				CachePlayer(VRCWebSocketContent.user.id, VRCWebSocketContent.user, userLocation);
 			}
-
-			if (string.IsNullOrEmpty(VRCWebSocketContent.user.displayName))
+			try
 			{
+				if (string.IsNullOrEmpty(cachedPlayerStates[VRCWebSocketContent.user.id].username.Trim()))
+				{
+					return;
+				}
+			}
+			catch (Exception e)
+			{
+				//PendulumLogger.LogError("Error with WS patch: " + e.ToString());
 				return;
 			}
 
@@ -105,40 +112,57 @@ namespace PendulumClient.Anti.Patches
 					if (text3 != cachedPlayerStates[VRCWebSocketContent.user.id].location)
 					{
 						cachedPlayerStates[VRCWebSocketContent.user.id].location = text3;
-						string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + VRCWebSocketContent.user.displayName + "</color> went to <color=" + Main.PendulumClientMain.MenuColorHex + ">" + text3 + "</color>";
-						string textnorm = VRCWebSocketContent.user.displayName + " went to " + text3;
+						string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + cachedPlayerStates[VRCWebSocketContent.user.id].username + "</color> went to <color=" + Main.PendulumClientMain.MenuColorHex + ">" + text3 + "</color>";
+						string textnorm = cachedPlayerStates[VRCWebSocketContent.user.id].username + " went to " + text3;
 						PendulumLogger.SocialLog(textnorm);
-						UI.NotificationsV2.SendHudNotificationThreaded(Convert.ToString(text.Clone()));
+						UI.NotificationsV2.SendHudNotificationThreaded(text);
 					}
 				}
 				catch (Exception e)
 				{
-					PendulumLogger.LogError("Error with WS patch: " + e.ToString());
+					//PendulumLogger.LogError("Error with WS patch: " + e.ToString());
+					return;
 				}
 			}
 			else if (vRCWebSocketObject.type == "friend-online")
 			{
-				string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + VRCWebSocketContent.user.displayName + "</color> is now <color=#00FF00>online</color>";
-				string textnorm = VRCWebSocketContent.user.displayName + " is now online";
-				PendulumLogger.SocialLog(textnorm);
-				UI.NotificationsV2.SendHudNotificationThreaded(text);
-			}
-			else if (vRCWebSocketObject.type == "friend-offline")
-			{
-				if (cachedPlayerStates.ContainsKey(VRCWebSocketContent.userId))
+				try
 				{
-					string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + cachedPlayerStates[VRCWebSocketContent.userId].username + "</color> is now <color=#FF0000>offline</color>";
-					string textnorm = cachedPlayerStates[VRCWebSocketContent.userId].username + " is now offline";
+					string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + cachedPlayerStates[VRCWebSocketContent.user.id].username + "</color> is now <color=#00FF00>online</color>";
+					string textnorm = cachedPlayerStates[VRCWebSocketContent.user.id].username + " is now online";
 					PendulumLogger.SocialLog(textnorm);
 					UI.NotificationsV2.SendHudNotificationThreaded(text);
 				}
-				else
+				catch (Exception e)
 				{
-					API.SendGetRequest("users/" + VRCWebSocketContent.userId, (ApiContainer)new ApiModelContainer<APIUser>
+					//PendulumLogger.LogError("Error with WS patch: " + e.ToString());
+					return;
+				}
+			}
+			else if (vRCWebSocketObject.type == "friend-offline")
+			{
+				try
+				{
+					if (cachedPlayerStates.ContainsKey(VRCWebSocketContent.userId))
 					{
-						OnSuccess = (System.Action<ApiContainer>)OnPlayerFetched,
-						OnError = (System.Action<ApiContainer>)OnPlayerFailedFetch
-					}, (Il2CppSystem.Collections.Generic.IReadOnlyDictionary<string, BestHTTP.JSON.Json.Token>)null, false, 0f, (API.CredentialsBundle)null);
+						string text = "<color=" + QMLogAndPlayerlist.PlayerListFunctions.FriendColor + ">" + cachedPlayerStates[VRCWebSocketContent.userId].username + "</color> is now <color=#FF0000>offline</color>";
+						string textnorm = cachedPlayerStates[VRCWebSocketContent.userId].username + " is now offline";
+						PendulumLogger.SocialLog(textnorm);
+						UI.NotificationsV2.SendHudNotificationThreaded(text);
+					}
+					else
+					{
+						API.SendGetRequest("users/" + VRCWebSocketContent.userId, (ApiContainer)new ApiModelContainer<APIUser>
+						{
+							OnSuccess = (System.Action<ApiContainer>)OnPlayerFetched,
+							OnError = (System.Action<ApiContainer>)OnPlayerFailedFetch
+						}, (Il2CppSystem.Collections.Generic.IReadOnlyDictionary<string, BestHTTP.JSON.Json.Token>)null, false, 0f, (API.CredentialsBundle)null);
+					}
+				}
+				catch (Exception e)
+				{
+					//PendulumLogger.LogError("Error with WS patch: " + e.ToString());
+					return;
 				}
 			}
 				//case "friend-update":
@@ -156,7 +180,11 @@ namespace PendulumClient.Anti.Patches
 				PendulumLogger.SocialLog(textnorm);
 				UI.NotificationsV2.SendHudNotificationThreaded(text);
 			}
-			catch { }
+			catch (Exception e)
+			{
+				//PendulumLogger.LogError("Error with WS patch: " + e.ToString());
+				return;
+			}
 		}
 
 		private static void OnPlayerFailedFetch(ApiContainer container)
@@ -165,11 +193,11 @@ namespace PendulumClient.Anti.Patches
 	}
 	public class WSPlayerState
     {
-        internal string username;
+		public string username;
 
-        internal string joinState;
+		public string joinState;
 
-        internal string location;
+		public string location;
     }
 	public class VRCWebSocketObjectJSON
 	{

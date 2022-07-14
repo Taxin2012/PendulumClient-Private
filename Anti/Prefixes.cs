@@ -828,7 +828,7 @@ namespace PendulumClient.Anti
                         if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unblocked you");
+                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} unblocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unblocked you");
                             PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
                         }
@@ -837,7 +837,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -847,7 +847,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -870,7 +870,7 @@ namespace PendulumClient.Anti
                         if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} blocked you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} blocked you");
+                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} blocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} blocked you");
                             if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
                         }
@@ -879,7 +879,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -889,7 +889,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -899,7 +899,7 @@ namespace PendulumClient.Anti
                     else if (Data.Contains("You have been warned"))
                     {
                         PendulumLogger.ModerationLog($"Instance owner tried to warn you");
-                        AlertPopup.SendAlertPopupNOPC($"[Moderation]\nInstance owner tried to warn you");
+                        AlertPopup.SendAlertPopupNOPC($"Instance owner tried to warn you");
                         QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"Instance owner tried to warn you");
                         return false;
                     }
@@ -969,7 +969,7 @@ namespace PendulumClient.Anti
                         if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unblocked you");
+                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} unblocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unblocked you");
                             PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
                         }
@@ -978,7 +978,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -988,7 +988,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -1012,7 +1012,7 @@ namespace PendulumClient.Anti
                         if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} blocked you");
-                            AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} blocked you");
+                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} blocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} blocked you");
                             if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
                         }
@@ -1021,7 +1021,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} unmuted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -1031,7 +1031,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"[Moderation]\n{ParsedName} muted you");
+                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -1041,7 +1041,7 @@ namespace PendulumClient.Anti
                     else if (Data.Contains("You have been warned"))
                     {
                         PendulumLogger.ModerationLog($"Instance owner tried to warn you");
-                        AlertPopup.SendAlertPopupNOPC($"[Moderation]\nInstance owner tried to warn you");
+                        AlertPopup.SendAlertPopupNOPC($"Instance owner tried to warn you");
                         QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"Instance owner tried to warn you");
                         return false;
                     }

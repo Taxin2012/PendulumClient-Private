@@ -1022,7 +1022,7 @@ namespace PendulumClient.Main
             {
                 try
                 {
-                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(40);
+                    VRCPlayer.field_Internal_Static_VRCPlayer_0.Method_Public_Void_Int32_0(10);
                 }
                 catch { }
             }

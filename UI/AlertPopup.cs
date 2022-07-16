@@ -33,10 +33,12 @@ namespace PendulumClient.UI
             //VRCUiManager.prop_VRCUiManager_0.Method_Public_Void_String_0("[PendulumClient]\n\n" + text);
         }
 
-        public static void SendAlertPopupNOPC(string text, params object[] args)
+        public static void SendModerationNotificaition(VRC.Player player, string text)
         {
-            string outputtext = string.Format(text, args);
-            NewUIExtensions.QueueHudMessage(Main.PendulumClientMain.VRC_UIManager, outputtext);
+            string newname = QMLogAndPlayerlist.PlayerListFunctions.GetNameColored(player);
+            NotificationsV2.AddNotification(newname + text);
+            //string outputtext = string.Format(text, args);
+            //NewUIExtensions.QueueHudMessage(Main.PendulumClientMain.VRC_UIManager, outputtext);
             //VRCUiManager.prop_VRCUiManager_0.field_Public_Text_0.color = new Color(0.8f, 0.8f, 0.8f);
             //VRCUiManager.prop_VRCUiManager_0.field_Private_Single_0 = 0f;
             //VRCUiManager.prop_VRCUiManager_0.Method_Public_Void_String_0("[PendulumClient]\n\n" + outputtext);

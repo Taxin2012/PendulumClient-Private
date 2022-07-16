@@ -94,9 +94,7 @@ namespace PendulumClient.Anti.Patches
 			try
 			{
 				if (string.IsNullOrEmpty(cachedPlayerStates[VRCWebSocketContent.user.id].username.Trim()))
-				{
 					return;
-				}
 			}
 			catch (Exception e)
 			{

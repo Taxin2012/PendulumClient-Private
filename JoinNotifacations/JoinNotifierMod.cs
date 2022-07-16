@@ -593,7 +593,7 @@ namespace JoinNotifier
             {
                 GameObject.Destroy(player.gameObject);
             }
-
+            /*
             if (player.prop_APIUser_0.id == CorbinUID)
             {
                 var TagColor = CorbinColor;
@@ -659,8 +659,8 @@ namespace JoinNotifier
                     threesliceQS.color = TagColor;
                 }
             }
-
-            /*if (player.prop_APIUser_0.id == MooniUID)
+            
+            if (player.prop_APIUser_0.id == MooniUID)
             {
                 var TagColor = MooniColor;
                 var Parent = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents");
@@ -693,40 +693,40 @@ namespace JoinNotifier
                 }
             }*/
 
-            if (!DevUserIDs.Contains(player.field_Private_APIUser_0.id))
+            /*if (!DevUserIDs.Contains(player.field_Private_APIUser_0.id))
+            {*/
+            if (player._vrcplayer.field_Public_PlayerNameplate_0 != null)
             {
-                if (player._vrcplayer.field_Public_PlayerNameplate_0 != null)
+                var textcont = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container").gameObject;
+                var orgname = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container/Name").gameObject;
+                var newname = GameObject.Instantiate(orgname, textcont.transform);
+                newname.name = "GeneratedName";
+                newname.SetActive(true);
+                newname.GetComponent<TMPro.TextMeshProUGUI>().color = PendulumClientMain.GetTrustColor(player.field_Private_APIUser_0);
+                newname.GetComponent<TMPro.TextMeshProUGUI>().text = player.prop_APIUser_0.displayName;
+                GameObject.Destroy(orgname);//orgname.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
+                if (APIUser.IsFriendsWith(player.prop_APIUser_0.id))
                 {
-                    var textcont = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container").gameObject;
-                    var orgname = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Main/Text Container/Name").gameObject;
-                    var newname = GameObject.Instantiate(orgname, textcont.transform);
-                    newname.name = "GeneratedName";
-                    newname.SetActive(true);
-                    newname.GetComponent<TMPro.TextMeshProUGUI>().color = PendulumClientMain.GetTrustColor(player.field_Private_APIUser_0);
-                    newname.GetComponent<TMPro.TextMeshProUGUI>().text = player.prop_APIUser_0.displayName;
-                    GameObject.Destroy(orgname);//orgname.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
-                    if (APIUser.IsFriendsWith(player.prop_APIUser_0.id))
+                    var content = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents");
+                    var icons = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon").gameObject;
+                    var newicons = GameObject.Instantiate(icons, content);
+                    newicons.name = "GeneratedIcons";
+                    newicons.SetActive(true);
+                    for (int i = 0; i < newicons.transform.childCount; ++i)
                     {
-                        var content = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents");
-                        var icons = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon").gameObject;
-                        var newicons = GameObject.Instantiate(icons, content);
-                        newicons.name = "GeneratedIcons";
-                        newicons.SetActive(true);
-                        for (int i = 0; i < newicons.transform.childCount; ++i)
-                        {
-                            //PendulumLogger.Log("Icon: " + newicons.transform.GetChild(i).gameObject.name);
-                            GameObject.Destroy(newicons.transform.GetChild(i).gameObject);
-                        }
-                        var orgficon = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon/Friend Icon").gameObject;
-                        var newficon = GameObject.Instantiate(orgficon, newicons.transform);
-                        newficon.name = "GeneratedFriendIcon";
-                        newficon.SetActive(true);
-                        if (!player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon/User Image").gameObject.activeSelf)
-                        {
-                            newficon.GetComponent<RectTransform>().anchoredPosition += new Vector2(50, 0);
-                            //orgficon.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
-                        }
+                        //PendulumLogger.Log("Icon: " + newicons.transform.GetChild(i).gameObject.name);
+                        GameObject.Destroy(newicons.transform.GetChild(i).gameObject);
                     }
+                    var orgficon = player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon/Friend Icon").gameObject;
+                    var newficon = GameObject.Instantiate(orgficon, newicons.transform);
+                    newficon.name = "GeneratedFriendIcon";
+                    newficon.SetActive(true);
+                    if (!player.gameObject.transform.Find("Player Nameplate/Canvas/Nameplate/Contents/Icon/User Image").gameObject.activeSelf)
+                    {
+                        newficon.GetComponent<RectTransform>().anchoredPosition += new Vector2(50, 0);
+                        //orgficon.GetComponent<RectTransform>().sizeDelta = new Vector2(0f, 0f);
+                    }
+                    //}
                     //var gplate = GameObject.Instantiate(plate);
                     //nametext.color = PendulumClientMain.GetTrustColor(player.prop_APIUser_0);
                 }

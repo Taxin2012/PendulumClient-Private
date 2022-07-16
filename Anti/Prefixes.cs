@@ -808,7 +808,7 @@ namespace PendulumClient.Anti
                     var parameters = __0.CustomData;
                     if (parameters == null) return true;
 
-                    string Data = Newtonsoft.Json.JsonConvert.SerializeObject(Serialization.FromIL2CPPToManaged<object>(parameters));
+                    string Data = Newtonsoft.Json.JsonConvert.SerializeObject(parameters);
                     //PendulumLogger.Log("Moderation Event: " + Data);
                     //object Data = Serialization.FromIL2CPPToManaged<object>(__0.customData);
                     if (Data.Contains("\"10\":false,"))
@@ -816,19 +816,21 @@ namespace PendulumClient.Anti
                         //JObject jObject = JObject.Parse(Data);
                         // var jo = JObject.Parse(jObject.ToString());
                         var id = Data.Split(new string[] { "\"1\":" }, StringSplitOptions.None)[1].Split(',')[0];//jo["245"]["1"].ToString();
-                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        var ParsedPlayer = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id));
+                        var ParsedAPIuser = ParsedPlayer.field_Private_APIUser_0;
                         string ParsedName = "?";
                         string ParsedUserID = "";
-                        if (ParsedAPIuser != null)
+                        if (ParsedPlayer != null && ParsedAPIuser != null)
                         {
                             ParsedName = ParsedAPIuser.displayName;
                             ParsedUserID = ParsedAPIuser.id;
                         }
+                        else return false;
 
                         if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
-                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} unblocked you");
+                            AlertPopup.SendModerationNotificaition(ParsedPlayer, " unblocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unblocked you");
                             PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
                         }
@@ -837,7 +839,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -847,7 +849,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -858,19 +860,21 @@ namespace PendulumClient.Anti
                         //JObject jObject = JObject.Parse(Data);
                         //var jo = JObject.Parse(jObject.ToString());
                         var id = Data.Split(new string[] { "\"1\":" }, StringSplitOptions.None)[1].Split(',')[0];//jo["245"]["1"].ToString();
-                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        var ParsedPlayer = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id));
+                        var ParsedAPIuser = ParsedPlayer.field_Private_APIUser_0;
                         string ParsedName = "?";
                         string ParsedUserID = "";
-                        if (ParsedAPIuser != null)
+                        if (ParsedPlayer != null && ParsedAPIuser != null)
                         {
                             ParsedName = ParsedAPIuser.displayName;
                             ParsedUserID = ParsedAPIuser.id;
                         }
+                        else return false;
 
                         if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} blocked you");
-                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} blocked you");
+                            AlertPopup.SendModerationNotificaition(ParsedPlayer, " blocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} blocked you");
                             if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
                         }
@@ -879,7 +883,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -889,7 +893,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -957,19 +961,21 @@ namespace PendulumClient.Anti
                         var jo = JObject.Parse(jObject.ToString());
                         var id = jo["245"]["1"].ToString();
 
-                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        var ParsedPlayer = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id));
+                        var ParsedAPIuser = ParsedPlayer.field_Private_APIUser_0;
                         string ParsedName = "?";
                         string ParsedUserID = "";
-                        if (ParsedAPIuser != null)
+                        if (ParsedPlayer != null && ParsedAPIuser != null)
                         {
                             ParsedName = ParsedAPIuser.displayName;
                             ParsedUserID = ParsedAPIuser.id;
                         }
+                        else return false;
 
                         if (PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} unblocked you");
-                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} unblocked you");
+                            AlertPopup.SendModerationNotificaition(ParsedPlayer, " unblocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unblocked you");
                             PendulumClientMain.BlockedUserIDs.Remove(ParsedUserID);
                         }
@@ -978,7 +984,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -988,7 +994,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }
@@ -1000,19 +1006,21 @@ namespace PendulumClient.Anti
                         var jo = JObject.Parse(jObject.ToString());
                         var id = jo["245"]["1"].ToString();
 
-                        var ParsedAPIuser = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id)).field_Private_APIUser_0;
+                        var ParsedPlayer = PlayerWrappers.GetPlayerByPhotonID(int.Parse(id));
+                        var ParsedAPIuser = ParsedPlayer.field_Private_APIUser_0;
                         string ParsedName = "?";
                         string ParsedUserID = "";
-                        if (ParsedAPIuser != null)
+                        if (ParsedPlayer != null && ParsedAPIuser != null)
                         {
                             ParsedName = ParsedAPIuser.displayName;
                             ParsedUserID = ParsedAPIuser.id;
                         }
+                        else return false;
 
                         if (!PendulumClientMain.BlockedUserIDs.Contains(ParsedUserID))
                         {
                             PendulumLogger.ModerationLog($"{ParsedName} blocked you");
-                            AlertPopup.SendAlertPopupNOPC($"{ParsedName} blocked you");
+                            AlertPopup.SendModerationNotificaition(ParsedPlayer, " blocked you");
                             QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} blocked you");
                             if (ParsedUserID != "") PendulumClientMain.BlockedUserIDs.Add(ParsedUserID);
                         }
@@ -1021,7 +1029,7 @@ namespace PendulumClient.Anti
                             if (PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} unmuted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} unmuted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " unmuted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} unmuted you");
                                 PendulumClientMain.MutedUserIDs.Remove(ParsedUserID);
                             }
@@ -1031,7 +1039,7 @@ namespace PendulumClient.Anti
                             if (!PendulumClientMain.MutedUserIDs.Contains(ParsedUserID))
                             {
                                 PendulumLogger.ModerationLog($"{ParsedName} muted you");
-                                AlertPopup.SendAlertPopupNOPC($"{ParsedName} muted you");
+                                AlertPopup.SendModerationNotificaition(ParsedPlayer, " muted you");
                                 QMLogAndPlayerlist.DebugLogFunctions.DebugLog($"{ParsedName} muted you");
                                 PendulumClientMain.MutedUserIDs.Add(ParsedUserID);
                             }

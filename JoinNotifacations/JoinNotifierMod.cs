@@ -48,7 +48,7 @@ namespace JoinNotifier
         //public const string BupperUID2 = "usr_035cbd45-e44b-4a06-a6e0-8250d0d4b2c9";
 
         public const string CorbinUID = "usr_70758d81-b4a8-4543-b033-f6b4bc97d165";
-        public const string KyranUID1 = "usr_ba0606b7-927b-4c14-be7b-54d9d158c8e4";
+        public const string KyranUID1 = "usr_07990006-1338-489f-802f-45455146f332";//"usr_ba0606b7-927b-4c14-be7b-54d9d158c8e4";
         public const string KyranUID2 = "usr_bf196e57-9b62-46b6-a52d-73e264356e43";//one month "usr_07990006-1338-489f-802f-45455146f332";
         public const string GrubbieUID = "usr_6ae7e5da-94d2-48d5-8f4d-d1ba861f67bb";
         public const string MooniUID = "usr_71704e0d-ac55-4e40-8368-725e7c69466b";

@@ -790,6 +790,11 @@ namespace PendulumClient.Anti
                 return false;
             }
 
+            if (__0.Code == 6 && Anti9)
+            {
+                return false;
+            }
+
             if (ButtonAPIV2.MenuFunctions.copyVoice_photonId > 0 && ButtonAPIV2.MenuFunctions.IsCopyingVoice)
             {
                 if (__0.Code == 1)

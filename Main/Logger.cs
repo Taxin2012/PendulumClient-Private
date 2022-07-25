@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;                // for Debug
-using System.Drawing;                    // for Color (add reference to  System.Drawing.assembly)
-using System.Runtime.InteropServices;    // for StructLayout
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace PendulumClient
 {
@@ -195,6 +195,7 @@ namespace PendulumClient
             SetScreenColorsApp.SetColor(ConsoleColor.DarkGreen, Color.FromArgb(255, 0, 255, 0));
             SetScreenColorsApp.SetColor(ConsoleColor.Magenta, Color.FromArgb(255, 100, 255, 100));
             SetScreenColorsApp.SetColor(ConsoleColor.DarkRed, Color.FromArgb(255, 255,100, 100));
+            ConsoleFontManager.SetConsoleFont();
         }
         public static void Log(string Log)
         {
@@ -423,6 +424,9 @@ namespace PendulumClient
         }
         public static void JoinLog(string Log)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -439,6 +443,9 @@ namespace PendulumClient
         }
         public static void LeaveLog(string Log)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -456,6 +463,9 @@ namespace PendulumClient
 
         public static void ModerationLog(string Log)
         {
+            if (ColorsSetup == false)
+                SetupColors();
+
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write("[");
             Console.ForegroundColor = ConsoleColor.Green;
@@ -557,6 +567,86 @@ namespace PendulumClient
             Console.Write("] ");
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write("[ERROR] " + Error + "\n");
+        }
+    }
+
+    internal class ConsoleFontManager
+    {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        internal unsafe struct CONSOLE_FONT_INFO_EX
+        {
+            internal uint cbSize;
+            internal uint nFont;
+            internal COORD dwFontSize;
+            internal int FontFamily;
+            internal int FontWeight;
+            internal fixed char FaceName[LF_FACESIZE];
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct COORD
+        {
+            internal short X;
+            internal short Y;
+
+            internal COORD(short x, short y)
+            {
+                X = x;
+                Y = y;
+            }
+        }
+        private const int STD_OUTPUT_HANDLE = -11;
+        private const int TMPF_TRUETYPE = 4;
+        private const int LF_FACESIZE = 32;
+        private static IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool SetCurrentConsoleFontEx(
+            IntPtr consoleOutput,
+            bool maximumWindow,
+            ref CONSOLE_FONT_INFO_EX consoleCurrentFontEx);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern IntPtr GetStdHandle(int dwType);
+
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern int SetConsoleFont(
+            IntPtr hOut,
+            uint dwFontNum
+            );
+        public static bool SetConsoleFont(string fontName = "Secret Code")
+        {
+            try
+            {
+                unsafe
+                {
+                    IntPtr hnd = GetStdHandle(STD_OUTPUT_HANDLE);
+                    if (hnd != INVALID_HANDLE_VALUE)
+                    {
+                        CONSOLE_FONT_INFO_EX info = new CONSOLE_FONT_INFO_EX();
+                        info.cbSize = (uint)Marshal.SizeOf(info);
+
+                        // Set console font to Lucida Console.
+                        CONSOLE_FONT_INFO_EX newInfo = new CONSOLE_FONT_INFO_EX();
+                        newInfo.cbSize = (uint)Marshal.SizeOf(newInfo);
+                        newInfo.FontFamily = TMPF_TRUETYPE;
+                        IntPtr ptr = new IntPtr(newInfo.FaceName);
+                        Marshal.Copy(fontName.ToCharArray(), 0, ptr, fontName.Length);
+
+                        // Get some settings from current font.
+                        newInfo.dwFontSize = new COORD(info.dwFontSize.X, info.dwFontSize.Y);
+                        newInfo.FontWeight = info.FontWeight;
+                        SetCurrentConsoleFontEx(hnd, false, ref newInfo);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                PendulumLogger.Log("well guess no custom font for you");
+                return false;
+            }
         }
     }
 }

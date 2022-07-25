@@ -79,6 +79,7 @@ namespace PendulumClient.ColorModuleV2
             OverrideList.Add(new CMV2_OverrideObject(".SliderBackground", "image-color: $DARK$;"));
             OverrideList.Add(new CMV2_OverrideObject(".ElementClass_Scrollbar_HandleImage", "image-color: $BASE$;"));
             OverrideList.Add(new CMV2_OverrideObject(".ElementClass_Slider_HandleImage", "image-color: $BASE$;"));
+            OverrideList.Add(new CMV2_OverrideObject(".ElementClass_Scrollbar_Wing_HandleImage", "image-color: $BASE$;"));
             OverrideList.Add(new CMV2_OverrideObject(".Slider:hover>.ElementClass_Slider_HandleImage", "image-color: $BASE$;"));
             OverrideList.Add(new CMV2_OverrideObject(".Slider:active>.ElementClass_Slider_HandleImage", "image-color: $BASE$;"));
             OverrideList.Add(new CMV2_OverrideObject(".SliderFill", "image-color: $BASE$;"));

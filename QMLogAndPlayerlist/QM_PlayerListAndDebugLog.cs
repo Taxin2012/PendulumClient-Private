@@ -51,7 +51,6 @@ namespace PendulumClient.QMLogAndPlayerlist
         {
             if (!QM_PlayerListAndDebugLog.DebugLogRect.enabled)
             {
-                QM_PlayerListAndDebugLog.DebugLogRect.Scroll.SetActive(false);
                 return;
             }
             else if (!QM_PlayerListAndDebugLog.DebugLogRect.Scroll.activeSelf)
@@ -441,8 +440,7 @@ namespace PendulumClient.QMLogAndPlayerlist
             {
                 if (!QM_PlayerListAndDebugLog.PlayerList.enabled)
                 {
-                    ClearPlayerList(false);
-                    QM_PlayerListAndDebugLog.PlayerList.Scroll.SetActive(false);
+                    yield break;
                 }
                 else if (VRC_PLScrollRect.CloneableText != null && VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0 != null && VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count > 0)
                 {
@@ -461,44 +459,26 @@ namespace PendulumClient.QMLogAndPlayerlist
                         var num = 0;
                         foreach (VRC.Player player in VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0)
                         {
-                            if (player != null)
+                            if (player != null && player.prop_APIUser_0 != null && player.field_Private_VRCPlayerApi_0 != null)
                             {
-                                if (player.prop_APIUser_0 != null)
+                                if (PlayerListTexts.Count > num)
                                 {
-                                    if (player.field_Private_VRCPlayerApi_0 != null)
-                                    {
-                                        if (PlayerListTexts.Count > num)
-                                        {
-                                            var ListItem = PlayerListTexts[num];
-                                            var Text = ListItem.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
-                                            Text.text = GetPlayerListName(player);
-                                        }
-                                        else
-                                        {
-                                            var ListItem = GameObject.Instantiate(VRC_PLScrollRect.CloneableText, VRC_PLScrollRect.VerticalLayout.transform);
-                                            ListItem.name = "PlayerListItem";
-                                            var Text = ListItem.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
-                                            Text.text = GetPlayerListName(player);
-                                            Text.enableWordWrapping = false;
-                                            ListItem.SetActive(true);
-
-                                            PlayerListTexts.Add(ListItem);
-                                        }
-                                        num++;
-                                    }
-                                    else
-                                    {
-                                        //PendulumLogger.Log("PlayerAPI is null");
-                                    }
+                                    var ListItem = PlayerListTexts[num];
+                                    var Text = ListItem.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
+                                    Text.text = GetPlayerListName(player);
                                 }
                                 else
                                 {
-                                    //PendulumLogger.Log("APIUser is null");
+                                    var ListItem = GameObject.Instantiate(VRC_PLScrollRect.CloneableText, VRC_PLScrollRect.VerticalLayout.transform);
+                                    ListItem.name = "PlayerListItem";
+                                    var Text = ListItem.transform.Find("LeftItemContainer/Text_Title").gameObject.GetComponent<TextMeshProUGUI>();
+                                    Text.text = GetPlayerListName(player);
+                                    Text.enableWordWrapping = false;
+                                    ListItem.SetActive(true);
+
+                                    PlayerListTexts.Add(ListItem);
                                 }
-                            }
-                            else
-                            {
-                                //PendulumLogger.Log("Player is null");
+                                num++;
                             }
                         }
                         if (num > VRC.PlayerManager.field_Private_Static_PlayerManager_0.field_Private_List_1_Player_0.Count)

@@ -769,6 +769,7 @@ namespace PendulumClient.Main
             {
                 y.OnUpdate();
             });
+            CheckUWRPatch();
             _avatarSearchInstance.OnUpdate();
             NotificationsV2.OnUpdate();
             PendulumPatchManager.OnUpdate();
@@ -812,9 +813,6 @@ namespace PendulumClient.Main
                 Early_UiManagerInit();
                 UiManagerInit3 = false;
             }
-
-
-            CheckUWRPatch();
 
             if (LoggedIn == false && ShouldLogIn)
             {
@@ -1274,7 +1272,7 @@ namespace PendulumClient.Main
                     SetupDebugPanelNextThread = false;
                 }
             }
-            if (JoinNotifierMod.JoiningPlayerList.Count >= 1 && UIManagerInit == true && IsLoading == false)
+            /*if (JoinNotifierMod.JoiningPlayerList.Count >= 1 && UIManagerInit == true && IsLoading == false)
             {
                 JoinNotifierMod.OneTimeLoop += Time.deltaTime;
             }
@@ -1309,7 +1307,7 @@ namespace PendulumClient.Main
                     JoinNotifierMod.JoiningPlayerList.Clear();
                     JoinNotifierMod.OneTimeLoop = 0f;
                 }
-            }
+            }*/
 
             if (DisconnectOn == true)
             {
@@ -3666,7 +3664,7 @@ namespace PendulumClient.Main
                 NotificationManager.field_Private_Static_NotificationManager_0.Method_Public_Void_Notification_EnumNPublicSealedvaAlReLo4vUnique_0(noti, NotificationManager.EnumNPublicSealedvaAlReLo4vUnique.Recent);
             }
         }*/
-        public static void DownloadButton(bool enabled, GameObject button)
+        /*public static void DownloadButton(bool enabled, GameObject button)
         {
             return;
             var ButtonComp = button.GetComponent<Button>();
@@ -3681,211 +3679,7 @@ namespace PendulumClient.Main
                 ButtonComp.interactable = true;
                 ButtonText.text = "Download\n.VRCA";
             }
-        }
-        public static bool IsDownloadingFile = false;
-        public static void DownloadVRCA(Player player)
-        {
-            //GameObject.Destroy(user_menu.transform.Find("VRCAButton").gameObject);
-            /*WebClient downloadhandler = new WebClient();
-            var DownloadedBundle = downloadhandler.DownloadData(player._vrcplayer.prop_ApiAvatar_0.assetUrl);
-            downloadhandler.DownloadDataCompleted += new DownloadDataCompletedEventHandler(VRCADownloaded);
-            File.WriteAllBytes("PendulumClient/VRCA/" + player._vrcplayer.prop_ApiAvatar_0.name + ".vrca", DownloadedBundle);
-            StoredVRCAPath = player._vrcplayer.prop_ApiAvatar_0.name + ".vrca";
-            VRCADataDownloaded = true;*/
-            if (IsDownloadingFile == true)
-            {
-                AlertPopup.SendAlertPopup("You already have a pending download!");
-                return;
-            }
-            if (JoinNotifierMod.DevUserIDs.Contains(player._vrcplayer.prop_ApiAvatar_0.authorId))
-            {
-                if (APIUser.CurrentUser.id != JoinNotifierMod.KyranUID2)
-                {
-                    AlertPopup.SendAlertPopup("You cant steal this persons model!");
-                    return;
-                }
-            }
-            IsDownloadingFile = true;
-
-            DownloadButton(true, DevToolsMenu.VRCAButton);
-            string asseturl = player._vrcplayer.prop_ApiAvatar_0.assetUrl;
-            string avatarname = player._vrcplayer.prop_ApiAvatar_0.name;
-
-            downloadFileVRCA(asseturl, avatarname);
-        }
-
-        public static void DowloadVRCW(ApiWorld world)
-        {
-            //GameObject.Destroy(user_menu.transform.Find("VRCAButton").gameObject);
-            /*WebClient downloadhandler = new WebClient();
-            var DownloadedBundle = downloadhandler.DownloadData(player._vrcplayer.prop_ApiAvatar_0.assetUrl);
-            downloadhandler.DownloadDataCompleted += new DownloadDataCompletedEventHandler(VRCADownloaded);
-            File.WriteAllBytes("PendulumClient/VRCA/" + player._vrcplayer.prop_ApiAvatar_0.name + ".vrca", DownloadedBundle);
-            StoredVRCAPath = player._vrcplayer.prop_ApiAvatar_0.name + ".vrca";
-            VRCADataDownloaded = true;*/
-            if (IsDownloadingFile == true)
-            {
-                AlertPopup.SendAlertPopup("You already have a pending download!");
-                return;
-            }
-            if (JoinNotifierMod.DevUserIDs.Contains(world.authorId))
-            {
-                if (APIUser.CurrentUser.id != JoinNotifierMod.KyranUID2)
-                {
-                    AlertPopup.SendAlertPopup("You cant steal this persons world!");
-                    return;
-                }
-            }
-            IsDownloadingFile = true;
-
-            DownloadButton(true, DevToolsMenu.VRCAButton);
-            string asseturl = world.assetUrl;
-            string worldname = world.name;
-
-            downloadFileVRCW(asseturl, worldname);
-        }
-
-        private static void downloadFileVRCA(string asseturl, string avatarname)
-        {
-            AlertPopup.SendAlertPopup("Downloading " + avatarname + ".vrca");
-            var Path = "PendulumClient/VRCA/" + avatarname + ".vrca";
-            StoredVRCAPath = avatarname + ".vrca";
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-                wc.DownloadFileCompleted += OnVRCAComplete;
-                wc.DownloadFileAsync(new Uri(asseturl), Path);
-                //wc.DownloadFile(asseturl, Path);
-            }
-            catch(Exception e)
-            {
-                PendulumLogger.Log("Download Error: " + e.ToString());
-            }
-        }
-
-        private static void downloadFileVRCW(string asseturl, string worldname)
-        {
-            AlertPopup.SendAlertPopup("Downloading " + worldname + ".vrcw");
-            var Path = "PendulumClient/VRCW/" + worldname + ".vrcw";
-            StoredVRCAPath = worldname + ".vrcw";
-            try
-            {
-                WebClient wc = new WebClient();
-                wc.Headers.Add("user-agent", " Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
-                wc.DownloadFileCompleted += OnVRCWComplete;
-                wc.DownloadFileAsync(new Uri(asseturl), Path);
-                //wc.DownloadFile(asseturl, Path);
-            }
-            catch (Exception e)
-            {
-                PendulumLogger.Log("Download Error: " + e.ToString());
-            }
-        }
-
-        private static void OnVRCWComplete(object sender, AsyncCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-            {
-                AlertPopup.SendAlertPopup("The download has been cancelled");
-                DownloadButton(false, DevToolsMenu.VRCAButton);
-                IsDownloadingFile = false;
-                return;
-            }
-
-            if (e.Error != null)
-            {
-                AlertPopup.SendAlertPopup("An error ocurred while trying to download file");
-                PendulumLogger.Log("Download Error: " + e.Error.ToString());
-                DownloadButton(false, DevToolsMenu.VRCAButton);
-                IsDownloadingFile = false;
-                return;
-            }
-
-            if (MenuFunctions.OpenFileOnDownload)
-            {
-                string filePath = Environment.CurrentDirectory + "/PendulumClient/VRCW/" + StoredVRCAPath;
-                if (File.Exists(filePath))
-                {
-                    string p = "";
-                    foreach (var chr in filePath)
-                    {
-                        char newchr = '0';
-                        if (chr == '/')
-                        {
-                            newchr = '\\';
-                        }
-                        else
-                        {
-                            newchr = chr;
-                        }
-                        p += newchr;
-                    }
-                    string args = string.Format("/e, /select, \"{0}\"", p);
-
-                    ProcessStartInfo info = new ProcessStartInfo();
-                    info.FileName = "explorer";
-                    info.Arguments = args;
-                    Process.Start(info);
-                }
-            }
-            DownloadButton(false, DevToolsMenu.VRCAButton);
-            AlertPopup.SendAlertPopup(StoredVRCAPath + "\nSuccessfully downloaded!");
-            StoredVRCAPath = "";
-            IsDownloadingFile = false;
-        }
-
-        private static void OnVRCAComplete(object sender, AsyncCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-            {
-                AlertPopup.SendAlertPopup("The download has been cancelled");
-                DownloadButton(false, DevToolsMenu.VRCAButton);
-                IsDownloadingFile = false;
-                return;
-            }
-
-            if (e.Error != null)
-            {
-                AlertPopup.SendAlertPopup("An error ocurred while trying to download file");
-                PendulumLogger.Log("Download Error: " + e.Error.ToString());
-                DownloadButton(false, DevToolsMenu.VRCAButton);
-                IsDownloadingFile = false;
-                return;
-            }
-
-            if (MenuFunctions.OpenFileOnDownload)
-            {
-                string filePath = Environment.CurrentDirectory + "/PendulumClient/VRCA/" + StoredVRCAPath;
-                if (File.Exists(filePath))
-                {
-                    string p = "";
-                    foreach (var chr in filePath)
-                    {
-                        char newchr = '0';
-                        if (chr == '/')
-                        {
-                            newchr = '\\';
-                        }
-                        else
-                        {
-                            newchr = chr;
-                        }
-                        p += newchr;
-                    }
-                    string args = string.Format("/e, /select, \"{0}\"", p);
-
-                    ProcessStartInfo info = new ProcessStartInfo();
-                    info.FileName = "explorer";
-                    info.Arguments = args;
-                    Process.Start(info);
-                }
-            }
-            DownloadButton(false, DevToolsMenu.VRCAButton);
-            AlertPopup.SendAlertPopup(StoredVRCAPath + "\nSuccessfully downloaded!");
-            StoredVRCAPath = "";
-            IsDownloadingFile = false;
-        }
+        }*/
 
         public static void VRCADownloaded(object sender, DownloadDataCompletedEventArgs e)
         {

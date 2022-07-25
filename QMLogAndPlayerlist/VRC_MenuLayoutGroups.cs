@@ -74,9 +74,7 @@ namespace PendulumClient.QMLogAndPlayerlist
 
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
 
-            Scroll.gameObject.SetActive(true);
-
-            enabled = true;
+            SetEnableState(true);
 
             SetupPlayerCount(CloneableText, parent);
         }
@@ -104,6 +102,7 @@ namespace PendulumClient.QMLogAndPlayerlist
         internal void SetEnableState(bool state)
         {
             enabled = state;
+            Scroll.gameObject.SetActive(state);
         }
     }
 
@@ -169,13 +168,12 @@ namespace PendulumClient.QMLogAndPlayerlist
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childControlHeight = true;
             VerticalLayout.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.LowerCenter;
 
-            enabled = true;
-
-            Scroll.gameObject.SetActive(true);
+            SetEnableState(true);
         }
         internal void SetEnableState(bool state)
         {
             enabled = state;
+            Scroll.gameObject.SetActive(state);
         }
     }
 }

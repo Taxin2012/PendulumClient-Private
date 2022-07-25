@@ -512,6 +512,7 @@
     <Compile Include="JoinNotifacations\NetworkManagerHooks.cs" />
     <Compile Include="Main\AssemblyInfo.cs" />
     <Compile Include="Main\AvatarYoinking.cs" />
+    <Compile Include="Main\Features\VRCDownloads.cs" />
     <Compile Include="Main\Logger.cs" />
     <Compile Include="Main\Login.cs" />
     <Compile Include="Main\Main.cs" />

@@ -368,11 +368,11 @@ namespace PendulumClient.ButtonAPIV2
             });
             DownloadsMenu.AddButton("Download Current .VRCA", "Download your current avatar's .VRCA", () =>
             {
-                PendulumClientMain.DownloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
+                Main.Features.VRCDownloads.DownloadVRCA(VRCPlayer.field_Internal_Static_VRCPlayer_0._player);
             });
             DownloadsMenu.AddButton("Download Current .VRCW", "Download your current world's .VRCW", () =>
             {
-                PendulumClientMain.DowloadVRCW(RoomManager.field_Internal_Static_ApiWorld_0);
+                Main.Features.VRCDownloads.DowloadVRCW(RoomManager.field_Internal_Static_ApiWorld_0);
             });
             DownloadsMenu.AddButton("Open VRCA Folder", "Open the folder containing all of your downloaded VRCAs", () =>
             {
@@ -415,7 +415,7 @@ namespace PendulumClient.ButtonAPIV2
                 if (plr == null)
                     return;
 
-                PendulumClientMain.DownloadVRCA(plr);
+                Main.Features.VRCDownloads.DownloadVRCA(plr);
             });
             var ShaderList = TargetMenu.AddCategoryPage("Shader List", "show a list of shaders on their avatar");
             var TestCat1 = ShaderList.AddCategory("Test 1");

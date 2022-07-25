@@ -1671,6 +1671,8 @@ namespace PendulumClient.Anti
         }
         public static bool FloatPatch(PlayerNameplate __instance, ref float __0, ref bool __1)//, float __1, float __2)
         {
+            return true;
+
             if (__1 == false) return true;
             if (__0 == 0) return true;
             /*if (__instance == null) return true;

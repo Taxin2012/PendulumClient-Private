@@ -442,7 +442,7 @@ namespace PendulumClient.UI
             });
             GameObject DownloadVRCA = ButtonAPI.CreateButton(ButtonType.Default, "Download\n.VRCA", "Download this users vrca to your computer.\n(No longer freezes game while downloading) ", Color.white, Color.white, -2f, 3f, user_menu.transform, delegate
             {
-                PendulumClientMain.DownloadVRCA(Wrappers.GetQuickMenu().GetSelectedPlayer());
+                //PendulumClientMain.DownloadVRCA(Wrappers.GetQuickMenu().GetSelectedPlayer());
             });
             DownloadVRCA.name = "VRCAButton";
             VRCAButton = DownloadVRCA;
@@ -625,7 +625,7 @@ namespace PendulumClient.UI
             var user_menu = PendulumClientMain.user_menu;
             GameObject DownloadVRCA = ButtonAPI.CreateButton(ButtonType.Default, "Download\n.VRCA", "Download this users vrca to your computer.", Color.white, Color.white, -2f, 3f, user_menu.transform, delegate
             {
-                PendulumClientMain.DownloadVRCA(Wrappers.GetQuickMenu().GetSelectedPlayer());
+                //PendulumClientMain.DownloadVRCA(Wrappers.GetQuickMenu().GetSelectedPlayer());
             });
             DownloadVRCA.name = "VRCAButton";
             PendulumClientMain.StoredVRCAPath = string.Empty;

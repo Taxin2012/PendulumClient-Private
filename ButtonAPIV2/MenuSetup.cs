@@ -183,7 +183,7 @@ namespace PendulumClient.ButtonAPIV2
         private static void SetupProtectionMenu(APIV2_ButtonPageInterface MainMenu)
         {
             var ProtectionMenu = MainMenu.AddMenuPage("Protections", "protec yourself", null, true);
-            ProtectionMenu.AddToggle("Anti Event9", "Block all Code9 Photon Events\n(you cant see avatar 3.0 changes)", b => {
+            ProtectionMenu.AddToggle("Anti Event9&6", "Block all Code9 Photon Events\n(you cant see avatar 3.0 changes)", b => {
                 Anti.Prefixes.Anti9 = b;
             });
             ProtectionMenu.AddToggle("Anti Event209", "Block all Code209 Photon Events", b => {
